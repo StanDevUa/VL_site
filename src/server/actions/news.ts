@@ -48,8 +48,10 @@ export async function createNews(formData: FormData) {
   }
 
   const photoFile = formData.get("photo") as File | null;
-  const photo =
-    photoFile && photoFile.size > 0 ? await uploadFile("news", photoFile) : null;
+  if (!photoFile || photoFile.size === 0) {
+    throw new Error("Додайте фото.");
+  }
+  const photo = await uploadFile("news", photoFile);
 
   const slug = await generateUniqueSlug(fields.titleUk);
 
@@ -72,15 +74,10 @@ export async function updateNews(id: string, formData: FormData) {
   const current = await prisma.newsPost.findUniqueOrThrow({ where: { id } });
 
   const photoFile = formData.get("photo") as File | null;
-  const removePhoto = formData.get("removePhoto") === "on";
-
   let photo = current.photo;
   if (photoFile && photoFile.size > 0) {
     photo = await uploadFile("news", photoFile);
-    if (current.photo) await deleteFile(current.photo);
-  } else if (removePhoto && current.photo) {
     await deleteFile(current.photo);
-    photo = null;
   }
 
   await prisma.newsPost.update({
@@ -97,7 +94,7 @@ export async function updateNews(id: string, formData: FormData) {
 export async function deleteNews(id: string) {
   const news = await prisma.newsPost.findUniqueOrThrow({ where: { id } });
 
-  if (news.photo) await deleteFile(news.photo);
+  await deleteFile(news.photo);
   await prisma.newsPost.delete({ where: { id } });
 
   revalidatePath("/admin/novyny");

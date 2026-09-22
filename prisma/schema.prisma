@@ -153,7 +153,7 @@ model NewsPost {
   textUk    String       @db.Text
   textEn    String?      @db.Text
   textRu    String?      @db.Text
-  photo     String?
+  photo     String
   category  NewsCategory
   date      DateTime
   createdAt DateTime     @default(now())

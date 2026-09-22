@@ -72,15 +72,13 @@ export default async function NewsDetailPage({
           </span>
         </div>
 
-        {news.photo && (
-          <Image
-            src={getPublicUrl(news.photo)!}
-            alt=""
-            width={800}
-            height={450}
-            className="w-full rounded-card object-cover mb-6"
-          />
-        )}
+        <Image
+          src={getPublicUrl(news.photo)!}
+          alt=""
+          width={800}
+          height={450}
+          className="w-full rounded-card object-cover mb-6"
+        />
 
         <p className="text-xl font-bold text-navy mb-4">
           {pickLocalized(news, "excerpt", locale)}

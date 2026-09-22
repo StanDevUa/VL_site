@@ -37,7 +37,7 @@ export default async function EditNewsPage({
           textRu: news.textRu,
           category: news.category,
           date: news.date.toISOString().slice(0, 10),
-          photoUrl: getPublicUrl(news.photo),
+          photoUrl: getPublicUrl(news.photo)!,
         }}
       />
     </div>

@@ -1,0 +1,60 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+
+/**
+ * Обов'язкове головне фото — використовується всюди, де фото є ключовим
+ * контентом (роботи, новини, товари, дипломи): на створенні обов'язкове,
+ * на редагуванні можна лише замінити, прибрати геть не можна.
+ */
+export function PhotoPicker({
+  name,
+  existingUrl,
+  required,
+}: {
+  name: string;
+  existingUrl?: string | null;
+  required?: boolean;
+}) {
+  const [preview, setPreview] = useState<string | null>(null);
+
+  return (
+    <div>
+      <label className="relative block w-full h-40 rounded-card border-2 border-dashed border-navy/20 cursor-pointer overflow-hidden hover:border-indigo transition-colors bg-powder-beige/40">
+        <input
+          type="file"
+          name={name}
+          accept="image/*"
+          required={required}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            setPreview(file ? URL.createObjectURL(file) : null);
+          }}
+        />
+        {preview ? (
+          // eslint-disable-next-line @next/next/no-img-element -- локальний blob-прев'ю, не для next/image
+          <img src={preview} alt="" className="w-full h-full object-cover" />
+        ) : existingUrl ? (
+          <Image src={existingUrl} alt="" fill className="object-cover" />
+        ) : (
+          <div className="flex flex-col items-center justify-center h-full text-navy-soft text-sm gap-1 px-4 text-center">
+            <span className="font-bold">+ Обрати фото</span>
+            <span className="text-xs">Натисни, щоб завантажити</span>
+          </div>
+        )}
+      </label>
+      {preview && (
+        <p className="text-xs text-indigo font-bold mt-2">
+          Нове фото обрано — натисни «Зберегти» внизу, щоб застосувати.
+        </p>
+      )}
+      {!preview && existingUrl && (
+        <p className="text-xs text-navy-soft mt-2">
+          Натисни на фото, щоб замінити.
+        </p>
+      )}
+    </div>
+  );
+}

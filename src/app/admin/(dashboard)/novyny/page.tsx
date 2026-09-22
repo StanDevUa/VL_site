@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { NewsCategory } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getPublicUrl } from "@/lib/storage";
 import { deleteNews } from "@/server/actions/news";
@@ -13,21 +14,35 @@ const CATEGORY_LABELS: Record<string, string> = {
   FOR_PSYCHOLOGISTS: "Для психологів",
 };
 
+const CATEGORY_FILTERS: { value?: NewsCategory; label: string }[] = [
+  { value: undefined, label: "Усі" },
+  { value: "ANNOUNCEMENT", label: "Анонс" },
+  { value: "NEWS", label: "Новина" },
+  { value: "FOR_PSYCHOLOGISTS", label: "Для психологів" },
+];
+
 export default async function AdminNewsListPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; category?: string }>;
 }) {
-  const { page } = await searchParams;
+  const { page, category } = await searchParams;
   const currentPage = Math.max(1, Number(page) || 1);
+  const activeCategory =
+    category && Object.values(NewsCategory).includes(category as NewsCategory)
+      ? (category as NewsCategory)
+      : undefined;
+
+  const where = activeCategory ? { category: activeCategory } : {};
 
   const [news, total] = await Promise.all([
     prisma.newsPost.findMany({
+      where,
       orderBy: { date: "desc" },
       skip: (currentPage - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
     }),
-    prisma.newsPost.count(),
+    prisma.newsPost.count({ where }),
   ]);
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -46,26 +61,50 @@ export default async function AdminNewsListPage({
         </Link>
       </div>
 
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div className="flex flex-wrap gap-2">
+          {CATEGORY_FILTERS.map((filter) => (
+            <Link
+              key={filter.label}
+              href={
+                filter.value
+                  ? `/admin/novyny?category=${filter.value}`
+                  : "/admin/novyny"
+              }
+              className={
+                "rounded-field px-4 py-2 text-sm font-bold transition-colors " +
+                (activeCategory === filter.value
+                  ? "bg-indigo text-white"
+                  : "bg-white border border-navy/15 text-navy-soft hover:text-navy")
+              }
+            >
+              {filter.label}
+            </Link>
+          ))}
+        </div>
+        <p className="text-sm text-navy-soft shrink-0">
+          Знайдено: <span className="font-bold text-navy">{total}</span>
+        </p>
+      </div>
+
       {news.length === 0 ? (
         <p className="text-navy-soft">
-          Новин ще немає. Натисни «Додати новину», щоб створити першу.
+          {activeCategory
+            ? "У цій категорії новин ще немає."
+            : "Новин ще немає. Натисни «Додати новину», щоб створити першу."}
         </p>
       ) : (
         <>
           <div className="bg-white rounded-card border border-navy/10 divide-y divide-navy/10">
             {news.map((item) => (
               <div key={item.id} className="flex items-center gap-4 p-4">
-                {item.photo ? (
-                  <Image
-                    src={getPublicUrl(item.photo)!}
-                    alt=""
-                    width={72}
-                    height={54}
-                    className="rounded-field object-cover w-[72px] h-[54px] shrink-0"
-                  />
-                ) : (
-                  <div className="w-[72px] h-[54px] shrink-0 rounded-field bg-powder-beige" />
-                )}
+                <Image
+                  src={getPublicUrl(item.photo)!}
+                  alt=""
+                  width={72}
+                  height={54}
+                  className="rounded-field object-cover w-[72px] h-[54px] shrink-0"
+                />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="shrink-0 text-xs font-bold uppercase tracking-wide text-magenta bg-magenta/10 px-2 py-0.5 rounded-field">
@@ -95,7 +134,11 @@ export default async function AdminNewsListPage({
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
                 <Link
                   key={p}
-                  href={`/admin/novyny?page=${p}`}
+                  href={
+                    activeCategory
+                      ? `/admin/novyny?category=${activeCategory}&page=${p}`
+                      : `/admin/novyny?page=${p}`
+                  }
                   className={
                     "w-10 h-10 flex items-center justify-center rounded-field font-bold text-sm " +
                     (p === currentPage

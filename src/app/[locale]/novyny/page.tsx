@@ -81,17 +81,13 @@ export default async function NewsListPage({
                 href={`/novyny/${item.slug}`}
                 className="group block rounded-card bg-white border border-navy/10 overflow-hidden hover:shadow-card-hover transition-shadow"
               >
-                {item.photo ? (
-                  <Image
-                    src={getPublicUrl(item.photo)!}
-                    alt=""
-                    width={400}
-                    height={220}
-                    className="w-full h-[180px] object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-[180px] bg-powder-pink" />
-                )}
+                <Image
+                  src={getPublicUrl(item.photo)!}
+                  alt=""
+                  width={400}
+                  height={220}
+                  className="w-full h-[180px] object-cover"
+                />
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-xs font-bold uppercase tracking-wide text-magenta bg-magenta/10 px-2 py-1 rounded-field">

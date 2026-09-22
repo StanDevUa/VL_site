@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { LocaleTabs, type LocaleSuffix } from "@/components/admin/locale-tabs";
+import { PhotoPicker } from "@/components/admin/photo-picker";
 
 type ExistingWork = {
   titleUk: string;
@@ -21,55 +22,6 @@ type ExistingWork = {
 const inputClass =
   "w-full rounded-field border border-navy/15 px-4 py-3 text-navy outline-none focus:border-indigo focus:ring-4 focus:ring-indigo/15";
 const labelClass = "block text-sm font-bold text-navy mb-2";
-
-function MainPhotoPicker({
-  existingUrl,
-  required,
-}: {
-  existingUrl?: string;
-  required?: boolean;
-}) {
-  const [preview, setPreview] = useState<string | null>(null);
-
-  return (
-    <div>
-      <label className="relative block w-full h-40 rounded-card border-2 border-dashed border-navy/20 cursor-pointer overflow-hidden hover:border-indigo transition-colors bg-powder-beige/40">
-        <input
-          type="file"
-          name="mainPhoto"
-          accept="image/*"
-          required={required}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-          onChange={(e) => {
-            const file = e.target.files?.[0];
-            setPreview(file ? URL.createObjectURL(file) : null);
-          }}
-        />
-        {preview ? (
-          // eslint-disable-next-line @next/next/no-img-element -- локальний blob-прев'ю, не для next/image
-          <img src={preview} alt="" className="w-full h-full object-cover" />
-        ) : existingUrl ? (
-          <Image src={existingUrl} alt="" fill className="object-cover" />
-        ) : (
-          <div className="flex flex-col items-center justify-center h-full text-navy-soft text-sm gap-1 px-4 text-center">
-            <span className="font-bold">+ Обрати фото</span>
-            <span className="text-xs">Натисни, щоб завантажити</span>
-          </div>
-        )}
-      </label>
-      {preview && (
-        <p className="text-xs text-indigo font-bold mt-2">
-          Нове фото обрано — натисни «Зберегти» внизу, щоб застосувати.
-        </p>
-      )}
-      {!preview && existingUrl && (
-        <p className="text-xs text-navy-soft mt-2">
-          Натисни на фото, щоб замінити.
-        </p>
-      )}
-    </div>
-  );
-}
 
 type PendingFile = { file: File; previewUrl: string };
 
@@ -271,7 +223,7 @@ export function WorkForm({
           <h2 className="font-heading font-bold text-lg text-navy mb-4">
             Головне фото {!existing && "*"}
           </h2>
-          <MainPhotoPicker existingUrl={existing?.mainPhotoUrl} required={!existing} />
+          <PhotoPicker name="mainPhoto" existingUrl={existing?.mainPhotoUrl} required={!existing} />
         </div>
       </div>
 

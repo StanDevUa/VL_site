@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
 import { LocaleTabs, type LocaleSuffix } from "@/components/admin/locale-tabs";
+import { PhotoPicker } from "@/components/admin/photo-picker";
 
 type ExistingNews = {
   titleUk: string;
@@ -16,7 +15,7 @@ type ExistingNews = {
   textRu: string | null;
   category: string;
   date: string; // yyyy-mm-dd, готове для <input type="date">
-  photoUrl: string | null;
+  photoUrl: string;
 };
 
 const inputClass =
@@ -28,74 +27,6 @@ const CATEGORY_OPTIONS = [
   { value: "NEWS", label: "Новина" },
   { value: "FOR_PSYCHOLOGISTS", label: "Для психологів" },
 ];
-
-function NewsPhotoPicker({ existingUrl }: { existingUrl?: string | null }) {
-  const [preview, setPreview] = useState<string | null>(null);
-  const [markRemove, setMarkRemove] = useState(false);
-
-  const showExisting = !!existingUrl && !markRemove && !preview;
-
-  return (
-    <div>
-      <label className="relative block w-full h-40 rounded-card border-2 border-dashed border-navy/20 cursor-pointer overflow-hidden hover:border-indigo transition-colors bg-powder-beige/40">
-        <input
-          type="file"
-          name="photo"
-          accept="image/*"
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-          onChange={(e) => {
-            const file = e.target.files?.[0];
-            setPreview(file ? URL.createObjectURL(file) : null);
-            if (file) setMarkRemove(false);
-          }}
-        />
-        {preview ? (
-          // eslint-disable-next-line @next/next/no-img-element -- локальний blob-прев'ю
-          <img src={preview} alt="" className="w-full h-full object-cover" />
-        ) : showExisting ? (
-          <Image src={existingUrl!} alt="" fill className="object-cover" />
-        ) : (
-          <div className="flex flex-col items-center justify-center h-full text-navy-soft text-sm gap-1 px-4 text-center">
-            <span className="font-bold">+ Обрати фото</span>
-            <span className="text-xs">Необов&apos;язково</span>
-          </div>
-        )}
-      </label>
-
-      {preview && (
-        <p className="text-xs text-indigo font-bold mt-2">
-          Нове фото обрано — натисни «Зберегти», щоб застосувати.
-        </p>
-      )}
-
-      {!preview && showExisting && (
-        <button
-          type="button"
-          onClick={() => setMarkRemove(true)}
-          className="mt-2 text-xs font-bold text-red-600 hover:underline"
-        >
-          Видалити фото
-        </button>
-      )}
-
-      {markRemove && !preview && (
-        <div className="mt-2">
-          <input type="hidden" name="removePhoto" value="on" />
-          <p className="text-xs text-navy-soft">
-            Фото буде видалено після збереження.{" "}
-            <button
-              type="button"
-              onClick={() => setMarkRemove(false)}
-              className="font-bold text-indigo hover:underline"
-            >
-              Скасувати
-            </button>
-          </p>
-        </div>
-      )}
-    </div>
-  );
-}
 
 export function NewsForm({
   action,
@@ -194,9 +125,9 @@ export function NewsForm({
 
           <div className="rounded-card bg-white border border-navy/10 p-6">
             <h2 className="font-heading font-bold text-lg text-navy mb-4">
-              Фото
+              Фото {!existing && "*"}
             </h2>
-            <NewsPhotoPicker existingUrl={existing?.photoUrl} />
+            <PhotoPicker name="photo" existingUrl={existing?.photoUrl} required={!existing} />
           </div>
         </div>
       </div>
