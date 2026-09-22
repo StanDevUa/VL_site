@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { auth, signOut } from "@/lib/auth";
-import { secondaryButtonClass } from "@/components/ui/button-styles";
 
 const NAV = [
   { href: "/admin", label: "Головна" },
@@ -50,7 +49,10 @@ export default async function AdminDashboardLayout({
               await signOut({ redirectTo: "/admin/login" });
             }}
           >
-            <button type="submit" className={`w-full ${secondaryButtonClass}`}>
+            <button
+              type="submit"
+              className="w-full rounded-button border border-navy/18 px-4 py-2 text-sm font-bold text-navy transition-colors hover:border-indigo hover:text-indigo active:bg-indigo active:text-white active:border-indigo focus:outline-none focus:ring-4 focus:ring-indigo/20"
+            >
               Вийти
             </button>
           </form>
