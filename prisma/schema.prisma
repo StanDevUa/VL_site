@@ -177,12 +177,13 @@ model Testimonial {
 // ── Дипломи (галерея "Моя кваліфікація") ────────────────────────
 
 model Diploma {
-  id        String   @id @default(cuid())
-  image     String
-  captionUk String?
-  captionEn String?
-  captionRu String?
-  createdAt DateTime @default(now()) // порядок показу = порядок додавання
+  id         String   @id @default(cuid())
+  image      String
+  captionUk  String?
+  captionEn  String?
+  captionRu  String?
+  showOnSite Boolean  @default(false)
+  createdAt  DateTime @default(now()) // порядок показу = порядок додавання
 }
 
 // ── FAQ ──────────────────────────────────────────────────────────
