@@ -57,7 +57,7 @@ export default async function AdminDashboardLayout({
         </div>
       </aside>
 
-      <main className="flex-1 p-8">{children}</main>
+      <main className="flex-1 min-w-0 p-8">{children}</main>
     </div>
   );
 }
