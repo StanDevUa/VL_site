@@ -172,14 +172,14 @@ export function WorkForm({
   const [state, formAction, isPending] = useActionState(action, undefined);
 
   return (
-    <form action={formAction} className="max-w-5xl">
+    <form action={formAction} noValidate className="max-w-5xl @container">
       {state?.error && (
         <div className="mb-6 rounded-field bg-red-50 border border-red-200 px-4 py-3 text-sm font-bold text-red-700">
           {state.error}
         </div>
       )}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6 items-start">
-        <div className="lg:col-span-2 rounded-card bg-white border border-navy/10 p-6">
+      <div className="grid grid-cols-1 @2xl:grid-cols-3 gap-6 mb-6 items-start">
+        <div className="@2xl:col-span-2 rounded-card bg-white border border-navy/10 p-6">
           <h2 className="font-heading font-bold text-lg text-navy mb-4">
             Текст (три мовні версії)
           </h2>

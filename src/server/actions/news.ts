@@ -25,12 +25,14 @@ function readFields(formData: FormData) {
 
   const publishMode = formData.get("publishMode") as string;
   const scheduledDate = formData.get("scheduledDate") as string;
+  const missingScheduledDate = publishMode === "scheduled" && !scheduledDate;
   const date =
     publishMode === "scheduled" && scheduledDate
       ? new Date(scheduledDate)
       : new Date();
 
   return {
+    missingScheduledDate,
     titleUk: (formData.get("titleUk") as string)?.trim(),
     titleEn: (formData.get("titleEn") as string)?.trim() || null,
     titleRu: (formData.get("titleRu") as string)?.trim() || null,
@@ -57,6 +59,9 @@ export async function createNews(
   if (!fields.category) {
     return { error: "Оберіть категорію." };
   }
+  if (fields.missingScheduledDate) {
+    return { error: "Вкажіть дату й час публікації." };
+  }
 
   const photoFile = formData.get("photo") as File | null;
   if (!photoFile || photoFile.size === 0) {
@@ -65,9 +70,10 @@ export async function createNews(
   const photo = await uploadFile("news", photoFile);
 
   const slug = await generateUniqueSlug(fields.titleUk);
+  const { missingScheduledDate: _missingScheduledDate, ...data } = fields;
 
   await prisma.newsPost.create({
-    data: { ...fields, category: fields.category, slug, photo },
+    data: { ...data, category: fields.category, slug, photo },
   });
 
   revalidatePath("/admin/novyny");
@@ -88,6 +94,9 @@ export async function updateNews(
   if (!fields.category) {
     return { error: "Оберіть категорію." };
   }
+  if (fields.missingScheduledDate) {
+    return { error: "Вкажіть дату й час публікації." };
+  }
 
   const current = await prisma.newsPost.findUniqueOrThrow({ where: { id } });
 
@@ -98,9 +107,11 @@ export async function updateNews(
     await deleteFile(current.photo);
   }
 
+  const { missingScheduledDate: _missingScheduledDate, ...data } = fields;
+
   await prisma.newsPost.update({
     where: { id },
-    data: { ...fields, category: fields.category, photo },
+    data: { ...data, category: fields.category, photo },
   });
 
   revalidatePath("/admin/novyny");
