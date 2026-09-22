@@ -23,8 +23,12 @@ function readFields(formData: FormData) {
     ? (categoryRaw as NewsCategory)
     : null;
 
-  const dateStr = formData.get("date") as string;
-  const date = dateStr ? new Date(dateStr) : new Date();
+  const publishMode = formData.get("publishMode") as string;
+  const scheduledDate = formData.get("scheduledDate") as string;
+  const date =
+    publishMode === "scheduled" && scheduledDate
+      ? new Date(scheduledDate)
+      : new Date();
 
   return {
     titleUk: (formData.get("titleUk") as string)?.trim(),

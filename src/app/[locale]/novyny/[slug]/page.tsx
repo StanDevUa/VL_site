@@ -6,6 +6,7 @@ import { NewsCategory } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getPublicUrl } from "@/lib/storage";
 import { pickLocalized, newsCategoryKey } from "@/lib/i18n-content";
+import { publishedNewsWhere } from "@/lib/news-visibility";
 import { formatDate } from "@/lib/format-date";
 import type { AppLocale } from "@/i18n/routing";
 
@@ -26,24 +27,26 @@ export default async function NewsDetailPage({
   const t = await getTranslations("News");
   const common = await getTranslations("Common");
 
-  const news = await prisma.newsPost.findUnique({ where: { slug } });
+  const news = await prisma.newsPost.findFirst({
+    where: publishedNewsWhere({ slug }),
+  });
   if (!news) {
     notFound();
   }
 
   const [prevNews, nextNews, otherNews] = await Promise.all([
     prisma.newsPost.findFirst({
-      where: { date: { lt: news.date } },
+      where: publishedNewsWhere({ date: { lt: news.date } }),
       orderBy: { date: "desc" },
       select: { slug: true },
     }),
     prisma.newsPost.findFirst({
-      where: { date: { gt: news.date } },
+      where: publishedNewsWhere({ date: { gt: news.date } }),
       orderBy: { date: "asc" },
       select: { slug: true },
     }),
     prisma.newsPost.findMany({
-      where: { id: { not: news.id } },
+      where: publishedNewsWhere({ id: { not: news.id } }),
       orderBy: { date: "desc" },
       take: 5,
     }),

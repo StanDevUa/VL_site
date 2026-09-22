@@ -5,6 +5,7 @@ import { NewsCategory } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getPublicUrl } from "@/lib/storage";
 import { pickLocalized, newsCategoryKey } from "@/lib/i18n-content";
+import { publishedNewsWhere } from "@/lib/news-visibility";
 import { formatDate } from "@/lib/format-date";
 import type { AppLocale } from "@/i18n/routing";
 
@@ -32,7 +33,7 @@ export default async function NewsListPage({
   const locale = (await getLocale()) as AppLocale;
   const t = await getTranslations("News");
 
-  const where = activeCategory ? { category: activeCategory } : {};
+  const where = publishedNewsWhere(activeCategory ? { category: activeCategory } : {});
 
   const [news, total] = await Promise.all([
     prisma.newsPost.findMany({

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
 import { LocaleTabs, type LocaleSuffix } from "@/components/admin/locale-tabs";
 import { PhotoPicker } from "@/components/admin/photo-picker";
@@ -17,7 +17,8 @@ type ExistingNews = {
   textEn: string | null;
   textRu: string | null;
   category: string;
-  date: string; // yyyy-mm-dd, готове для <input type="date">
+  date: string; // yyyy-MM-ddTHH:mm, готове для <input type="datetime-local">
+  isScheduled: boolean; // date у майбутньому — форма відкриється у режимі "заплановано"
   photoUrl: string;
 };
 
@@ -39,8 +40,18 @@ export function NewsForm({
   existing?: ExistingNews;
 }) {
   const fields = existing as unknown as Record<string, string | null> | undefined;
-  const today = new Date().toISOString().slice(0, 10);
   const [state, formAction, isPending] = useActionState(action, undefined);
+  const [publishMode, setPublishMode] = useState<"now" | "scheduled">(
+    existing?.isScheduled ? "scheduled" : "now",
+  );
+
+  // За замовчуванням — за годину від зараз, щоб поле не було порожнім,
+  // коли Вікторія перемикається на "Запланувати". Обчислюється один раз
+  // при монтуванні (лінива ініціалізація useState) — щоб не викликати
+  // Date.now() безпосередньо в тілі рендеру.
+  const [defaultScheduleValue] = useState(
+    () => existing?.date ?? new Date(Date.now() + 60 * 60 * 1000).toISOString().slice(0, 16),
+  );
 
   return (
     <form action={formAction} className="max-w-5xl">
@@ -120,14 +131,44 @@ export function NewsForm({
                 </select>
               </div>
               <div>
-                <label className={labelClass}>Дата *</label>
-                <input
-                  type="date"
-                  name="date"
-                  required
-                  defaultValue={existing?.date ?? today}
-                  className={inputClass}
-                />
+                <label className={labelClass}>Публікація *</label>
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 text-sm text-navy">
+                    <input
+                      type="radio"
+                      name="publishMode"
+                      value="now"
+                      checked={publishMode === "now"}
+                      onChange={() => setPublishMode("now")}
+                    />
+                    Опублікувати зараз
+                  </label>
+                  <label className="flex items-center gap-2 text-sm text-navy">
+                    <input
+                      type="radio"
+                      name="publishMode"
+                      value="scheduled"
+                      checked={publishMode === "scheduled"}
+                      onChange={() => setPublishMode("scheduled")}
+                    />
+                    Запланувати на
+                  </label>
+                  {publishMode === "scheduled" && (
+                    <input
+                      type="datetime-local"
+                      name="scheduledDate"
+                      required
+                      defaultValue={defaultScheduleValue}
+                      className={inputClass}
+                    />
+                  )}
+                </div>
+                {publishMode === "scheduled" && (
+                  <p className="text-xs text-navy-soft mt-2">
+                    Новина сама з&apos;явиться на сайті у вказаний момент —
+                    нічого додатково робити не треба.
+                  </p>
+                )}
               </div>
             </div>
           </div>

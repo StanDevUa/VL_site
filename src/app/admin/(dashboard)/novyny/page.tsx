@@ -4,6 +4,7 @@ import { NewsCategory } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getPublicUrl } from "@/lib/storage";
 import { deleteNews } from "@/server/actions/news";
+import { isFutureDate } from "@/lib/format-date";
 import { DeleteButton } from "@/components/admin/delete-button";
 
 const PAGE_SIZE = 10;
@@ -113,6 +114,11 @@ export default async function AdminNewsListPage({
                     <span className="shrink-0 text-xs text-navy-soft">
                       {item.date.toLocaleDateString("uk-UA")}
                     </span>
+                    {isFutureDate(item.date) && (
+                      <span className="shrink-0 text-xs font-bold text-indigo bg-indigo/10 px-2 py-0.5 rounded-field">
+                        Заплановано
+                      </span>
+                    )}
                   </div>
                   <p className="font-bold text-navy truncate">{item.titleUk}</p>
                 </div>

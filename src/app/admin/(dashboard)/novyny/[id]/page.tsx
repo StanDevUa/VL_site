@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getPublicUrl } from "@/lib/storage";
+import { toDatetimeLocalValue, isFutureDate } from "@/lib/format-date";
 import { NewsForm } from "@/components/admin/news-form";
 import { updateNews } from "@/server/actions/news";
 
@@ -36,7 +37,8 @@ export default async function EditNewsPage({
           textEn: news.textEn,
           textRu: news.textRu,
           category: news.category,
-          date: news.date.toISOString().slice(0, 10),
+          date: toDatetimeLocalValue(news.date),
+          isScheduled: isFutureDate(news.date),
           photoUrl: getPublicUrl(news.photo)!,
         }}
       />
