@@ -15,5 +15,12 @@
     "allWorks": "All works",
     "allNews": "All news",
     "readMore": "Read more"
+  },
+  "Works": {
+    "pageTitle": "My works",
+    "empty": "No works yet.",
+    "prevWork": "Previous work",
+    "nextWork": "Next work",
+    "otherWorks": "Other works"
   }
 }
