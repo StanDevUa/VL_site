@@ -13,6 +13,7 @@ function readFields(formData: FormData) {
     answerUk: (formData.get("answerUk") as string)?.trim(),
     answerEn: (formData.get("answerEn") as string)?.trim() || null,
     answerRu: (formData.get("answerRu") as string)?.trim() || null,
+    showOnHome: formData.get("showOnHome") === "on",
   };
 }
 

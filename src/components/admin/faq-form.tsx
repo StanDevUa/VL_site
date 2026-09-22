@@ -14,6 +14,7 @@ type ExistingFaqEntry = {
   answerUk: string;
   answerEn: string | null;
   answerRu: string | null;
+  showOnHome: boolean;
 };
 
 const inputClass =
@@ -86,6 +87,18 @@ export function FaqForm({
             </div>
           )}
         </LocaleTabs>
+      </div>
+
+      <div className="rounded-card bg-white border border-navy/10 p-6 mb-8">
+        <label className="flex items-center gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            name="showOnHome"
+            defaultChecked={existing?.showOnHome ?? false}
+            className="w-5 h-5 rounded accent-indigo"
+          />
+          <span className="font-bold text-navy">Показувати на головній сторінці</span>
+        </label>
       </div>
 
       <div className="flex items-center gap-3">

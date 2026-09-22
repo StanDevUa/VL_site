@@ -44,7 +44,14 @@ export default async function AdminFaqListPage({
             {entries.map((item) => (
               <div key={item.id} className="flex items-center gap-4 p-4">
                 <div className="flex-1 min-w-0">
-                  <p className="font-bold text-navy truncate">{item.questionUk}</p>
+                  <div className="flex items-center gap-2 mb-1">
+                    <p className="font-bold text-navy truncate">{item.questionUk}</p>
+                    {item.showOnHome && (
+                      <span className="shrink-0 text-xs font-bold text-indigo bg-indigo/10 px-2 py-0.5 rounded-field">
+                        На головній
+                      </span>
+                    )}
+                  </div>
                   <p className="text-sm text-navy-soft truncate">{item.answerUk}</p>
                 </div>
                 <Link

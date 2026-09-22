@@ -196,6 +196,7 @@ model FaqEntry {
   answerUk   String   @db.Text
   answerEn   String?  @db.Text
   answerRu   String?  @db.Text
+  showOnHome Boolean  @default(false)
   createdAt  DateTime @default(now())
 }
 
