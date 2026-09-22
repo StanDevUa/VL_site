@@ -79,7 +79,7 @@ function GalleryPicker({ existing }: { existing: { key: string; url: string }[] 
       {existing.length > 0 && (
         <>
           <p className="text-sm font-bold text-navy mb-2">Поточні фото</p>
-          <div className="grid grid-cols-4 gap-3 mb-5">
+          <div className="grid grid-cols-2 gap-3 mb-5">
             {existing.map((photo) => (
               <label key={photo.key} className="relative block cursor-pointer">
                 <Image
@@ -104,7 +104,7 @@ function GalleryPicker({ existing }: { existing: { key: string; url: string }[] 
           <p className="text-sm font-bold text-indigo mb-2">
             Нові фото (додадуться після збереження)
           </p>
-          <div className="grid grid-cols-4 gap-3 mb-5">
+          <div className="grid grid-cols-2 gap-3 mb-5">
             {newPreviews.map((src, i) => (
               // eslint-disable-next-line @next/next/no-img-element -- локальні blob-прев'ю
               <img
@@ -146,67 +146,71 @@ export function WorkForm({
   const fields = existing as unknown as Record<string, string | null> | undefined;
 
   return (
-    <form action={action} className="max-w-2xl space-y-8">
-      <div className="rounded-card bg-white border border-navy/10 p-6">
-        <h2 className="font-heading font-bold text-lg text-navy mb-4">
-          Текст (три мовні версії)
-        </h2>
-        <LocaleTabs>
-          {(suffix: LocaleSuffix) => (
-            <div className="space-y-4">
-              <div>
-                <label className={labelClass}>
-                  Назва{suffix === "Uk" && " *"}
-                </label>
-                <input
-                  name={`title${suffix}`}
-                  defaultValue={fields?.[`title${suffix}`] ?? ""}
-                  required={suffix === "Uk"}
-                  className={inputClass}
-                />
+    <form action={action} className="max-w-5xl">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="lg:col-span-2 rounded-card bg-white border border-navy/10 p-6">
+          <h2 className="font-heading font-bold text-lg text-navy mb-4">
+            Текст (три мовні версії)
+          </h2>
+          <LocaleTabs>
+            {(suffix: LocaleSuffix) => (
+              <div className="space-y-4">
+                <div>
+                  <label className={labelClass}>
+                    Назва{suffix === "Uk" && " *"}
+                  </label>
+                  <input
+                    name={`title${suffix}`}
+                    defaultValue={fields?.[`title${suffix}`] ?? ""}
+                    required={suffix === "Uk"}
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>
+                    Короткий опис (у списку та на сторінці роботи)
+                    {suffix === "Uk" && " *"}
+                  </label>
+                  <textarea
+                    name={`excerpt${suffix}`}
+                    defaultValue={fields?.[`excerpt${suffix}`] ?? ""}
+                    required={suffix === "Uk"}
+                    rows={2}
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>
+                    Повний опис{suffix === "Uk" && " *"}
+                  </label>
+                  <textarea
+                    name={`description${suffix}`}
+                    defaultValue={fields?.[`description${suffix}`] ?? ""}
+                    required={suffix === "Uk"}
+                    rows={6}
+                    className={inputClass}
+                  />
+                </div>
               </div>
-              <div>
-                <label className={labelClass}>
-                  Короткий опис (у списку та на сторінці роботи)
-                  {suffix === "Uk" && " *"}
-                </label>
-                <textarea
-                  name={`excerpt${suffix}`}
-                  defaultValue={fields?.[`excerpt${suffix}`] ?? ""}
-                  required={suffix === "Uk"}
-                  rows={2}
-                  className={inputClass}
-                />
-              </div>
-              <div>
-                <label className={labelClass}>
-                  Повний опис{suffix === "Uk" && " *"}
-                </label>
-                <textarea
-                  name={`description${suffix}`}
-                  defaultValue={fields?.[`description${suffix}`] ?? ""}
-                  required={suffix === "Uk"}
-                  rows={6}
-                  className={inputClass}
-                />
-              </div>
-            </div>
-          )}
-        </LocaleTabs>
-      </div>
+            )}
+          </LocaleTabs>
+        </div>
 
-      <div className="rounded-card bg-white border border-navy/10 p-6">
-        <h2 className="font-heading font-bold text-lg text-navy mb-4">
-          Головне фото {!existing && "*"}
-        </h2>
-        <MainPhotoPicker existingUrl={existing?.mainPhotoUrl} required={!existing} />
-      </div>
+        <div className="space-y-6">
+          <div className="rounded-card bg-white border border-navy/10 p-6">
+            <h2 className="font-heading font-bold text-lg text-navy mb-4">
+              Головне фото {!existing && "*"}
+            </h2>
+            <MainPhotoPicker existingUrl={existing?.mainPhotoUrl} required={!existing} />
+          </div>
 
-      <div className="rounded-card bg-white border border-navy/10 p-6">
-        <h2 className="font-heading font-bold text-lg text-navy mb-4">
-          Галерея (додаткові фото, необов&apos;язково)
-        </h2>
-        <GalleryPicker existing={existing?.gallery ?? []} />
+          <div className="rounded-card bg-white border border-navy/10 p-6">
+            <h2 className="font-heading font-bold text-lg text-navy mb-4">
+              Галерея (необов&apos;язково)
+            </h2>
+            <GalleryPicker existing={existing?.gallery ?? []} />
+          </div>
+        </div>
       </div>
 
       <button
