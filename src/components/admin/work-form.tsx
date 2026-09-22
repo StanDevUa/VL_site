@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { LocaleTabs, type LocaleSuffix } from "@/components/admin/locale-tabs";
 
@@ -33,7 +33,7 @@ function MainPhotoPicker({
 
   return (
     <div>
-      <label className="relative block w-52 h-40 rounded-card border-2 border-dashed border-navy/20 cursor-pointer overflow-hidden hover:border-indigo transition-colors bg-powder-beige/40">
+      <label className="relative block w-full h-40 rounded-card border-2 border-dashed border-navy/20 cursor-pointer overflow-hidden hover:border-indigo transition-colors bg-powder-beige/40">
         <input
           type="file"
           name="mainPhoto"
@@ -71,48 +71,118 @@ function MainPhotoPicker({
   );
 }
 
+type PendingFile = { file: File; previewUrl: string };
+
 function GalleryPicker({ existing }: { existing: { key: string; url: string }[] }) {
-  const [newPreviews, setNewPreviews] = useState<string[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [newFiles, setNewFiles] = useState<PendingFile[]>([]);
+  const [removedKeys, setRemovedKeys] = useState<Set<string>>(new Set());
+
+  function syncInputFiles(files: PendingFile[]) {
+    // Нативний <input type="file"> не вміє "додавати" файли — кожен вибір
+    // повністю замінює попередній. Тому самі ведемо повний список у стані
+    // і через DataTransfer переписуємо .files інпута перед сабмітом форми.
+    const dataTransfer = new DataTransfer();
+    files.forEach(({ file }) => dataTransfer.items.add(file));
+    if (inputRef.current) {
+      inputRef.current.files = dataTransfer.files;
+    }
+  }
+
+  function handlePick(selected: FileList | null) {
+    if (!selected || selected.length === 0) return;
+    const picked = Array.from(selected).map((file) => ({
+      file,
+      previewUrl: URL.createObjectURL(file),
+    }));
+    const merged = [...newFiles, ...picked];
+    setNewFiles(merged);
+    syncInputFiles(merged);
+  }
+
+  function removeNewFile(index: number) {
+    URL.revokeObjectURL(newFiles[index].previewUrl);
+    const updated = newFiles.filter((_, i) => i !== index);
+    setNewFiles(updated);
+    syncInputFiles(updated);
+  }
+
+  function toggleRemoveExisting(key: string) {
+    setRemovedKeys((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
+  }
 
   return (
     <div>
       {existing.length > 0 && (
         <>
           <p className="text-sm font-bold text-navy mb-2">Поточні фото</p>
-          <div className="grid grid-cols-2 gap-3 mb-5">
-            {existing.map((photo) => (
-              <label key={photo.key} className="relative block cursor-pointer">
-                <Image
-                  src={photo.url}
-                  alt=""
-                  width={120}
-                  height={90}
-                  className="rounded-field object-cover w-full h-[90px]"
-                />
-                <span className="mt-1 flex items-center gap-1 text-xs text-navy-soft">
-                  <input type="checkbox" name="removeGallery" value={photo.key} />
-                  видалити
-                </span>
-              </label>
-            ))}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+            {existing.map((photo) => {
+              const marked = removedKeys.has(photo.key);
+              return (
+                <div key={photo.key}>
+                  <div className="relative">
+                    <Image
+                      src={photo.url}
+                      alt=""
+                      width={140}
+                      height={100}
+                      className={
+                        "rounded-field object-cover w-full h-[100px] " +
+                        (marked ? "opacity-30 grayscale" : "")
+                      }
+                    />
+                    {marked && <input type="hidden" name="removeGallery" value={photo.key} />}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => toggleRemoveExisting(photo.key)}
+                    className={
+                      "mt-1 w-full rounded-field px-2 py-1.5 text-xs font-bold transition-colors " +
+                      (marked
+                        ? "bg-navy/10 text-navy hover:bg-navy/15"
+                        : "bg-red-50 text-red-600 hover:bg-red-100")
+                    }
+                  >
+                    {marked ? "Скасувати видалення" : "Видалити"}
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </>
       )}
 
-      {newPreviews.length > 0 && (
+      {newFiles.length > 0 && (
         <>
           <p className="text-sm font-bold text-indigo mb-2">
             Нові фото (додадуться після збереження)
           </p>
-          <div className="grid grid-cols-2 gap-3 mb-5">
-            {newPreviews.map((src, i) => (
-              // eslint-disable-next-line @next/next/no-img-element -- локальні blob-прев'ю
-              <img
-                key={i}
-                src={src}
-                alt=""
-                className="rounded-field object-cover w-full h-[90px] ring-2 ring-indigo/50"
-              />
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+            {newFiles.map(({ previewUrl }, i) => (
+              <div key={previewUrl}>
+                {/* eslint-disable-next-line @next/next/no-img-element -- локальні blob-прев'ю */}
+                <img
+                  src={previewUrl}
+                  alt=""
+                  className="rounded-field object-cover w-full h-[100px] ring-2 ring-indigo/50"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeNewFile(i)}
+                  className="mt-1 w-full rounded-field bg-red-50 px-2 py-1.5 text-xs font-bold text-red-600 hover:bg-red-100 transition-colors"
+                >
+                  Прибрати
+                </button>
+              </div>
             ))}
           </div>
         </>
@@ -121,17 +191,18 @@ function GalleryPicker({ existing }: { existing: { key: string; url: string }[] 
       <label className="inline-flex items-center gap-2 rounded-field border-2 border-dashed border-navy/20 px-5 py-3 cursor-pointer hover:border-indigo text-sm font-bold text-navy-soft hover:text-navy transition-colors">
         + Додати фото до галереї
         <input
+          ref={inputRef}
           type="file"
           name="gallery"
           accept="image/*"
           multiple
           className="hidden"
-          onChange={(e) => {
-            const files = Array.from(e.target.files ?? []);
-            setNewPreviews(files.map((f) => URL.createObjectURL(f)));
-          }}
+          onChange={(e) => handlePick(e.target.files)}
         />
       </label>
+      <p className="text-xs text-navy-soft mt-2">
+        Можна натискати кілька разів — нові фото додаються до вже обраних.
+      </p>
     </div>
   );
 }
@@ -147,7 +218,7 @@ export function WorkForm({
 
   return (
     <form action={action} className="max-w-5xl">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <div className="lg:col-span-2 rounded-card bg-white border border-navy/10 p-6">
           <h2 className="font-heading font-bold text-lg text-navy mb-4">
             Текст (три мовні версії)
@@ -196,21 +267,19 @@ export function WorkForm({
           </LocaleTabs>
         </div>
 
-        <div className="space-y-6">
-          <div className="rounded-card bg-white border border-navy/10 p-6">
-            <h2 className="font-heading font-bold text-lg text-navy mb-4">
-              Головне фото {!existing && "*"}
-            </h2>
-            <MainPhotoPicker existingUrl={existing?.mainPhotoUrl} required={!existing} />
-          </div>
-
-          <div className="rounded-card bg-white border border-navy/10 p-6">
-            <h2 className="font-heading font-bold text-lg text-navy mb-4">
-              Галерея (необов&apos;язково)
-            </h2>
-            <GalleryPicker existing={existing?.gallery ?? []} />
-          </div>
+        <div className="rounded-card bg-white border border-navy/10 p-6">
+          <h2 className="font-heading font-bold text-lg text-navy mb-4">
+            Головне фото {!existing && "*"}
+          </h2>
+          <MainPhotoPicker existingUrl={existing?.mainPhotoUrl} required={!existing} />
         </div>
+      </div>
+
+      <div className="rounded-card bg-white border border-navy/10 p-6 mb-8">
+        <h2 className="font-heading font-bold text-lg text-navy mb-4">
+          Галерея (необов&apos;язково)
+        </h2>
+        <GalleryPicker existing={existing?.gallery ?? []} />
       </div>
 
       <button
