@@ -49,9 +49,13 @@ export default async function AdminTestimonialsListPage({
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <p className="font-bold text-navy truncate">{item.author}</p>
-                    {item.showOnHome && (
+                    {item.showOnHome ? (
                       <span className="shrink-0 text-xs font-bold text-indigo bg-indigo/10 px-2 py-0.5 rounded-field">
                         На головній
+                      </span>
+                    ) : (
+                      <span className="shrink-0 text-xs font-bold text-navy-soft bg-navy/5 px-2 py-0.5 rounded-field">
+                        Приховано
                       </span>
                     )}
                   </div>
