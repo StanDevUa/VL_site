@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import Link from "next/link";
 import { LocaleTabs, type LocaleSuffix } from "@/components/admin/locale-tabs";
 import { PhotoPicker } from "@/components/admin/photo-picker";
+import { FieldError } from "@/components/admin/field-error";
 import type { FormState } from "@/server/actions/form-state";
 
 type ExistingNews = {
@@ -41,8 +42,11 @@ export function NewsForm({
 }) {
   const fields = existing as unknown as Record<string, string | null> | undefined;
   const [state, formAction, isPending] = useActionState(action, undefined);
+  const resolve = (key: string) => state?.values?.[key] ?? fields?.[key] ?? "";
   const [publishMode, setPublishMode] = useState<"now" | "scheduled">(
-    existing?.isScheduled ? "scheduled" : "now",
+    state?.values?.publishMode === "scheduled" || existing?.isScheduled
+      ? "scheduled"
+      : "now",
   );
 
   // За замовчуванням — за годину від зараз, щоб поле не було порожнім,
@@ -50,16 +54,14 @@ export function NewsForm({
   // при монтуванні (лінива ініціалізація useState) — щоб не викликати
   // Date.now() безпосередньо в тілі рендеру.
   const [defaultScheduleValue] = useState(
-    () => existing?.date ?? new Date(Date.now() + 60 * 60 * 1000).toISOString().slice(0, 16),
+    () =>
+      state?.values?.scheduledDate ||
+      existing?.date ||
+      new Date(Date.now() + 60 * 60 * 1000).toISOString().slice(0, 16),
   );
 
   return (
     <form action={formAction} noValidate className="max-w-5xl @container">
-      {state?.error && (
-        <div className="mb-6 rounded-field bg-red-50 border border-red-200 px-4 py-3 text-sm font-bold text-red-700">
-          {state.error}
-        </div>
-      )}
       <div className="grid grid-cols-1 @2xl:grid-cols-3 gap-6 mb-6 items-start">
         <div className="@2xl:col-span-2 rounded-card bg-white border border-navy/10 p-6">
           <h2 className="font-heading font-bold text-lg text-navy mb-4">
@@ -74,10 +76,10 @@ export function NewsForm({
                   </label>
                   <input
                     name={`title${suffix}`}
-                    defaultValue={fields?.[`title${suffix}`] ?? ""}
-                    required={suffix === "Uk"}
+                    defaultValue={resolve(`title${suffix}`)}
                     className={inputClass}
                   />
+                  {suffix === "Uk" && <FieldError message={state?.fieldErrors?.titleUk} />}
                 </div>
                 <div>
                   <label className={labelClass}>
@@ -86,11 +88,11 @@ export function NewsForm({
                   </label>
                   <textarea
                     name={`excerpt${suffix}`}
-                    defaultValue={fields?.[`excerpt${suffix}`] ?? ""}
-                    required={suffix === "Uk"}
+                    defaultValue={resolve(`excerpt${suffix}`)}
                     rows={2}
                     className={inputClass}
                   />
+                  {suffix === "Uk" && <FieldError message={state?.fieldErrors?.excerptUk} />}
                 </div>
                 <div>
                   <label className={labelClass}>
@@ -98,11 +100,11 @@ export function NewsForm({
                   </label>
                   <textarea
                     name={`text${suffix}`}
-                    defaultValue={fields?.[`text${suffix}`] ?? ""}
-                    required={suffix === "Uk"}
+                    defaultValue={resolve(`text${suffix}`)}
                     rows={8}
                     className={inputClass}
                   />
+                  {suffix === "Uk" && <FieldError message={state?.fieldErrors?.textUk} />}
                 </div>
               </div>
             )}
@@ -119,8 +121,7 @@ export function NewsForm({
                 <label className={labelClass}>Категорія *</label>
                 <select
                   name="category"
-                  required
-                  defaultValue={existing?.category ?? "NEWS"}
+                  defaultValue={state?.values?.category || existing?.category || "NEWS"}
                   className={inputClass}
                 >
                   {CATEGORY_OPTIONS.map((opt) => (
@@ -129,6 +130,7 @@ export function NewsForm({
                     </option>
                   ))}
                 </select>
+                <FieldError message={state?.fieldErrors?.category} />
               </div>
               <div>
                 <label className={labelClass}>Публікація *</label>
@@ -157,13 +159,13 @@ export function NewsForm({
                     <input
                       type="datetime-local"
                       name="scheduledDate"
-                      required
                       defaultValue={defaultScheduleValue}
                       className={inputClass}
                     />
                   )}
                 </div>
-                {publishMode === "scheduled" && (
+                <FieldError message={state?.fieldErrors?.scheduledDate} />
+                {publishMode === "scheduled" && !state?.fieldErrors?.scheduledDate && (
                   <p className="text-xs text-navy-soft mt-2">
                     Новина сама з&apos;явиться на сайті у вказаний момент —
                     нічого додатково робити не треба.
@@ -177,7 +179,12 @@ export function NewsForm({
             <h2 className="font-heading font-bold text-lg text-navy mb-4">
               Фото {!existing && "*"}
             </h2>
-            <PhotoPicker name="photo" existingUrl={existing?.photoUrl} required={!existing} />
+            <PhotoPicker
+              name="photo"
+              existingUrl={existing?.photoUrl}
+              required={!existing}
+              error={state?.fieldErrors?.photo}
+            />
           </div>
         </div>
       </div>

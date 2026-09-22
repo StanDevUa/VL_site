@@ -48,3 +48,17 @@ body {
   color: var(--color-navy);
   font-family: var(--font-body), system-ui, sans-serif;
 }
+
+/*
+ * Приховуємо візуальну смугу скролу всюди на сайті — саме прокручування
+ * (колесо миші, трекпад, клавіатура) лишається повністю робочим, зникає
+ * тільки сірий трек+повзунок збоку екрана.
+ */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* старий Edge/IE */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, новий Edge */
+}

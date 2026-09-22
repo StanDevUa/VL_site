@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { uploadFile, deleteFile } from "@/lib/storage";
 import { slugify, uniqueSlug } from "@/lib/slugify";
-import type { FormState } from "./form-state";
+import { extractTextValues, type FormState } from "./form-state";
 
 async function generateUniqueSlug(titleUk: string, excludeId?: string) {
   const base = slugify(titleUk);
@@ -35,16 +35,19 @@ export async function createWork(
   formData: FormData,
 ): Promise<FormState> {
   const fields = readTranslatedFields(formData);
-
-  if (!fields.titleUk || !fields.excerptUk || !fields.descriptionUk) {
-    return { error: "Заповніть обов'язкові поля українською." };
-  }
-
   const mainPhotoFile = formData.get("mainPhoto") as File | null;
-  if (!mainPhotoFile || mainPhotoFile.size === 0) {
-    return { error: "Додайте головне фото." };
+
+  const fieldErrors: Record<string, string> = {};
+  if (!fields.titleUk) fieldErrors.titleUk = "Введіть назву українською.";
+  if (!fields.excerptUk) fieldErrors.excerptUk = "Введіть короткий опис українською.";
+  if (!fields.descriptionUk) fieldErrors.descriptionUk = "Введіть повний опис українською.";
+  if (!mainPhotoFile || mainPhotoFile.size === 0) fieldErrors.mainPhoto = "Додайте головне фото.";
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return { fieldErrors, values: extractTextValues(formData) };
   }
-  const mainPhoto = await uploadFile("works", mainPhotoFile);
+
+  const mainPhoto = await uploadFile("works", mainPhotoFile!);
 
   const galleryFiles = formData.getAll("gallery") as File[];
   const gallery: string[] = [];
@@ -72,8 +75,13 @@ export async function updateWork(
 ): Promise<FormState> {
   const fields = readTranslatedFields(formData);
 
-  if (!fields.titleUk || !fields.excerptUk || !fields.descriptionUk) {
-    return { error: "Заповніть обов'язкові поля українською." };
+  const fieldErrors: Record<string, string> = {};
+  if (!fields.titleUk) fieldErrors.titleUk = "Введіть назву українською.";
+  if (!fields.excerptUk) fieldErrors.excerptUk = "Введіть короткий опис українською.";
+  if (!fields.descriptionUk) fieldErrors.descriptionUk = "Введіть повний опис українською.";
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return { fieldErrors, values: extractTextValues(formData) };
   }
 
   const current = await prisma.portfolioWork.findUniqueOrThrow({

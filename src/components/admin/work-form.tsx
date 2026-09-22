@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LocaleTabs, type LocaleSuffix } from "@/components/admin/locale-tabs";
 import { PhotoPicker } from "@/components/admin/photo-picker";
+import { FieldError } from "@/components/admin/field-error";
 import type { FormState } from "@/server/actions/form-state";
 
 type ExistingWork = {
@@ -170,14 +171,13 @@ export function WorkForm({
 }) {
   const fields = existing as unknown as Record<string, string | null> | undefined;
   const [state, formAction, isPending] = useActionState(action, undefined);
+  // Після невдалої спроби зберегти форма ремаунтиться (Server Action повернув
+  // новий стан), тож defaultValue має брати щойно введене (state.values),
+  // а не відкочуватись до fields з existing/порожнього рядка.
+  const resolve = (key: string) => state?.values?.[key] ?? fields?.[key] ?? "";
 
   return (
     <form action={formAction} noValidate className="max-w-5xl @container">
-      {state?.error && (
-        <div className="mb-6 rounded-field bg-red-50 border border-red-200 px-4 py-3 text-sm font-bold text-red-700">
-          {state.error}
-        </div>
-      )}
       <div className="grid grid-cols-1 @2xl:grid-cols-3 gap-6 mb-6 items-start">
         <div className="@2xl:col-span-2 rounded-card bg-white border border-navy/10 p-6">
           <h2 className="font-heading font-bold text-lg text-navy mb-4">
@@ -192,10 +192,10 @@ export function WorkForm({
                   </label>
                   <input
                     name={`title${suffix}`}
-                    defaultValue={fields?.[`title${suffix}`] ?? ""}
-                    required={suffix === "Uk"}
+                    defaultValue={resolve(`title${suffix}`)}
                     className={inputClass}
                   />
+                  {suffix === "Uk" && <FieldError message={state?.fieldErrors?.titleUk} />}
                 </div>
                 <div>
                   <label className={labelClass}>
@@ -204,11 +204,11 @@ export function WorkForm({
                   </label>
                   <textarea
                     name={`excerpt${suffix}`}
-                    defaultValue={fields?.[`excerpt${suffix}`] ?? ""}
-                    required={suffix === "Uk"}
+                    defaultValue={resolve(`excerpt${suffix}`)}
                     rows={2}
                     className={inputClass}
                   />
+                  {suffix === "Uk" && <FieldError message={state?.fieldErrors?.excerptUk} />}
                 </div>
                 <div>
                   <label className={labelClass}>
@@ -216,11 +216,13 @@ export function WorkForm({
                   </label>
                   <textarea
                     name={`description${suffix}`}
-                    defaultValue={fields?.[`description${suffix}`] ?? ""}
-                    required={suffix === "Uk"}
+                    defaultValue={resolve(`description${suffix}`)}
                     rows={6}
                     className={inputClass}
                   />
+                  {suffix === "Uk" && (
+                    <FieldError message={state?.fieldErrors?.descriptionUk} />
+                  )}
                 </div>
               </div>
             )}
@@ -231,7 +233,12 @@ export function WorkForm({
           <h2 className="font-heading font-bold text-lg text-navy mb-4">
             Головне фото {!existing && "*"}
           </h2>
-          <PhotoPicker name="mainPhoto" existingUrl={existing?.mainPhotoUrl} required={!existing} />
+          <PhotoPicker
+            name="mainPhoto"
+            existingUrl={existing?.mainPhotoUrl}
+            required={!existing}
+            error={state?.fieldErrors?.mainPhoto}
+          />
         </div>
       </div>
 

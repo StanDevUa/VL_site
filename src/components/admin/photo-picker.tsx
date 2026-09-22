@@ -12,16 +12,23 @@ export function PhotoPicker({
   name,
   existingUrl,
   required,
+  error,
 }: {
   name: string;
   existingUrl?: string | null;
   required?: boolean;
+  error?: string;
 }) {
   const [preview, setPreview] = useState<string | null>(null);
 
   return (
     <div>
-      <label className="relative block w-full h-40 rounded-card border-2 border-dashed border-navy/20 cursor-pointer overflow-hidden hover:border-indigo transition-colors bg-powder-beige/40">
+      <label
+        className={
+          "relative block w-full h-40 rounded-card border-2 border-dashed cursor-pointer overflow-hidden transition-colors bg-powder-beige/40 " +
+          (error ? "border-red-400" : "border-navy/20 hover:border-indigo")
+        }
+      >
         <input
           type="file"
           name={name}
@@ -45,12 +52,13 @@ export function PhotoPicker({
           </div>
         )}
       </label>
-      {preview && (
+      {error && <p className="text-xs font-bold text-red-600 mt-2">{error}</p>}
+      {!error && preview && (
         <p className="text-xs text-indigo font-bold mt-2">
           Нове фото обрано — натисни «Зберегти» внизу, щоб застосувати.
         </p>
       )}
-      {!preview && existingUrl && (
+      {!error && !preview && existingUrl && (
         <p className="text-xs text-navy-soft mt-2">
           Натисни на фото, щоб замінити.
         </p>

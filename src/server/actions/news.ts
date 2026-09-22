@@ -6,7 +6,7 @@ import { NewsCategory } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { uploadFile, deleteFile } from "@/lib/storage";
 import { slugify, uniqueSlug } from "@/lib/slugify";
-import type { FormState } from "./form-state";
+import { extractTextValues, type FormState } from "./form-state";
 
 async function generateUniqueSlug(titleUk: string, excludeId?: string) {
   const base = slugify(titleUk);
@@ -52,28 +52,29 @@ export async function createNews(
   formData: FormData,
 ): Promise<FormState> {
   const fields = readFields(formData);
-
-  if (!fields.titleUk || !fields.excerptUk || !fields.textUk) {
-    return { error: "Заповніть обов'язкові поля українською." };
-  }
-  if (!fields.category) {
-    return { error: "Оберіть категорію." };
-  }
-  if (fields.missingScheduledDate) {
-    return { error: "Вкажіть дату й час публікації." };
-  }
-
   const photoFile = formData.get("photo") as File | null;
-  if (!photoFile || photoFile.size === 0) {
-    return { error: "Додайте фото." };
+
+  const fieldErrors: Record<string, string> = {};
+  if (!fields.titleUk) fieldErrors.titleUk = "Введіть заголовок українською.";
+  if (!fields.excerptUk) fieldErrors.excerptUk = "Введіть короткий опис українською.";
+  if (!fields.textUk) fieldErrors.textUk = "Введіть текст новини українською.";
+  if (!fields.category) fieldErrors.category = "Оберіть категорію.";
+  if (fields.missingScheduledDate) {
+    fieldErrors.scheduledDate = "Вкажіть дату й час публікації.";
   }
-  const photo = await uploadFile("news", photoFile);
+  if (!photoFile || photoFile.size === 0) fieldErrors.photo = "Додайте фото.";
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return { fieldErrors, values: extractTextValues(formData) };
+  }
+
+  const photo = await uploadFile("news", photoFile!);
 
   const slug = await generateUniqueSlug(fields.titleUk);
   const { missingScheduledDate: _missingScheduledDate, ...data } = fields;
 
   await prisma.newsPost.create({
-    data: { ...data, category: fields.category, slug, photo },
+    data: { ...data, category: fields.category!, slug, photo },
   });
 
   revalidatePath("/admin/novyny");
@@ -88,14 +89,17 @@ export async function updateNews(
 ): Promise<FormState> {
   const fields = readFields(formData);
 
-  if (!fields.titleUk || !fields.excerptUk || !fields.textUk) {
-    return { error: "Заповніть обов'язкові поля українською." };
-  }
-  if (!fields.category) {
-    return { error: "Оберіть категорію." };
-  }
+  const fieldErrors: Record<string, string> = {};
+  if (!fields.titleUk) fieldErrors.titleUk = "Введіть заголовок українською.";
+  if (!fields.excerptUk) fieldErrors.excerptUk = "Введіть короткий опис українською.";
+  if (!fields.textUk) fieldErrors.textUk = "Введіть текст новини українською.";
+  if (!fields.category) fieldErrors.category = "Оберіть категорію.";
   if (fields.missingScheduledDate) {
-    return { error: "Вкажіть дату й час публікації." };
+    fieldErrors.scheduledDate = "Вкажіть дату й час публікації.";
+  }
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return { fieldErrors, values: extractTextValues(formData) };
   }
 
   const current = await prisma.newsPost.findUniqueOrThrow({ where: { id } });
@@ -111,7 +115,7 @@ export async function updateNews(
 
   await prisma.newsPost.update({
     where: { id },
-    data: { ...data, category: fields.category, photo },
+    data: { ...data, category: fields.category!, photo },
   });
 
   revalidatePath("/admin/novyny");
