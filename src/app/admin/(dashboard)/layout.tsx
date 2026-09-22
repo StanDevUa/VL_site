@@ -7,8 +7,9 @@ const NAV = [
   { href: "/admin/novyny", label: "Новини та анонси" },
   { href: "/admin/vidguky", label: "Відгуки" },
   { href: "/admin/dyplomy", label: "Дипломи" },
-  // наступні розділи додаються сюди по мірі готовності:
-  // Товари, Категорії, Замовлення, FAQ
+  { href: "/admin/faq", label: "FAQ" },
+  // наступний розділ — "Магазин" (Категорії/Товари/Замовлення), з'явиться
+  // як розкривний пункт одразу під "Головна", коли почнемо його будувати.
 ];
 
 export default async function AdminDashboardLayout({
