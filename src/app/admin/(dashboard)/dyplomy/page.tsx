@@ -56,7 +56,7 @@ export default async function AdminDiplomasListPage({
                   <div className="flex items-center gap-2 mb-2">
                     {item.showOnSite ? (
                       <span className="text-xs font-bold text-indigo bg-indigo/10 px-2 py-0.5 rounded-field">
-                        На сайті
+                        На головній
                       </span>
                     ) : (
                       <span className="text-xs font-bold text-navy-soft bg-navy/5 px-2 py-0.5 rounded-field">

@@ -42,9 +42,9 @@ export function DiplomaForm({
   };
 
   return (
-    <form action={formAction} noValidate className="max-w-3xl @container">
-      <div className="grid grid-cols-1 @2xl:grid-cols-3 gap-6 mb-6 items-start">
-        <div className="@2xl:col-span-2 space-y-6">
+    <form action={formAction} noValidate className="max-w-5xl @container">
+      <div className="grid grid-cols-1 @2xl:grid-cols-[2fr_1.5fr] gap-6 mb-6">
+        <div className="space-y-6">
           <div className="rounded-card bg-white border border-navy/10 p-6">
             <h2 className="font-heading font-bold text-lg text-navy mb-4">
               Підпис (необов&apos;язково, три мовні версії)
@@ -69,7 +69,7 @@ export function DiplomaForm({
                 defaultChecked={existing?.showOnSite ?? false}
                 className="w-5 h-5 rounded accent-indigo"
               />
-              <span className="font-bold text-navy">Показувати на сайті</span>
+              <span className="font-bold text-navy">Показувати на головній сторінці</span>
             </label>
           </div>
 
@@ -83,17 +83,20 @@ export function DiplomaForm({
           </div>
         </div>
 
-        <div className="rounded-card bg-white border border-navy/10 p-6">
+        <div className="rounded-card bg-white border border-navy/10 p-6 h-full flex flex-col">
           <h2 className="font-heading font-bold text-lg text-navy mb-4">
             Фото {!existing && "*"}
           </h2>
-          <PhotoPicker
-            name="image"
-            existingUrl={existing?.imageUrl}
-            required={!existing}
-            error={errorFor("image")}
-            onPick={() => dismissOnFill("image", "x")}
-          />
+          <div className="flex-1 flex flex-col">
+            <PhotoPicker
+              name="image"
+              existingUrl={existing?.imageUrl}
+              required={!existing}
+              error={errorFor("image")}
+              onPick={() => dismissOnFill("image", "x")}
+              heightClass="h-full"
+            />
+          </div>
         </div>
       </div>
     </form>

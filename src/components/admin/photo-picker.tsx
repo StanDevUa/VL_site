@@ -14,12 +14,15 @@ export function PhotoPicker({
   required,
   error,
   onPick,
+  heightClass = "h-40",
 }: {
   name: string;
   existingUrl?: string | null;
   required?: boolean;
   error?: string;
   onPick?: () => void;
+  /** За замовчуванням фіксовані 160px (як у формах "Роботи"/"Новини"). */
+  heightClass?: string;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -42,10 +45,10 @@ export function PhotoPicker({
   });
 
   return (
-    <div>
+    <div className="h-full flex flex-col">
       <label
         className={
-          "relative block w-full h-40 rounded-card border-2 border-dashed cursor-pointer overflow-hidden transition-colors bg-powder-beige/40 " +
+          `relative block w-full ${heightClass} rounded-card border-2 border-dashed cursor-pointer overflow-hidden transition-colors bg-powder-beige/40 ` +
           (error ? "border-red-400" : "border-navy/20 hover:border-indigo")
         }
       >
