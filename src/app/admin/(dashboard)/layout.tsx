@@ -51,7 +51,7 @@ export default async function AdminDashboardLayout({
           >
             <button
               type="submit"
-              className="w-full rounded-button border border-navy/18 px-4 py-2 text-sm font-bold text-navy transition-colors hover:border-indigo hover:text-indigo active:bg-indigo active:text-white active:border-indigo focus:outline-none focus:ring-4 focus:ring-indigo/20"
+              className="w-full rounded-button border border-navy/18 px-4 py-2 text-sm font-bold text-navy transition-colors hover:border-magenta hover:text-magenta focus:outline-none focus:ring-4 focus:ring-magenta/20"
             >
               Вийти
             </button>

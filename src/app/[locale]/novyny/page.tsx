@@ -123,7 +123,7 @@ export default async function NewsListPage({
                     "w-10 h-10 flex items-center justify-center rounded-field font-bold text-sm " +
                     (p === currentPage
                       ? "bg-indigo text-white"
-                      : "bg-white border border-navy/15 text-navy hover:border-indigo")
+                      : "bg-white border border-navy/15 text-navy hover:border-magenta hover:text-magenta")
                   }
                 >
                   {p}
