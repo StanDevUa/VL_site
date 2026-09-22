@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { uploadFile, deleteFile } from "@/lib/storage";
 import { slugify, uniqueSlug } from "@/lib/slugify";
+import type { FormState } from "./form-state";
 
 async function generateUniqueSlug(titleUk: string, excludeId?: string) {
   const base = slugify(titleUk);
@@ -29,16 +30,19 @@ function readTranslatedFields(formData: FormData) {
   };
 }
 
-export async function createWork(formData: FormData) {
+export async function createWork(
+  _prevState: FormState,
+  formData: FormData,
+): Promise<FormState> {
   const fields = readTranslatedFields(formData);
 
   if (!fields.titleUk || !fields.excerptUk || !fields.descriptionUk) {
-    throw new Error("Заповніть обов'язкові поля українською.");
+    return { error: "Заповніть обов'язкові поля українською." };
   }
 
   const mainPhotoFile = formData.get("mainPhoto") as File | null;
   if (!mainPhotoFile || mainPhotoFile.size === 0) {
-    throw new Error("Додайте головне фото.");
+    return { error: "Додайте головне фото." };
   }
   const mainPhoto = await uploadFile("works", mainPhotoFile);
 
@@ -61,11 +65,15 @@ export async function createWork(formData: FormData) {
   redirect("/admin/roboty");
 }
 
-export async function updateWork(id: string, formData: FormData) {
+export async function updateWork(
+  id: string,
+  _prevState: FormState,
+  formData: FormData,
+): Promise<FormState> {
   const fields = readTranslatedFields(formData);
 
   if (!fields.titleUk || !fields.excerptUk || !fields.descriptionUk) {
-    throw new Error("Заповніть обов'язкові поля українською.");
+    return { error: "Заповніть обов'язкові поля українською." };
   }
 
   const current = await prisma.portfolioWork.findUniqueOrThrow({

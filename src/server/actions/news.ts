@@ -6,6 +6,7 @@ import { NewsCategory } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { uploadFile, deleteFile } from "@/lib/storage";
 import { slugify, uniqueSlug } from "@/lib/slugify";
+import type { FormState } from "./form-state";
 
 async function generateUniqueSlug(titleUk: string, excludeId?: string) {
   const base = slugify(titleUk);
@@ -17,10 +18,10 @@ async function generateUniqueSlug(titleUk: string, excludeId?: string) {
 }
 
 function readFields(formData: FormData) {
-  const category = formData.get("category") as string;
-  if (!Object.values(NewsCategory).includes(category as NewsCategory)) {
-    throw new Error("Оберіть категорію.");
-  }
+  const categoryRaw = formData.get("category") as string;
+  const category = Object.values(NewsCategory).includes(categoryRaw as NewsCategory)
+    ? (categoryRaw as NewsCategory)
+    : null;
 
   const dateStr = formData.get("date") as string;
   const date = dateStr ? new Date(dateStr) : new Date();
@@ -35,28 +36,34 @@ function readFields(formData: FormData) {
     textUk: (formData.get("textUk") as string)?.trim(),
     textEn: (formData.get("textEn") as string)?.trim() || null,
     textRu: (formData.get("textRu") as string)?.trim() || null,
-    category: category as NewsCategory,
+    category,
     date,
   };
 }
 
-export async function createNews(formData: FormData) {
+export async function createNews(
+  _prevState: FormState,
+  formData: FormData,
+): Promise<FormState> {
   const fields = readFields(formData);
 
   if (!fields.titleUk || !fields.excerptUk || !fields.textUk) {
-    throw new Error("Заповніть обов'язкові поля українською.");
+    return { error: "Заповніть обов'язкові поля українською." };
+  }
+  if (!fields.category) {
+    return { error: "Оберіть категорію." };
   }
 
   const photoFile = formData.get("photo") as File | null;
   if (!photoFile || photoFile.size === 0) {
-    throw new Error("Додайте фото.");
+    return { error: "Додайте фото." };
   }
   const photo = await uploadFile("news", photoFile);
 
   const slug = await generateUniqueSlug(fields.titleUk);
 
   await prisma.newsPost.create({
-    data: { ...fields, slug, photo },
+    data: { ...fields, category: fields.category, slug, photo },
   });
 
   revalidatePath("/admin/novyny");
@@ -64,11 +71,18 @@ export async function createNews(formData: FormData) {
   redirect("/admin/novyny");
 }
 
-export async function updateNews(id: string, formData: FormData) {
+export async function updateNews(
+  id: string,
+  _prevState: FormState,
+  formData: FormData,
+): Promise<FormState> {
   const fields = readFields(formData);
 
   if (!fields.titleUk || !fields.excerptUk || !fields.textUk) {
-    throw new Error("Заповніть обов'язкові поля українською.");
+    return { error: "Заповніть обов'язкові поля українською." };
+  }
+  if (!fields.category) {
+    return { error: "Оберіть категорію." };
   }
 
   const current = await prisma.newsPost.findUniqueOrThrow({ where: { id } });
@@ -82,7 +96,7 @@ export async function updateNews(id: string, formData: FormData) {
 
   await prisma.newsPost.update({
     where: { id },
-    data: { ...fields, photo },
+    data: { ...fields, category: fields.category, photo },
   });
 
   revalidatePath("/admin/novyny");

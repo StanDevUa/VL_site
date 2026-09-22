@@ -1,9 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useActionState, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { LocaleTabs, type LocaleSuffix } from "@/components/admin/locale-tabs";
 import { PhotoPicker } from "@/components/admin/photo-picker";
+import type { FormState } from "@/server/actions/form-state";
 
 type ExistingWork = {
   titleUk: string;
@@ -163,13 +165,19 @@ export function WorkForm({
   action,
   existing,
 }: {
-  action: (formData: FormData) => void;
+  action: (prevState: FormState, formData: FormData) => Promise<FormState>;
   existing?: ExistingWork;
 }) {
   const fields = existing as unknown as Record<string, string | null> | undefined;
+  const [state, formAction, isPending] = useActionState(action, undefined);
 
   return (
-    <form action={action} className="max-w-5xl">
+    <form action={formAction} className="max-w-5xl">
+      {state?.error && (
+        <div className="mb-6 rounded-field bg-red-50 border border-red-200 px-4 py-3 text-sm font-bold text-red-700">
+          {state.error}
+        </div>
+      )}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6 items-start">
         <div className="lg:col-span-2 rounded-card bg-white border border-navy/10 p-6">
           <h2 className="font-heading font-bold text-lg text-navy mb-4">
@@ -234,12 +242,21 @@ export function WorkForm({
         <GalleryPicker existing={existing?.gallery ?? []} />
       </div>
 
-      <button
-        type="submit"
-        className="rounded-button bg-indigo px-8 py-3 font-heading font-bold text-white shadow-button transition-colors hover:bg-indigo-hover"
-      >
-        Зберегти
-      </button>
+      <div className="flex items-center gap-3">
+        <button
+          type="submit"
+          disabled={isPending}
+          className="rounded-button bg-indigo px-8 py-3 font-heading font-bold text-white shadow-button transition-colors hover:bg-indigo-hover disabled:opacity-60"
+        >
+          {isPending ? "Зберігаємо…" : "Зберегти"}
+        </button>
+        <Link
+          href="/admin/roboty"
+          className="rounded-button border border-navy/15 px-8 py-3 font-heading font-bold text-navy hover:border-indigo hover:text-indigo transition-colors"
+        >
+          Скасувати
+        </Link>
+      </div>
     </form>
   );
 }
