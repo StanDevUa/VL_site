@@ -44,34 +44,21 @@ export function DiplomaForm({
   return (
     <form action={formAction} noValidate className="max-w-3xl @container">
       <div className="grid grid-cols-1 @2xl:grid-cols-3 gap-6 mb-6 items-start">
-        <div className="@2xl:col-span-2 rounded-card bg-white border border-navy/10 p-6">
-          <h2 className="font-heading font-bold text-lg text-navy mb-4">
-            Підпис (необов&apos;язково, три мовні версії)
-          </h2>
-          <LocaleTabs>
-            {(suffix: LocaleSuffix) => (
-              <input
-                name={`caption${suffix}`}
-                defaultValue={resolve(`caption${suffix}`)}
-                placeholder="Наприклад, «Сертифікат з дитячої психології, 2024»"
-                className={inputClass}
-              />
-            )}
-          </LocaleTabs>
-        </div>
-
-        <div className="space-y-6">
+        <div className="@2xl:col-span-2 space-y-6">
           <div className="rounded-card bg-white border border-navy/10 p-6">
             <h2 className="font-heading font-bold text-lg text-navy mb-4">
-              Фото {!existing && "*"}
+              Підпис (необов&apos;язково, три мовні версії)
             </h2>
-            <PhotoPicker
-              name="image"
-              existingUrl={existing?.imageUrl}
-              required={!existing}
-              error={errorFor("image")}
-              onPick={() => dismissOnFill("image", "x")}
-            />
+            <LocaleTabs>
+              {(suffix: LocaleSuffix) => (
+                <input
+                  name={`caption${suffix}`}
+                  defaultValue={resolve(`caption${suffix}`)}
+                  placeholder="Наприклад, «Сертифікат з дитячої психології, 2024»"
+                  className={inputClass}
+                />
+              )}
+            </LocaleTabs>
           </div>
 
           <div className="rounded-card bg-white border border-navy/10 p-6">
@@ -85,16 +72,29 @@ export function DiplomaForm({
               <span className="font-bold text-navy">Показувати на сайті</span>
             </label>
           </div>
-        </div>
-      </div>
 
-      <div className="flex items-center gap-3">
-        <button type="submit" disabled={isPending} className={primaryButtonClass}>
-          {isPending ? "Зберігаємо…" : "Зберегти"}
-        </button>
-        <Link href="/admin/dyplomy" className={secondaryButtonClass}>
-          Скасувати
-        </Link>
+          <div className="flex items-center gap-3">
+            <button type="submit" disabled={isPending} className={primaryButtonClass}>
+              {isPending ? "Зберігаємо…" : "Зберегти"}
+            </button>
+            <Link href="/admin/dyplomy" className={secondaryButtonClass}>
+              Скасувати
+            </Link>
+          </div>
+        </div>
+
+        <div className="rounded-card bg-white border border-navy/10 p-6">
+          <h2 className="font-heading font-bold text-lg text-navy mb-4">
+            Фото {!existing && "*"}
+          </h2>
+          <PhotoPicker
+            name="image"
+            existingUrl={existing?.imageUrl}
+            required={!existing}
+            error={errorFor("image")}
+            onPick={() => dismissOnFill("image", "x")}
+          />
+        </div>
       </div>
     </form>
   );
