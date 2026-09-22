@@ -22,5 +22,16 @@
     "prevWork": "Previous work",
     "nextWork": "Next work",
     "otherWorks": "Other works"
+  },
+  "News": {
+    "pageTitle": "News & announcements",
+    "empty": "No news yet.",
+    "prevNews": "Previous news",
+    "nextNews": "Next news",
+    "otherNews": "Other news",
+    "categoryAll": "All",
+    "categoryAnnouncement": "Announcement",
+    "categoryNews": "News",
+    "categoryForPsychologists": "For psychologists"
   }
 }

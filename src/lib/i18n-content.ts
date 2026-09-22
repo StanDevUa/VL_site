@@ -1,4 +1,5 @@
 import type { AppLocale } from "@/i18n/routing";
+import type { NewsCategory } from "@prisma/client";
 
 /**
  * Обирає локалізоване поле сутності за конвенцією {field}Uk/{field}En/{field}Ru
@@ -21,4 +22,17 @@ export function pickLocalized<T extends Record<string, unknown>>(
   }
 
   return (entity[fallbackKey] as string) ?? "";
+}
+
+/** Ключ next-intl (namespace "News") для фіксованого (неперекладного в БД) значення категорії. */
+export function newsCategoryKey(category: NewsCategory): string {
+  switch (category) {
+    case "ANNOUNCEMENT":
+      return "categoryAnnouncement";
+    case "FOR_PSYCHOLOGISTS":
+      return "categoryForPsychologists";
+    case "NEWS":
+    default:
+      return "categoryNews";
+  }
 }

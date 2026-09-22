@@ -4,8 +4,9 @@ import { auth, signOut } from "@/lib/auth";
 const NAV = [
   { href: "/admin", label: "Головна" },
   { href: "/admin/roboty", label: "Мої роботи" },
+  { href: "/admin/novyny", label: "Новини та анонси" },
   // наступні розділи додаються сюди по мірі готовності:
-  // Новини, Товари, Категорії, Замовлення, Відгуки, Дипломи, FAQ
+  // Товари, Категорії, Замовлення, Відгуки, Дипломи, FAQ
 ];
 
 export default async function AdminDashboardLayout({

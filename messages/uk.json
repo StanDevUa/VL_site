@@ -22,5 +22,16 @@
     "prevWork": "Попередня робота",
     "nextWork": "Наступна робота",
     "otherWorks": "Інші роботи"
+  },
+  "News": {
+    "pageTitle": "Новини та анонси",
+    "empty": "Новин поки немає.",
+    "prevNews": "Попередня новина",
+    "nextNews": "Наступна новина",
+    "otherNews": "Інші новини",
+    "categoryAll": "Усі",
+    "categoryAnnouncement": "Анонс",
+    "categoryNews": "Новина",
+    "categoryForPsychologists": "Для психологів"
   }
 }
