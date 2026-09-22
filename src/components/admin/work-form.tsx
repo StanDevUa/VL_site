@@ -218,7 +218,7 @@ export function WorkForm({
 
   return (
     <form action={action} className="max-w-5xl">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6 items-start">
         <div className="lg:col-span-2 rounded-card bg-white border border-navy/10 p-6">
           <h2 className="font-heading font-bold text-lg text-navy mb-4">
             Текст (три мовні версії)
