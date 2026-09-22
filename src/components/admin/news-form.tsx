@@ -160,7 +160,7 @@ export function NewsForm({
                       type="radio"
                       name="publishMode"
                       value="now"
-                      checked={publishMode === "now"}
+                      defaultChecked={publishMode === "now"}
                       onChange={() => setManualPublishMode("now")}
                     />
                     Опублікувати зараз
@@ -170,7 +170,7 @@ export function NewsForm({
                       type="radio"
                       name="publishMode"
                       value="scheduled"
-                      checked={publishMode === "scheduled"}
+                      defaultChecked={publishMode === "scheduled"}
                       onChange={() => setManualPublishMode("scheduled")}
                     />
                     Запланувати на
