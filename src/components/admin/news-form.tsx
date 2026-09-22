@@ -45,25 +45,23 @@ export function NewsForm({
   const [state, formAction, isPending] = useActionState(action, undefined);
   const resolve = (key: string) => state?.values?.[key] ?? fields?.[key] ?? "";
 
-  const [publishMode, setPublishMode] = useState<"now" | "scheduled">(
-    existing?.isScheduled ? "scheduled" : "now",
-  );
-  const [dismissed, setDismissed] = useState<Set<string>>(new Set());
+  // publishMode навмисно НЕ звичайний useState з початковим значенням —
+  // React скидає контрольований DOM-стан цього радіо після Server Action
+  // (незалежно від того, чи це справжній ремаунт компонента, чи ні), тож
+  // "запам'ятати клік і ніколи не чіпати" ненадійно. Замість цього щоразу
+  // беремо ручний вибір людини, якщо він є, інакше — те, що реально було
+  // востаннє надіслано на сервер (echo у state.values), інакше — початкове
+  // значення з existing. Працює правильно за будь-якого механізму скидання.
+  const [manualPublishMode, setManualPublishMode] = useState<"now" | "scheduled" | null>(null);
+  const publishMode: "now" | "scheduled" =
+    manualPublishMode ??
+    (state?.values?.publishMode === "scheduled" || existing?.isScheduled ? "scheduled" : "now");
 
-  // React скидає незкеровані поля форми після завершення Server Action —
-  // тож publishMode (кероване через checked) і застарілі помилки (dismissed)
-  // треба синхронізувати щоразу, коли з сервера повертається новий стан.
-  // Робимо це під час рендеру (офіційний React-патерн "adjusting state when
-  // a prop changes"), а не в useEffect — інакше зайвий цикл рендеру й лінт-помилка.
+  const [dismissed, setDismissed] = useState<Set<string>>(new Set());
   const [prevState, setPrevState] = useState(state);
   if (state !== prevState) {
     setPrevState(state);
     setDismissed(new Set());
-    if (state?.values?.publishMode === "scheduled") {
-      setPublishMode("scheduled");
-    } else if (state?.values?.publishMode === "now") {
-      setPublishMode("now");
-    }
   }
 
   const errorFor = (key: string) => (dismissed.has(key) ? undefined : state?.fieldErrors?.[key]);
@@ -163,7 +161,7 @@ export function NewsForm({
                       name="publishMode"
                       value="now"
                       checked={publishMode === "now"}
-                      onChange={() => setPublishMode("now")}
+                      onChange={() => setManualPublishMode("now")}
                     />
                     Опублікувати зараз
                   </label>
@@ -173,7 +171,7 @@ export function NewsForm({
                       name="publishMode"
                       value="scheduled"
                       checked={publishMode === "scheduled"}
-                      onChange={() => setPublishMode("scheduled")}
+                      onChange={() => setManualPublishMode("scheduled")}
                     />
                     Запланувати на
                   </label>

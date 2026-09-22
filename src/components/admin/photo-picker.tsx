@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 /**
@@ -21,7 +21,25 @@ export function PhotoPicker({
   error?: string;
   onPick?: () => void;
 }) {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  // Після невдалої спроби зберегти React скидає file-інпут на рівні DOM
+  // (аналог form.reset()) — на відміну від тексту, файл не можна повернути
+  // через defaultValue, тож тримаємо сам File у стані й підставляємо його
+  // назад у справжній інпут через DataTransfer, щойно браузер його прибрав.
+  useEffect(() => {
+    if (
+      selectedFile &&
+      inputRef.current &&
+      (!inputRef.current.files || inputRef.current.files.length === 0)
+    ) {
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(selectedFile);
+      inputRef.current.files = dataTransfer.files;
+    }
+  });
 
   return (
     <div>
@@ -32,13 +50,15 @@ export function PhotoPicker({
         }
       >
         <input
+          ref={inputRef}
           type="file"
           name={name}
           accept="image/*"
           required={required}
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
           onChange={(e) => {
-            const file = e.target.files?.[0];
+            const file = e.target.files?.[0] ?? null;
+            setSelectedFile(file);
             setPreview(file ? URL.createObjectURL(file) : null);
             if (file) onPick?.();
           }}

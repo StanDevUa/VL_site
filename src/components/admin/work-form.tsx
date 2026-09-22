@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useRef, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { LocaleTabs, type LocaleSuffix } from "@/components/admin/locale-tabs";
@@ -43,6 +43,15 @@ function GalleryPicker({ existing }: { existing: { key: string; url: string }[] 
       inputRef.current.files = dataTransfer.files;
     }
   }
+
+  // Та сама причина, що й у PhotoPicker: React скидає file-інпут на рівні
+  // DOM після Server Action, тож перевіряємо після кожного рендеру, чи не
+  // спорожнів інпут попри те, що обрані файли все ще в нас у стані.
+  useEffect(() => {
+    if (newFiles.length > 0 && inputRef.current && inputRef.current.files?.length === 0) {
+      syncInputFiles(newFiles);
+    }
+  });
 
   function handlePick(selected: FileList | null) {
     if (!selected || selected.length === 0) return;
