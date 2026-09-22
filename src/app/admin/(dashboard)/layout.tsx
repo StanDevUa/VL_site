@@ -1,16 +1,5 @@
-import Link from "next/link";
 import { auth, signOut } from "@/lib/auth";
-
-const NAV = [
-  { href: "/admin", label: "Головна" },
-  { href: "/admin/roboty", label: "Мої роботи" },
-  { href: "/admin/novyny", label: "Новини та анонси" },
-  { href: "/admin/vidguky", label: "Відгуки" },
-  { href: "/admin/dyplomy", label: "Дипломи" },
-  { href: "/admin/faq", label: "FAQ" },
-  // наступний розділ — "Магазин" (Категорії/Товари/Замовлення), з'явиться
-  // як розкривний пункт одразу під "Головна", коли почнемо його будувати.
-];
+import { AdminSidebarNav } from "@/components/admin/sidebar-nav";
 
 export default async function AdminDashboardLayout({
   children,
@@ -29,17 +18,7 @@ export default async function AdminDashboardLayout({
           <p className="text-xs text-navy-soft mt-1">Вікторія Лемешко</p>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-          {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="block rounded-field px-4 py-3 text-sm font-bold text-navy hover:bg-powder-pink"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        <AdminSidebarNav />
 
         <div className="p-4 border-t border-navy/10 shrink-0">
           <p className="text-xs text-navy-soft mb-2 truncate">
