@@ -62,3 +62,20 @@ body {
 *::-webkit-scrollbar {
   display: none; /* Chrome, Safari, новий Edge */
 }
+
+/* Виняток — textarea (короткий/повний опис тощо): свій скрол лишається
+   видимим, це стандартна й очікувана поведінка при введенні довгого тексту. */
+textarea {
+  scrollbar-width: thin;
+  -ms-overflow-style: auto;
+}
+
+textarea::-webkit-scrollbar {
+  display: block;
+  width: 8px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background: rgba(30, 42, 90, 0.25);
+  border-radius: 8px;
+}

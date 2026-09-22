@@ -26,3 +26,8 @@ export function formatDate(
 export function isFutureDate(date: Date): boolean {
   return date.getTime() > Date.now();
 }
+
+/** "Зараз + 1 година" у форматі для <input type="datetime-local"> — розумний початковий варіант при перемиканні на "Запланувати". */
+export function defaultScheduleDateTime(): string {
+  return toDatetimeLocalValue(new Date(Date.now() + 60 * 60 * 1000));
+}

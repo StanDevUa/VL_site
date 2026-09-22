@@ -5,6 +5,7 @@ import Link from "next/link";
 import { LocaleTabs, type LocaleSuffix } from "@/components/admin/locale-tabs";
 import { PhotoPicker } from "@/components/admin/photo-picker";
 import { FieldError } from "@/components/admin/field-error";
+import { defaultScheduleDateTime } from "@/lib/format-date";
 import type { FormState } from "@/server/actions/form-state";
 
 type ExistingNews = {
@@ -43,22 +44,33 @@ export function NewsForm({
   const fields = existing as unknown as Record<string, string | null> | undefined;
   const [state, formAction, isPending] = useActionState(action, undefined);
   const resolve = (key: string) => state?.values?.[key] ?? fields?.[key] ?? "";
-  const [publishMode, setPublishMode] = useState<"now" | "scheduled">(
-    state?.values?.publishMode === "scheduled" || existing?.isScheduled
-      ? "scheduled"
-      : "now",
-  );
 
-  // За замовчуванням — за годину від зараз, щоб поле не було порожнім,
-  // коли Вікторія перемикається на "Запланувати". Обчислюється один раз
-  // при монтуванні (лінива ініціалізація useState) — щоб не викликати
-  // Date.now() безпосередньо в тілі рендеру.
-  const [defaultScheduleValue] = useState(
-    () =>
-      state?.values?.scheduledDate ||
-      existing?.date ||
-      new Date(Date.now() + 60 * 60 * 1000).toISOString().slice(0, 16),
+  const [publishMode, setPublishMode] = useState<"now" | "scheduled">(
+    existing?.isScheduled ? "scheduled" : "now",
   );
+  const [dismissed, setDismissed] = useState<Set<string>>(new Set());
+
+  // React скидає незкеровані поля форми після завершення Server Action —
+  // тож publishMode (кероване через checked) і застарілі помилки (dismissed)
+  // треба синхронізувати щоразу, коли з сервера повертається новий стан.
+  // Робимо це під час рендеру (офіційний React-патерн "adjusting state when
+  // a prop changes"), а не в useEffect — інакше зайвий цикл рендеру й лінт-помилка.
+  const [prevState, setPrevState] = useState(state);
+  if (state !== prevState) {
+    setPrevState(state);
+    setDismissed(new Set());
+    if (state?.values?.publishMode === "scheduled") {
+      setPublishMode("scheduled");
+    } else if (state?.values?.publishMode === "now") {
+      setPublishMode("now");
+    }
+  }
+
+  const errorFor = (key: string) => (dismissed.has(key) ? undefined : state?.fieldErrors?.[key]);
+  const dismissOnFill = (key: string, value: string) => {
+    if (value.trim() === "") return;
+    setDismissed((prev) => (prev.has(key) ? prev : new Set(prev).add(key)));
+  };
 
   return (
     <form action={formAction} noValidate className="max-w-5xl @container">
@@ -77,9 +89,12 @@ export function NewsForm({
                   <input
                     name={`title${suffix}`}
                     defaultValue={resolve(`title${suffix}`)}
+                    onChange={
+                      suffix === "Uk" ? (e) => dismissOnFill("titleUk", e.target.value) : undefined
+                    }
                     className={inputClass}
                   />
-                  {suffix === "Uk" && <FieldError message={state?.fieldErrors?.titleUk} />}
+                  {suffix === "Uk" && <FieldError message={errorFor("titleUk")} />}
                 </div>
                 <div>
                   <label className={labelClass}>
@@ -89,10 +104,13 @@ export function NewsForm({
                   <textarea
                     name={`excerpt${suffix}`}
                     defaultValue={resolve(`excerpt${suffix}`)}
+                    onChange={
+                      suffix === "Uk" ? (e) => dismissOnFill("excerptUk", e.target.value) : undefined
+                    }
                     rows={2}
                     className={inputClass}
                   />
-                  {suffix === "Uk" && <FieldError message={state?.fieldErrors?.excerptUk} />}
+                  {suffix === "Uk" && <FieldError message={errorFor("excerptUk")} />}
                 </div>
                 <div>
                   <label className={labelClass}>
@@ -101,10 +119,13 @@ export function NewsForm({
                   <textarea
                     name={`text${suffix}`}
                     defaultValue={resolve(`text${suffix}`)}
+                    onChange={
+                      suffix === "Uk" ? (e) => dismissOnFill("textUk", e.target.value) : undefined
+                    }
                     rows={8}
                     className={inputClass}
                   />
-                  {suffix === "Uk" && <FieldError message={state?.fieldErrors?.textUk} />}
+                  {suffix === "Uk" && <FieldError message={errorFor("textUk")} />}
                 </div>
               </div>
             )}
@@ -122,6 +143,7 @@ export function NewsForm({
                 <select
                   name="category"
                   defaultValue={state?.values?.category || existing?.category || "NEWS"}
+                  onChange={(e) => dismissOnFill("category", e.target.value)}
                   className={inputClass}
                 >
                   {CATEGORY_OPTIONS.map((opt) => (
@@ -130,7 +152,7 @@ export function NewsForm({
                     </option>
                   ))}
                 </select>
-                <FieldError message={state?.fieldErrors?.category} />
+                <FieldError message={errorFor("category")} />
               </div>
               <div>
                 <label className={labelClass}>Публікація *</label>
@@ -159,13 +181,16 @@ export function NewsForm({
                     <input
                       type="datetime-local"
                       name="scheduledDate"
-                      defaultValue={defaultScheduleValue}
+                      defaultValue={
+                        state?.values?.scheduledDate || existing?.date || defaultScheduleDateTime()
+                      }
+                      onChange={(e) => dismissOnFill("scheduledDate", e.target.value)}
                       className={inputClass}
                     />
                   )}
                 </div>
-                <FieldError message={state?.fieldErrors?.scheduledDate} />
-                {publishMode === "scheduled" && !state?.fieldErrors?.scheduledDate && (
+                <FieldError message={errorFor("scheduledDate")} />
+                {publishMode === "scheduled" && !errorFor("scheduledDate") && (
                   <p className="text-xs text-navy-soft mt-2">
                     Новина сама з&apos;явиться на сайті у вказаний момент —
                     нічого додатково робити не треба.
@@ -183,7 +208,8 @@ export function NewsForm({
               name="photo"
               existingUrl={existing?.photoUrl}
               required={!existing}
-              error={state?.fieldErrors?.photo}
+              error={errorFor("photo")}
+              onPick={() => dismissOnFill("photo", "x")}
             />
           </div>
         </div>

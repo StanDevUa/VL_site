@@ -176,6 +176,22 @@ export function WorkForm({
   // а не відкочуватись до fields з existing/порожнього рядка.
   const resolve = (key: string) => state?.values?.[key] ?? fields?.[key] ?? "";
 
+  // Live-скидання застарілих помилок: щойно людина щось вписує в поле —
+  // ховаємо повідомлення про цю помилку, не чекаючи наступного збереження.
+  // Синхронізуємо під час рендеру (React-патерн "adjusting state when a
+  // prop changes"), не в useEffect — інакше зайвий цикл рендеру.
+  const [dismissed, setDismissed] = useState<Set<string>>(new Set());
+  const [prevState, setPrevState] = useState(state);
+  if (state !== prevState) {
+    setPrevState(state);
+    setDismissed(new Set());
+  }
+  const errorFor = (key: string) => (dismissed.has(key) ? undefined : state?.fieldErrors?.[key]);
+  const dismissOnFill = (key: string, value: string) => {
+    if (value.trim() === "") return;
+    setDismissed((prev) => (prev.has(key) ? prev : new Set(prev).add(key)));
+  };
+
   return (
     <form action={formAction} noValidate className="max-w-5xl @container">
       <div className="grid grid-cols-1 @2xl:grid-cols-3 gap-6 mb-6 items-start">
@@ -193,9 +209,12 @@ export function WorkForm({
                   <input
                     name={`title${suffix}`}
                     defaultValue={resolve(`title${suffix}`)}
+                    onChange={
+                      suffix === "Uk" ? (e) => dismissOnFill("titleUk", e.target.value) : undefined
+                    }
                     className={inputClass}
                   />
-                  {suffix === "Uk" && <FieldError message={state?.fieldErrors?.titleUk} />}
+                  {suffix === "Uk" && <FieldError message={errorFor("titleUk")} />}
                 </div>
                 <div>
                   <label className={labelClass}>
@@ -205,10 +224,13 @@ export function WorkForm({
                   <textarea
                     name={`excerpt${suffix}`}
                     defaultValue={resolve(`excerpt${suffix}`)}
+                    onChange={
+                      suffix === "Uk" ? (e) => dismissOnFill("excerptUk", e.target.value) : undefined
+                    }
                     rows={2}
                     className={inputClass}
                   />
-                  {suffix === "Uk" && <FieldError message={state?.fieldErrors?.excerptUk} />}
+                  {suffix === "Uk" && <FieldError message={errorFor("excerptUk")} />}
                 </div>
                 <div>
                   <label className={labelClass}>
@@ -217,12 +239,15 @@ export function WorkForm({
                   <textarea
                     name={`description${suffix}`}
                     defaultValue={resolve(`description${suffix}`)}
+                    onChange={
+                      suffix === "Uk"
+                        ? (e) => dismissOnFill("descriptionUk", e.target.value)
+                        : undefined
+                    }
                     rows={6}
                     className={inputClass}
                   />
-                  {suffix === "Uk" && (
-                    <FieldError message={state?.fieldErrors?.descriptionUk} />
-                  )}
+                  {suffix === "Uk" && <FieldError message={errorFor("descriptionUk")} />}
                 </div>
               </div>
             )}
@@ -237,7 +262,8 @@ export function WorkForm({
             name="mainPhoto"
             existingUrl={existing?.mainPhotoUrl}
             required={!existing}
-            error={state?.fieldErrors?.mainPhoto}
+            error={errorFor("mainPhoto")}
+            onPick={() => dismissOnFill("mainPhoto", "x")}
           />
         </div>
       </div>

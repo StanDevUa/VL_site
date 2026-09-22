@@ -13,11 +13,13 @@ export function PhotoPicker({
   existingUrl,
   required,
   error,
+  onPick,
 }: {
   name: string;
   existingUrl?: string | null;
   required?: boolean;
   error?: string;
+  onPick?: () => void;
 }) {
   const [preview, setPreview] = useState<string | null>(null);
 
@@ -38,6 +40,7 @@ export function PhotoPicker({
           onChange={(e) => {
             const file = e.target.files?.[0];
             setPreview(file ? URL.createObjectURL(file) : null);
+            if (file) onPick?.();
           }}
         />
         {preview ? (
