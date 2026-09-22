@@ -6,6 +6,7 @@ import { getPublicUrl } from "@/lib/storage";
 import { deleteNews } from "@/server/actions/news";
 import { isFutureDate } from "@/lib/format-date";
 import { DeleteButton } from "@/components/admin/delete-button";
+import { primaryButtonClass } from "@/components/ui/button-styles";
 
 const PAGE_SIZE = 10;
 
@@ -56,7 +57,7 @@ export default async function AdminNewsListPage({
         </h1>
         <Link
           href="/admin/novyny/new"
-          className="rounded-button bg-indigo px-5 py-3 font-heading font-bold text-white shadow-button hover:bg-indigo-hover"
+          className={primaryButtonClass}
         >
           + Додати новину
         </Link>

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { deleteTestimonial } from "@/server/actions/testimonials";
 import { DeleteButton } from "@/components/admin/delete-button";
+import { primaryButtonClass } from "@/components/ui/button-styles";
 
 const PAGE_SIZE = 10;
 
@@ -30,7 +31,7 @@ export default async function AdminTestimonialsListPage({
         <h1 className="font-heading font-extrabold text-2xl text-navy">Відгуки</h1>
         <Link
           href="/admin/vidguky/new"
-          className="rounded-button bg-indigo px-5 py-3 font-heading font-bold text-white shadow-button hover:bg-indigo-hover"
+          className={primaryButtonClass}
         >
           + Додати відгук
         </Link>

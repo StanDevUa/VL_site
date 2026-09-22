@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { getPublicUrl } from "@/lib/storage";
 import { deleteWork } from "@/server/actions/works";
 import { DeleteButton } from "@/components/admin/delete-button";
+import { primaryButtonClass } from "@/components/ui/button-styles";
 
 const PAGE_SIZE = 10;
 
@@ -34,7 +35,7 @@ export default async function AdminWorksListPage({
         </h1>
         <Link
           href="/admin/roboty/new"
-          className="rounded-button bg-indigo px-5 py-3 font-heading font-bold text-white shadow-button hover:bg-indigo-hover"
+          className={primaryButtonClass}
         >
           + Додати роботу
         </Link>

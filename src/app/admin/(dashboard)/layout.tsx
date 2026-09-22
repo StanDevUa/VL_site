@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { auth, signOut } from "@/lib/auth";
+import { secondaryButtonClass } from "@/components/ui/button-styles";
 
 const NAV = [
   { href: "/admin", label: "Головна" },
@@ -18,8 +19,8 @@ export default async function AdminDashboardLayout({
   const session = await auth();
 
   return (
-    <div className="min-h-screen flex bg-page-bg">
-      <aside className="w-64 shrink-0 bg-white border-r border-navy/10 flex flex-col">
+    <div className="h-screen flex bg-page-bg overflow-hidden">
+      <aside className="w-64 h-full shrink-0 bg-white border-r border-navy/10 flex flex-col">
         <div className="p-6 border-b border-navy/10">
           <p className="font-heading font-extrabold text-lg text-navy">
             Адмін-панель
@@ -27,7 +28,7 @@ export default async function AdminDashboardLayout({
           <p className="text-xs text-navy-soft mt-1">Вікторія Лемешко</p>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {NAV.map((item) => (
             <Link
               key={item.href}
@@ -39,7 +40,7 @@ export default async function AdminDashboardLayout({
           ))}
         </nav>
 
-        <div className="p-4 border-t border-navy/10">
+        <div className="p-4 border-t border-navy/10 shrink-0">
           <p className="text-xs text-navy-soft mb-2 truncate">
             {session?.user?.email}
           </p>
@@ -49,17 +50,14 @@ export default async function AdminDashboardLayout({
               await signOut({ redirectTo: "/admin/login" });
             }}
           >
-            <button
-              type="submit"
-              className="w-full rounded-button border border-navy/15 px-4 py-2 text-sm font-bold text-navy hover:border-indigo hover:text-indigo"
-            >
+            <button type="submit" className={`w-full ${secondaryButtonClass}`}>
               Вийти
             </button>
           </form>
         </div>
       </aside>
 
-      <main className="flex-1 min-w-0 p-8">{children}</main>
+      <main className="flex-1 min-w-0 h-full overflow-y-auto p-8">{children}</main>
     </div>
   );
 }

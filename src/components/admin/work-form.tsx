@@ -6,6 +6,7 @@ import Link from "next/link";
 import { LocaleTabs, type LocaleSuffix } from "@/components/admin/locale-tabs";
 import { PhotoPicker } from "@/components/admin/photo-picker";
 import { FieldError } from "@/components/admin/field-error";
+import { primaryButtonClass, secondaryButtonClass } from "@/components/ui/button-styles";
 import type { FormState } from "@/server/actions/form-state";
 
 type ExistingWork = {
@@ -288,13 +289,13 @@ export function WorkForm({
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-button bg-indigo px-8 py-3 font-heading font-bold text-white shadow-button transition-colors hover:bg-indigo-hover disabled:opacity-60"
+          className={primaryButtonClass}
         >
           {isPending ? "Зберігаємо…" : "Зберегти"}
         </button>
         <Link
           href="/admin/roboty"
-          className="rounded-button border border-navy/15 px-8 py-3 font-heading font-bold text-navy hover:border-indigo hover:text-indigo transition-colors"
+          className={secondaryButtonClass}
         >
           Скасувати
         </Link>
