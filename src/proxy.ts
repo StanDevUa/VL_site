@@ -1,13 +1,28 @@
 import createMiddleware from "next-intl/middleware";
 import { NextRequest, NextResponse } from "next/server";
 import { routing } from "./i18n/routing";
+import { auth } from "@/lib/auth";
 
 const intlProxy = createMiddleware(routing);
 
-export function proxy(request: NextRequest) {
+const PUBLIC_ADMIN_PATHS = ["/admin/login"];
+
+export async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
   // Адмінка — окремий контур: без next-intl (інтерфейс завжди українською,
-  // без мовного префікса), захист сесією/isAdmin буде додано разом з Auth.js.
-  if (request.nextUrl.pathname.startsWith("/admin")) {
+  // без мовного префікса), захищена сесією Auth.js (isAdmin).
+  if (pathname.startsWith("/admin")) {
+    if (PUBLIC_ADMIN_PATHS.includes(pathname)) {
+      return NextResponse.next();
+    }
+
+    const session = await auth();
+    if (!session?.user?.isAdmin) {
+      const loginUrl = new URL("/admin/login", request.url);
+      return NextResponse.redirect(loginUrl);
+    }
+
     return NextResponse.next();
   }
 
