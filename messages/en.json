@@ -1,0 +1,19 @@
+{
+  "Nav": {
+    "about": "About",
+    "services": "Services",
+    "method": "Signature method",
+    "shop": "Shop",
+    "news": "News",
+    "faq": "FAQ"
+  },
+  "Common": {
+    "bookConsultation": "Book a consultation",
+    "toShop": "Go to shop",
+    "addToCart": "Add to cart",
+    "cart": "Cart",
+    "allWorks": "All works",
+    "allNews": "All news",
+    "readMore": "Read more"
+  }
+}

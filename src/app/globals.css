@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+/*
+ * Дизайн-токени з design/VL Design System (reference).html
+ * Детальніше — architecture.md, розділ 6.
+ */
+@theme {
+  /* Кольори бренду — лише для іконок/маркерів/лого/CTA-плашки, НІКОЛИ для кнопок */
+  --color-coral: #f2662f;
+  --color-magenta: #c9307c;
+  --color-violet: #7a3aa0;
+  --color-blue: #2b6bb8;
+
+  /* Дія та текст */
+  --color-indigo: #5252ac; /* колір усіх primary-кнопок */
+  --color-indigo-hover: #6262be;
+  --color-navy: #1e2a5a; /* основний колір тексту */
+  --color-navy-soft: #4a5480;
+
+  /* Фони секцій — чергуються: білий → пудрово-рожевий → білий → бежевий */
+  --color-white: #fffdfc;
+  --color-powder-pink: #fbefec;
+  --color-powder-beige: #faf4ea;
+  --color-page-bg: #f4f1ed;
+
+  /* Радіуси */
+  --radius-field: 11px; /* поля форм */
+  --radius-button: 12px;
+  --radius-card: 14px; /* картки, фото */
+  --radius-block: 18px; /* великі блоки */
+
+  /* Тіні */
+  --shadow-button: 0 14px 30px -12px rgba(82, 82, 172, 0.34);
+  --shadow-card-hover: 0 24px 44px -26px rgba(30, 42, 90, 0.35);
+  --shadow-photo: 0 30px 60px -30px rgba(30, 42, 90, 0.35);
+
+  /* Шрифти (CSS-змінні заповнюються next/font у [locale]/layout.tsx) */
+  --font-heading: var(--font-nunito);
+  --font-body: var(--font-mulish);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-page-bg);
+  color: var(--color-navy);
+  font-family: var(--font-body), system-ui, sans-serif;
+}

@@ -1,0 +1,265 @@
+// Схема бази даних — Ресурс 1 (сайт-візитка Вікторії Лемешко).
+// Опис рішень і обґрунтування — у architecture.md.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+// ── Користувачі, ролі, авторизація (Auth.js) ─────────────────────
+
+enum UserRole {
+  PURCHASER      // Ресурс 1 — покупець магазину
+  PARENT         // Ресурс 2 — кабінет на сайті ТМ Єнот ЕМО
+  PSYCHOLOGIST   // Ресурс 3 — платна підписка для фахівців
+}
+
+model User {
+  id           String               @id @default(cuid())
+  email        String               @unique
+  passwordHash String?              // null, доки покупець не встановив пароль
+  isAdmin      Boolean              @default(false) // єдиний адмін — Вікторія
+  roles        UserRoleAssignment[]
+  orders       Order[]
+  accounts     Account[]
+  sessions     Session[]
+  createdAt    DateTime             @default(now())
+}
+
+model UserRoleAssignment {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      UserRole
+  createdAt DateTime @default(now())
+
+  @@unique([userId, role])
+}
+
+// Стандартні моделі Auth.js (database session strategy)
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expires      DateTime
+}
+
+// Для листів "встановити/відновити пароль"
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ── Магазин ────────────────────────────────────────────────────────
+
+model Category {
+  id        String    @id @default(cuid())
+  nameUk    String
+  nameEn    String?
+  nameRu    String?
+  slug      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+}
+
+model Product {
+  id            String      @id @default(cuid())
+  slug          String      @unique
+  nameUk        String
+  nameEn        String?
+  nameRu        String?
+  categoryId    String
+  category      Category    @relation(fields: [categoryId], references: [id])
+  mainPhoto     String
+  gallery       String[]    @default([])
+  price         Decimal     @db.Decimal(10, 2)
+  productTypeUk String      // коротка підпис під характеристикою, напр. "пластикові картки"
+  productTypeEn String?
+  productTypeRu String?
+  specsUk       String      // короткий опис складу/комплектації
+  specsEn       String?
+  specsRu       String?
+  descriptionUk String      @db.Text
+  descriptionEn String?     @db.Text
+  descriptionRu String?     @db.Text
+  showOnHome    Boolean     @default(false)
+  orderItems    OrderItem[]
+  createdAt     DateTime    @default(now())
+}
+
+// ── Портфоліо ("Мої роботи") ─────────────────────────────────────
+
+model PortfolioWork {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  titleUk       String
+  titleEn       String?
+  titleRu       String?
+  excerptUk     String   // короткий опис: картка списку + лід-абзац + сайдбар "Інші роботи"
+  excerptEn     String?
+  excerptRu     String?
+  descriptionUk String   @db.Text
+  descriptionEn String?  @db.Text
+  descriptionRu String?  @db.Text
+  mainPhoto     String
+  gallery       String[] @default([])
+  createdAt     DateTime @default(now()) // порядок показу = порядок додавання
+}
+
+// ── Новини та анонси ──────────────────────────────────────────────
+
+enum NewsCategory {
+  ANNOUNCEMENT      // "Анонс"
+  NEWS              // "Новина"
+  FOR_PSYCHOLOGISTS // "Для психологів"
+}
+
+model NewsPost {
+  id        String       @id @default(cuid())
+  slug      String       @unique
+  titleUk   String
+  titleEn   String?
+  titleRu   String?
+  excerptUk String
+  excerptEn String?
+  excerptRu String?
+  textUk    String       @db.Text
+  textEn    String?      @db.Text
+  textRu    String?      @db.Text
+  photo     String?
+  category  NewsCategory
+  date      DateTime
+  createdAt DateTime     @default(now())
+}
+
+// ── Відгуки ────────────────────────────────────────────────────────
+
+model Testimonial {
+  id                  String   @id @default(cuid())
+  author              String   // ім'я, не перекладається
+  authorDescriptionUk String
+  authorDescriptionEn String?
+  authorDescriptionRu String?
+  textUk              String   @db.Text
+  textEn              String?  @db.Text
+  textRu              String?  @db.Text
+  showOnHome          Boolean  @default(false)
+  createdAt           DateTime @default(now())
+}
+
+// ── Дипломи (галерея "Моя кваліфікація") ────────────────────────
+
+model Diploma {
+  id        String   @id @default(cuid())
+  image     String
+  captionUk String?
+  captionEn String?
+  captionRu String?
+  createdAt DateTime @default(now()) // порядок показу = порядок додавання
+}
+
+// ── FAQ ──────────────────────────────────────────────────────────
+
+model FaqEntry {
+  id         String   @id @default(cuid())
+  questionUk String
+  questionEn String?
+  questionRu String?
+  answerUk   String   @db.Text
+  answerEn   String?  @db.Text
+  answerRu   String?  @db.Text
+  createdAt  DateTime @default(now())
+}
+
+// ── Заявки (без адмін-списку за ТЗ — зберігаються + надсилається email) ──
+
+model ConsultationRequest {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  email     String
+  comment   String?  @db.Text
+  createdAt DateTime @default(now())
+}
+
+model FaqQuestion {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  question  String   @db.Text
+  createdAt DateTime @default(now())
+}
+
+// ── Замовлення ───────────────────────────────────────────────────
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PAID
+  SHIPPED     // Вікторія позначає вручну після створення ТТН у кабінеті НП
+  CANCELLED
+}
+
+model Order {
+  id           String      @id @default(cuid())
+  orderNumber  String      @unique // людський номер, показується клієнту
+  userId       String
+  user         User        @relation(fields: [userId], references: [id])
+  status       OrderStatus @default(PENDING_PAYMENT)
+  items        OrderItem[]
+  subtotal     Decimal     @db.Decimal(10, 2) // тільки товари; доставка НЕ входить
+  currency     String      @default("UAH")
+
+  recipientName           String
+  recipientPhone          String
+  recipientEmail          String
+  novaPoshtaCityRef       String
+  novaPoshtaCityName      String
+  novaPoshtaWarehouseRef  String
+  novaPoshtaWarehouseName String
+  comment                 String?   @db.Text
+
+  wayforpayOrderReference String?   @unique
+  wayforpayStatus         String?
+  paidAt                  DateTime?
+
+  createdAt    DateTime    @default(now())
+}
+
+model OrderItem {
+  id             String   @id @default(cuid())
+  orderId        String
+  order          Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId      String?
+  product        Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  // знімок на момент покупки — щоб зміна товару в адмінці не спотворювала історію замовлень
+  nameUkSnapshot String
+  priceSnapshot  Decimal  @db.Decimal(10, 2)
+  quantity       Int
+}
