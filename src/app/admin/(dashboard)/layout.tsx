@@ -5,8 +5,9 @@ const NAV = [
   { href: "/admin", label: "Головна" },
   { href: "/admin/roboty", label: "Мої роботи" },
   { href: "/admin/novyny", label: "Новини та анонси" },
+  { href: "/admin/vidguky", label: "Відгуки" },
   // наступні розділи додаються сюди по мірі готовності:
-  // Товари, Категорії, Замовлення, Відгуки, Дипломи, FAQ
+  // Товари, Категорії, Замовлення, Дипломи, FAQ
 ];
 
 export default async function AdminDashboardLayout({
