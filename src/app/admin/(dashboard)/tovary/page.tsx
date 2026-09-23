@@ -71,7 +71,7 @@ export default async function AdminProductsListPage({
               key={c.id}
               href={`/admin/tovary?category=${c.id}`}
               className={
-                "rounded-field px-4 py-2 text-sm font-bold transition-colors " +
+                "rounded-field px-4 py-2 text-sm font-bold uppercase tracking-wide transition-colors " +
                 (activeCategory === c.id
                   ? "bg-indigo text-white"
                   : "bg-white border border-navy/15 text-navy-soft hover:text-navy")
