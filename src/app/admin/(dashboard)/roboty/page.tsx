@@ -69,9 +69,7 @@ export default async function AdminWorksListPage({
                 >
                   Редагувати
                 </Link>
-                <div className="shrink-0">
-                  <DeleteButton action={deleteWork.bind(null, work.id)} />
-                </div>
+                <DeleteButton action={deleteWork.bind(null, work.id)} />
               </div>
             ))}
           </div>

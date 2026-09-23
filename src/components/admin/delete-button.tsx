@@ -14,7 +14,7 @@ export function DeleteButton({
   if (disabled) {
     return (
       <span
-        className="text-sm font-bold text-navy-soft/50 cursor-not-allowed"
+        className="shrink-0 text-sm font-bold text-navy-soft/50 cursor-not-allowed"
         title={disabledReason}
       >
         Видалити
@@ -34,7 +34,7 @@ export function DeleteButton({
     >
       <button
         type="submit"
-        className="appearance-none bg-transparent border-0 p-0 m-0 font-body text-sm font-bold text-red-600 hover:underline"
+        className="shrink-0 appearance-none bg-transparent border-0 p-0 m-0 font-body text-sm font-bold text-red-600 hover:underline"
       >
         Видалити
       </button>

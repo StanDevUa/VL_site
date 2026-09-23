@@ -129,9 +129,7 @@ export default async function AdminNewsListPage({
                 >
                   Редагувати
                 </Link>
-                <div className="shrink-0">
-                  <DeleteButton action={deleteNews.bind(null, item.id)} />
-                </div>
+                <DeleteButton action={deleteNews.bind(null, item.id)} />
               </div>
             ))}
           </div>

@@ -64,9 +64,7 @@ export default async function AdminFaqListPage({
                 >
                   Редагувати
                 </Link>
-                <div className="shrink-0">
-                  <DeleteButton action={deleteFaqEntry.bind(null, item.id)} />
-                </div>
+                <DeleteButton action={deleteFaqEntry.bind(null, item.id)} />
               </div>
             ))}
           </div>

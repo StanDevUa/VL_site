@@ -67,9 +67,7 @@ export default async function AdminTestimonialsListPage({
                 >
                   Редагувати
                 </Link>
-                <div className="shrink-0">
-                  <DeleteButton action={deleteTestimonial.bind(null, item.id)} />
-                </div>
+                <DeleteButton action={deleteTestimonial.bind(null, item.id)} />
               </div>
             ))}
           </div>
