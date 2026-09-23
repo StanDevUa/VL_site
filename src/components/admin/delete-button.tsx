@@ -30,6 +30,7 @@ export function DeleteButton({
           e.preventDefault();
         }
       }}
+      className="contents"
     >
       <button
         type="submit"
