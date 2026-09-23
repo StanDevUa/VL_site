@@ -33,7 +33,7 @@ export function DeleteButton({
     >
       <button
         type="submit"
-        className="text-sm font-bold text-red-600 hover:underline"
+        className="bg-transparent border-0 p-0 m-0 font-body text-sm font-bold text-red-600 hover:underline"
       >
         Видалити
       </button>
