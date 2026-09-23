@@ -1,0 +1,106 @@
+import Link from "next/link";
+import Image from "next/image";
+import { prisma } from "@/lib/prisma";
+import { getPublicUrl } from "@/lib/storage";
+import { deleteProduct } from "@/server/actions/products";
+import { DeleteButton } from "@/components/admin/delete-button";
+import { primaryButtonClass } from "@/components/ui/button-styles";
+
+const PAGE_SIZE = 10;
+
+export default async function AdminProductsListPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page } = await searchParams;
+  const currentPage = Math.max(1, Number(page) || 1);
+
+  const [products, total] = await Promise.all([
+    prisma.product.findMany({
+      orderBy: { createdAt: "asc" },
+      skip: (currentPage - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+      include: { category: { select: { nameUk: true } } },
+    }),
+    prisma.product.count(),
+  ]);
+
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="font-heading font-extrabold text-2xl text-navy">Товари</h1>
+        <Link href="/admin/tovary/new" className={primaryButtonClass}>
+          + Додати товар
+        </Link>
+      </div>
+
+      {products.length === 0 ? (
+        <p className="text-navy-soft">
+          Товарів ще немає. Натисни «Додати товар», щоб створити перший.
+        </p>
+      ) : (
+        <>
+          <div className="bg-white rounded-card border border-navy/10 divide-y divide-navy/10">
+            {products.map((item) => (
+              <div key={item.id} className="flex items-center gap-4 p-4">
+                <Image
+                  src={getPublicUrl(item.mainPhoto)!}
+                  alt=""
+                  width={72}
+                  height={54}
+                  className="rounded-field object-cover w-[72px] h-[54px] shrink-0"
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <p className="font-bold text-navy truncate">{item.nameUk}</p>
+                    {item.showOnHome ? (
+                      <span className="shrink-0 text-xs font-bold text-indigo bg-indigo/10 px-2 py-0.5 rounded-field">
+                        На головній
+                      </span>
+                    ) : (
+                      <span className="shrink-0 text-xs font-bold text-navy-soft bg-navy/5 px-2 py-0.5 rounded-field">
+                        Приховано
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-sm text-navy-soft truncate">
+                    {item.category.nameUk} · {Number(item.price).toFixed(2)} грн
+                  </p>
+                </div>
+                <Link
+                  href={`/admin/tovary/${item.id}`}
+                  className="shrink-0 text-sm font-bold text-indigo hover:underline"
+                >
+                  Редагувати
+                </Link>
+                <DeleteButton action={deleteProduct.bind(null, item.id)} />
+              </div>
+            ))}
+          </div>
+
+          {totalPages > 1 && (
+            <nav className="flex items-center justify-center gap-2 mt-6">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                <Link
+                  key={p}
+                  href={`/admin/tovary?page=${p}`}
+                  className={
+                    "w-10 h-10 flex items-center justify-center rounded-field font-bold text-sm " +
+                    (p === currentPage
+                      ? "bg-indigo text-white"
+                      : "bg-white border border-navy/15 text-navy hover:border-magenta hover:text-magenta")
+                  }
+                >
+                  {p}
+                </Link>
+              ))}
+            </nav>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
