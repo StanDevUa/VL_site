@@ -48,5 +48,13 @@
     "deliveryNote": "All products are delivered across Ukraine by Nova Poshta — to a branch or by courier. We ship within two business days after confirmation.",
     "recommended": "Recommended products",
     "gallery": "Product photos"
+  },
+  "Cart": {
+    "pageTitle": "Cart",
+    "empty": "Your cart is empty.",
+    "remove": "Remove",
+    "subtotal": "Total:",
+    "deliveryHint": "Delivery is paid separately at Nova Poshta rates.",
+    "checkout": "Proceed to checkout"
   }
 }
