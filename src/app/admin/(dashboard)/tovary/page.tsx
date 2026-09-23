@@ -6,11 +6,9 @@ import { deleteProduct } from "@/server/actions/products";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { primaryButtonClass } from "@/components/ui/button-styles";
 import { formatDate } from "@/lib/format-date";
+import { CATEGORY_BADGE_GRADIENT } from "@/lib/category-badge";
 
 const PAGE_SIZE = 8;
-
-const CATEGORY_BADGE_GRADIENT =
-  "linear-gradient(120deg, #F2662F 0%, #C9307C 42%, #7A3AA0 70%, #2B6BB8 100%)";
 
 export default async function AdminProductsListPage({
   searchParams,

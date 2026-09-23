@@ -33,5 +33,20 @@
     "categoryAnnouncement": "Announcement",
     "categoryNews": "News",
     "categoryForPsychologists": "For psychologists"
+  },
+  "Shop": {
+    "pageTitle": "Shop",
+    "empty": "No products yet.",
+    "emptyInCategory": "No products in this category yet.",
+    "categoryAll": "All",
+    "goToCart": "Go to cart",
+    "quantity": "Quantity:",
+    "productType": "Product type:",
+    "specs": "Specifications:",
+    "pricePerUnit": "Price per unit:",
+    "inCart": "In cart:",
+    "deliveryNote": "All products are delivered across Ukraine by Nova Poshta — to a branch or by courier. We ship within two business days after confirmation.",
+    "recommended": "Recommended products",
+    "gallery": "Product photos"
   }
 }
