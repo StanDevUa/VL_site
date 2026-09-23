@@ -56,5 +56,26 @@
     "subtotal": "Total:",
     "deliveryHint": "Delivery is paid separately at Nova Poshta rates.",
     "checkout": "Proceed to checkout"
+  },
+  "Checkout": {
+    "pageTitle": "Checkout",
+    "emptyCart": "Your cart is empty — add some products first.",
+    "contactTitle": "Contact details",
+    "recipientName": "Full name",
+    "recipientPhone": "Phone",
+    "recipientEmail": "Email",
+    "deliveryTitle": "Delivery (Nova Poshta)",
+    "city": "City",
+    "warehouse": "Branch",
+    "comment": "Order comment (optional)",
+    "summaryTitle": "Your order",
+    "subtotal": "Total:",
+    "deliveryHint": "Delivery is paid separately at Nova Poshta rates.",
+    "consent": "I agree to the payment and delivery terms, the return policy, and the processing of my personal data.",
+    "submit": "Place order",
+    "submitting": "Placing order…",
+    "successTitle": "Thank you for your order!",
+    "orderNumberLabel": "Order number:",
+    "successNote": "We'll contact you shortly to arrange payment and delivery."
   }
 }
