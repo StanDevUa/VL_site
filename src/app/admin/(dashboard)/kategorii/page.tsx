@@ -1,10 +1,16 @@
 import Link from "next/link";
+import Image from "next/image";
 import { prisma } from "@/lib/prisma";
+import { getPublicUrl } from "@/lib/storage";
 import { deleteCategory } from "@/server/actions/categories";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { primaryButtonClass } from "@/components/ui/button-styles";
+import { formatDate } from "@/lib/format-date";
 
 const PAGE_SIZE = 10;
+
+const CATEGORY_BADGE_GRADIENT =
+  "linear-gradient(120deg, #F2662F 0%, #C9307C 42%, #7A3AA0 70%, #2B6BB8 100%)";
 
 export default async function AdminCategoriesListPage({
   searchParams,
@@ -19,7 +25,10 @@ export default async function AdminCategoriesListPage({
       orderBy: { createdAt: "asc" },
       skip: (currentPage - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
-      include: { _count: { select: { products: true } } },
+      include: {
+        _count: { select: { products: true } },
+        products: { take: 1, orderBy: { createdAt: "asc" }, select: { mainPhoto: true } },
+      },
     }),
     prisma.category.count(),
   ]);
@@ -41,32 +50,55 @@ export default async function AdminCategoriesListPage({
         </p>
       ) : (
         <>
-          <div className="bg-white rounded-card border border-navy/10 divide-y divide-navy/10">
-            {categories.map((item) => (
-              <div key={item.id} className="flex items-center gap-4 p-4">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className="font-bold text-navy truncate">{item.nameUk}</p>
-                    <span className="shrink-0 text-xs font-bold text-navy-soft bg-navy/5 px-2 py-0.5 rounded-field">
-                      Товарів: {item._count.products}
+          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-4">
+            {categories.map((item) => {
+              const thumbnail = item.products[0]?.mainPhoto;
+              return (
+                <div
+                  key={item.id}
+                  className="bg-white rounded-card border border-navy/10 overflow-hidden flex flex-col"
+                >
+                  <div className="relative h-28 bg-navy/5">
+                    {thumbnail && (
+                      <Image
+                        src={getPublicUrl(thumbnail)!}
+                        alt=""
+                        fill
+                        sizes="(min-width: 1280px) 16vw, (min-width: 640px) 33vw, 50vw"
+                        className="object-cover"
+                      />
+                    )}
+                    <span
+                      className="absolute top-2.5 left-2.5 text-[11px] font-bold uppercase tracking-wide text-white px-2.5 py-1 rounded-[7px]"
+                      style={{ background: CATEGORY_BADGE_GRADIENT }}
+                    >
+                      {item.nameUk}
                     </span>
                   </div>
+                  <div className="p-4 flex flex-col gap-1 flex-1">
+                    <p className="text-sm font-bold text-navy">
+                      Товарів: {item._count.products}
+                    </p>
+                    <p className="text-xs text-navy-soft">
+                      Додано: {formatDate(item.createdAt, "uk", { day: "2-digit", month: "2-digit", year: "numeric" })}
+                    </p>
+                    <div className="mt-auto pt-3 flex items-center justify-between">
+                      <Link
+                        href={`/admin/kategorii/${item.id}`}
+                        className="text-sm font-bold text-indigo hover:underline"
+                      >
+                        Редагувати
+                      </Link>
+                      <DeleteButton
+                        action={deleteCategory.bind(null, item.id)}
+                        disabled={item._count.products > 0}
+                        disabledReason="Не можна видалити категорію, поки в ній є товари."
+                      />
+                    </div>
+                  </div>
                 </div>
-                <Link
-                  href={`/admin/kategorii/${item.id}`}
-                  className="shrink-0 text-sm font-bold text-indigo hover:underline"
-                >
-                  Редагувати
-                </Link>
-                <div className="shrink-0">
-                  <DeleteButton
-                    action={deleteCategory.bind(null, item.id)}
-                    disabled={item._count.products > 0}
-                    disabledReason="Не можна видалити категорію, поки в ній є товари."
-                  />
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {totalPages > 1 && (
