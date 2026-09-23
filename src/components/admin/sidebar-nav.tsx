@@ -9,7 +9,7 @@ const NAV_TOP = [{ href: "/admin", label: "Головна" }];
 const SHOP_CHILDREN = [
   { href: "/admin/kategorii", label: "Категорії" },
   { href: "/admin/tovary", label: "Товари" },
-  // наступний — "Замовлення", з'явиться, коли буде готовий.
+  { href: "/admin/zamovlennia", label: "Замовлення" },
 ];
 
 const NAV_REST = [
