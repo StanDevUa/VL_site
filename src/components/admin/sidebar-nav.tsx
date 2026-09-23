@@ -1,40 +1,79 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const NAV = [
-  { href: "/admin", label: "Головна" },
+const NAV_TOP = [{ href: "/admin", label: "Головна" }];
+
+const SHOP_CHILDREN = [
+  { href: "/admin/kategorii", label: "Категорії" },
+  // наступні — "Товари" і "Замовлення", з'являться, коли будуть готові.
+];
+
+const NAV_REST = [
   { href: "/admin/roboty", label: "Мої роботи" },
   { href: "/admin/novyny", label: "Новини та анонси" },
   { href: "/admin/vidguky", label: "Відгуки" },
   { href: "/admin/dyplomy", label: "Дипломи" },
   { href: "/admin/faq", label: "FAQ" },
-  // наступний розділ — "Магазин" (Категорії/Товари/Замовлення), з'явиться
-  // як розкривний пункт одразу під "Головна", коли почнемо його будувати.
 ];
+
+function linkClass(isActive: boolean, bold = true) {
+  return (
+    "block rounded-field px-4 py-3 text-sm hover:bg-powder-pink " +
+    (bold ? "font-bold " : "") +
+    (isActive ? "bg-powder-pink text-magenta" : "text-navy")
+  );
+}
 
 export function AdminSidebarNav() {
   const pathname = usePathname();
+  const isShopActive = SHOP_CHILDREN.some((c) => pathname.startsWith(c.href));
+  const [shopOpen, setShopOpen] = useState(isShopActive);
 
   return (
     <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-      {NAV.map((item) => {
-        const isActive =
-          item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href);
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={
-              "block rounded-field px-4 py-3 text-sm font-bold hover:bg-powder-pink " +
-              (isActive ? "bg-powder-pink text-magenta" : "text-navy")
-            }
-          >
-            {item.label}
-          </Link>
-        );
-      })}
+      {NAV_TOP.map((item) => (
+        <Link key={item.href} href={item.href} className={linkClass(pathname === item.href)}>
+          {item.label}
+        </Link>
+      ))}
+
+      <button
+        type="button"
+        onClick={() => setShopOpen((v) => !v)}
+        className={
+          "w-full flex items-center justify-between rounded-field px-4 py-3 text-sm font-bold hover:bg-powder-pink " +
+          (isShopActive ? "bg-powder-pink text-magenta" : "text-navy")
+        }
+      >
+        Магазин
+        <span className={"transition-transform " + (shopOpen ? "rotate-180" : "")}>▾</span>
+      </button>
+      {shopOpen && (
+        <div className="pl-4 space-y-1">
+          {SHOP_CHILDREN.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={linkClass(pathname.startsWith(item.href), false)}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {NAV_REST.map((item) => (
+        <Link
+          key={item.href}
+          href={item.href}
+          className={linkClass(pathname.startsWith(item.href))}
+        >
+          {item.label}
+        </Link>
+      ))}
     </nav>
   );
 }

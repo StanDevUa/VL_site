@@ -3,10 +3,25 @@
 export function DeleteButton({
   action,
   confirmText = "Точно видалити? Це не можна скасувати.",
+  disabled = false,
+  disabledReason,
 }: {
   action: () => void;
   confirmText?: string;
+  disabled?: boolean;
+  disabledReason?: string;
 }) {
+  if (disabled) {
+    return (
+      <span
+        className="text-sm font-bold text-navy-soft/50 cursor-not-allowed"
+        title={disabledReason}
+      >
+        Видалити
+      </span>
+    );
+  }
+
   return (
     <form
       action={action}
