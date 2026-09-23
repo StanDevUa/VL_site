@@ -50,7 +50,7 @@ export default async function AdminCategoriesListPage({
         </p>
       ) : (
         <>
-          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-4">
             {categories.map((item) => {
               const thumbnail = item.products[0]?.mainPhoto;
               return (
@@ -64,7 +64,7 @@ export default async function AdminCategoriesListPage({
                         src={getPublicUrl(thumbnail)!}
                         alt=""
                         fill
-                        sizes="(min-width: 1280px) 16vw, (min-width: 640px) 33vw, 50vw"
+                        sizes="(min-width: 1280px) 20vw, (min-width: 640px) 33vw, 50vw"
                         className="object-cover"
                       />
                     )}
@@ -82,7 +82,7 @@ export default async function AdminCategoriesListPage({
                     <p className="text-xs text-navy-soft">
                       Додано: {formatDate(item.createdAt, "uk", { day: "2-digit", month: "2-digit", year: "numeric" })}
                     </p>
-                    <div className="mt-auto pt-3 flex items-center justify-between">
+                    <div className="mt-auto pt-3 flex items-center justify-between gap-2">
                       <Link
                         href={`/admin/kategorii/${item.id}`}
                         className="text-sm font-bold text-indigo hover:underline"

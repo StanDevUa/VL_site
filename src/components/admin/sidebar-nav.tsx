@@ -31,7 +31,6 @@ export function AdminSidebarNav() {
   const pathname = usePathname();
   const isShopActive = SHOP_CHILDREN.some((c) => pathname.startsWith(c.href));
   const [shopOpen, setShopOpen] = useState(isShopActive);
-  const isShopLabelHighlighted = shopOpen !== isShopActive;
 
   return (
     <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
@@ -46,7 +45,7 @@ export function AdminSidebarNav() {
         onClick={() => setShopOpen((v) => !v)}
         className={
           "w-full flex items-center justify-between rounded-field px-4 py-3 text-sm font-bold hover:bg-powder-pink " +
-          (isShopLabelHighlighted ? "text-magenta" : "text-navy")
+          (isShopActive ? "text-magenta" : "text-navy")
         }
       >
         Магазин
