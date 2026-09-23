@@ -7,7 +7,7 @@ import { DeleteButton } from "@/components/admin/delete-button";
 import { primaryButtonClass } from "@/components/ui/button-styles";
 import { formatDate } from "@/lib/format-date";
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 8;
 
 const CATEGORY_BADGE_GRADIENT =
   "linear-gradient(120deg, #F2662F 0%, #C9307C 42%, #7A3AA0 70%, #2B6BB8 100%)";
@@ -116,7 +116,7 @@ export default async function AdminProductsListPage({
                   </span>
                 </div>
                 <div className="p-4 flex flex-col gap-1 flex-1">
-                  <div className="flex justify-end">
+                  <div className="flex items-center justify-between">
                     {item.showOnHome ? (
                       <span className="text-xs font-bold text-indigo bg-indigo/10 px-2 py-0.5 rounded-field">
                         На головній
@@ -126,13 +126,13 @@ export default async function AdminProductsListPage({
                         Приховано
                       </span>
                     )}
+                    <p className="text-sm font-bold text-navy">
+                      {Number(item.price).toFixed(2)} грн
+                    </p>
                   </div>
                   <p className="font-bold text-navy truncate">{item.nameUk}</p>
                   <p className="text-xs text-navy-soft">
                     Додано: {formatDate(item.createdAt, "uk", { day: "2-digit", month: "2-digit", year: "numeric" })}
-                  </p>
-                  <p className="text-sm font-bold text-navy">
-                    {Number(item.price).toFixed(2)} грн
                   </p>
                   <p className="text-xs text-navy-soft">
                     Галерея: {item.gallery.length > 0 ? "Так" : "Ні"}
