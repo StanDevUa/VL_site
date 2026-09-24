@@ -9,6 +9,7 @@
   },
   "Common": {
     "bookConsultation": "Записатися на консультацію",
+    "bookConsultationShort": "Записатися",
     "toShop": "До магазину",
     "addToCart": "Додати в кошик",
     "cart": "Кошик",

@@ -152,9 +152,10 @@ export function Header() {
 
           <Link
             href="/#cta"
-            className="hidden whitespace-nowrap rounded-field bg-indigo px-5 py-3 font-heading text-[15px] font-bold text-white shadow-button transition-colors hover:bg-indigo-hover md:inline-flex"
+            className="inline-flex whitespace-nowrap rounded-field bg-indigo px-5 py-3 font-heading text-[15px] font-bold text-white shadow-button transition-colors hover:bg-indigo-hover"
           >
-            {common("bookConsultation")}
+            <span className="hidden sm:inline">{common("bookConsultation")}</span>
+            <span className="sm:hidden">{common("bookConsultationShort")}</span>
           </Link>
 
           <button
@@ -185,32 +186,23 @@ export function Header() {
               {t(item.key)}
             </Link>
           ))}
-          <div className="flex items-center justify-between gap-4 pt-4">
-            <div className="flex items-center gap-2">
-              {LOCALES.map((l) => {
-                const Flag = FLAGS[l.code];
-                return (
-                  <button
-                    key={l.code}
-                    type="button"
-                    onClick={() => switchLocale(l.code)}
-                    className={
-                      "h-[21px] w-[30px] overflow-hidden rounded border border-navy/10 " +
-                      (locale === l.code ? "" : "opacity-50")
-                    }
-                  >
-                    <Flag />
-                  </button>
-                );
-              })}
-            </div>
-            <Link
-              href="/#cta"
-              onClick={() => setMenuOpen(false)}
-              className="rounded-field bg-indigo px-5 py-3 font-heading text-sm font-bold text-white"
-            >
-              {common("bookConsultation")}
-            </Link>
+          <div className="flex items-center gap-2 pt-4">
+            {LOCALES.map((l) => {
+              const Flag = FLAGS[l.code];
+              return (
+                <button
+                  key={l.code}
+                  type="button"
+                  onClick={() => switchLocale(l.code)}
+                  className={
+                    "h-[21px] w-[30px] overflow-hidden rounded border border-navy/10 " +
+                    (locale === l.code ? "" : "opacity-50")
+                  }
+                >
+                  <Flag />
+                </button>
+              );
+            })}
           </div>
         </div>
       )}
