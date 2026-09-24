@@ -74,7 +74,7 @@ export function CustomSelect({
       </button>
 
       {open && (
-        <div className="absolute top-[calc(100%+6px)] left-0 right-0 z-20 max-h-60 overflow-y-auto rounded-field border border-indigo/30 bg-white shadow-card-hover">
+        <div className="absolute top-[calc(100%+6px)] left-0 right-0 z-20 max-h-60 overflow-y-auto rounded-field border border-indigo bg-white shadow-card-hover">
           {options.map((option) => (
             <button
               key={option.value}
