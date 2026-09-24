@@ -109,7 +109,7 @@ export function Header() {
           {/* Компактна кнопка для мобільного/планшета — 12.5px/11×13px до 640px (точно за макетом), звичайний розмір 640–1024, ховається на lg (там своя, у правому кластері) */}
           <Link
             href="/#cta"
-            className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-field bg-indigo px-[13px] py-[11px] font-heading text-[12.5px] font-bold text-white shadow-[0_8px_20px_-8px_rgba(82,82,172,.34)] transition-[transform,box-shadow,background-color] duration-[250ms] ease-in-out hover:-translate-y-[2px] hover:bg-indigo-hover hover:shadow-[0_14px_28px_-10px_rgba(82,82,172,.34)] sm:px-[22px] sm:py-[13px] sm:text-[15px] lg:hidden"
+            className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-field bg-indigo px-[13px] py-[11px] font-heading text-[12.5px] font-bold text-white shadow-[0_8px_20px_-8px_rgba(82,82,172,.34)] transition-[translate,box-shadow,background-color] duration-[250ms] ease-in-out hover:-translate-y-[2px] hover:bg-indigo-hover hover:shadow-[0_14px_28px_-10px_rgba(82,82,172,.34)] sm:px-[22px] sm:py-[13px] sm:text-[15px] lg:hidden"
           >
             {common("bookConsultation")}
           </Link>
@@ -152,7 +152,7 @@ export function Header() {
             target="_blank"
             rel="noreferrer"
             title="Telegram"
-            className="hidden h-[42px] w-[42px] shrink-0 items-center justify-center rounded-field text-white transition-[transform,box-shadow] duration-[250ms] ease-in-out hover:-translate-y-0.5 hover:shadow-[0_10px_20px_-10px_rgba(122,58,160,.8)] lg:flex"
+            className="hidden h-[42px] w-[42px] shrink-0 items-center justify-center rounded-field text-white transition-[translate,box-shadow] duration-[250ms] ease-in-out hover:-translate-y-0.5 hover:shadow-[0_10px_20px_-10px_rgba(122,58,160,.8)] lg:flex"
             style={{ background: "linear-gradient(135deg, #7A3AA0, #2B6BB8)" }}
           >
             <TelegramIcon />
@@ -160,7 +160,7 @@ export function Header() {
 
           <Link
             href="/#cta"
-            className="hidden whitespace-nowrap rounded-field bg-indigo px-5 py-3 font-heading text-[15px] font-bold text-white shadow-[0_8px_20px_-8px_rgba(82,82,172,.34)] transition-[transform,box-shadow,background-color] duration-[250ms] ease-in-out hover:-translate-y-[2px] hover:bg-indigo-hover hover:shadow-[0_14px_28px_-10px_rgba(82,82,172,.34)] lg:inline-flex"
+            className="hidden whitespace-nowrap rounded-field bg-indigo px-5 py-3 font-heading text-[15px] font-bold text-white shadow-[0_8px_20px_-8px_rgba(82,82,172,.34)] transition-[translate,box-shadow,background-color] duration-[250ms] ease-in-out hover:-translate-y-[2px] hover:bg-indigo-hover hover:shadow-[0_14px_28px_-10px_rgba(82,82,172,.34)] lg:inline-flex"
           >
             {common("bookConsultation")}
           </Link>
