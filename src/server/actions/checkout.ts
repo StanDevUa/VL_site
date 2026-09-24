@@ -126,7 +126,14 @@ export async function createOrder(
     },
   });
 
-  // WayForPay ще не підключено — поки що одразу на success зі статусом
-  // PENDING_PAYMENT замість редиректу на хостовану сторінку оплати.
-  redirect(`/checkout/success?order=${order.orderNumber}`);
+  redirect(`/checkout/pay?order=${order.orderNumber}`);
+}
+
+/** Статус читаємо з БД, а не з query-параметрів редиректу — їм не можна довіряти. */
+export async function getOrderStatus(orderNumber: string) {
+  const order = await prisma.order.findUnique({
+    where: { orderNumber },
+    select: { status: true },
+  });
+  return order?.status ?? null;
 }

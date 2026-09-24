@@ -79,6 +79,9 @@
     "submitting": "Placing order…",
     "successTitle": "Thank you for your order!",
     "orderNumberLabel": "Order number:",
-    "successNote": "We'll contact you shortly to arrange payment and delivery."
+    "paidNote": "Payment received. We'll contact you about delivery.",
+    "pendingNote": "Waiting for payment confirmation from the payment provider — this takes a few minutes. If the payment didn't go through, try placing the order again.",
+    "cancelledNote": "This order has been cancelled.",
+    "notFoundNote": "Order not found."
   }
 }
