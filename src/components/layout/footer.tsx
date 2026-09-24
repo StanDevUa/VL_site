@@ -140,13 +140,15 @@ function ScrollTopButton() {
   useEffect(() => {
     function handleScroll() {
       // "З другого блоку" — на головній ще немає реальних секцій (заглушка),
-      // тимчасовий орієнтир: перший екран (100vh). Уточнити, коли зробимо
-      // головну сторінку з реальними блоками.
-      const pastFirstBlock = window.scrollY > window.innerHeight * 0.9;
+      // тимчасовий орієнтир: невеликий фіксований відступ у пікселях (а не
+      // % висоти екрана — на короткій сторінці-заглушці такої прокрутки може
+      // фізично не існувати). Уточнити поріг, коли з'являться реальні блоки.
+      const pastFirstBlock = window.scrollY > 150;
       const atBottom =
         window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
       setVisible(pastFirstBlock && !atBottom);
     }
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleScroll);
     return () => {
