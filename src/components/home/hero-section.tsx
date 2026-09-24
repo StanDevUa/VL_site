@@ -4,13 +4,13 @@ import { Link } from "@/i18n/navigation";
 export function HeroSection() {
   return (
     <section
-      className="relative overflow-hidden px-[18px] py-14 sm:px-6 sm:py-16 lg:px-8 lg:pt-[84px] lg:pb-[120px]"
+      className="relative px-[18px] py-14 sm:px-6 sm:py-16 lg:px-8 lg:pt-[84px] lg:pb-[120px]"
       style={{ background: "linear-gradient(180deg, #FBEFEC 0%, #FBEFEC 60%, #FFFDFC 100%)" }}
     >
       {/* Декоративні плаваючі елементи (без scroll-parallax — статичне позиціювання) */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-[140px] -right-[120px] hidden h-[520px] w-[520px] rounded-full lg:block"
+        className="pointer-events-none absolute -top-[140px] -right-[120px] h-[520px] w-[520px] rounded-full"
         style={{
           background:
             "radial-gradient(circle at 35% 35%, rgba(242,102,47,.22), rgba(201,48,124,.14) 55%, rgba(43,107,184,0) 72%)",
@@ -19,7 +19,7 @@ export function HeroSection() {
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute top-[120px] left-[7%] hidden h-10 w-[26px] rounded-tl-[60%] rounded-br-[60%] rounded-tr-[10%] rounded-bl-[10%] opacity-50 lg:block"
+        className="pointer-events-none absolute top-[120px] left-[7%] h-10 w-[26px] rounded-tl-[60%] rounded-br-[60%] rounded-tr-[10%] rounded-bl-[10%] opacity-50"
         style={{
           background: "linear-gradient(140deg, #7A3AA0, #2B6BB8)",
           animation: "vlFloat 9s ease-in-out infinite",
@@ -27,7 +27,15 @@ export function HeroSection() {
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute top-[210px] right-[11%] hidden h-3.5 w-3.5 rounded-full opacity-40 lg:block"
+        className="pointer-events-none absolute top-[320px] left-[3%] h-7 w-[18px] rounded-tl-[60%] rounded-br-[60%] rounded-tr-[10%] rounded-bl-[10%] opacity-45"
+        style={{
+          background: "linear-gradient(140deg, #F2662F, #C9307C)",
+          animation: "vlFloatSlow 12s ease-in-out infinite",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute top-[210px] right-[11%] h-3.5 w-3.5 rounded-full opacity-40"
         style={{ background: "#F2662F", animation: "vlFloat 7s ease-in-out infinite" }}
       />
 
@@ -87,7 +95,7 @@ export function HeroSection() {
 
         <div className="relative">
           <div
-            className="absolute -top-[22px] -right-[18px] -bottom-6 -left-[22px] rounded-block opacity-15 blur-[2px]"
+            className="absolute -top-[22px] -right-[18px] bottom-6 left-[22px] rounded-block opacity-[.16] blur-[2px]"
             style={{
               background:
                 "linear-gradient(120deg, #F2662F 0%, #C9307C 42%, #7A3AA0 70%, #2B6BB8 100%)",
