@@ -51,8 +51,8 @@ export function CustomSelect({
         className={
           "flex w-full items-center justify-between gap-2 rounded-field border bg-white px-4 py-3 text-left text-navy outline-none transition-colors " +
           (open
-            ? "border-indigo ring-4 ring-indigo/15"
-            : "border-indigo/30 focus:border-indigo focus:ring-4 focus:ring-indigo/15")
+            ? "border-indigo/50 ring-4 ring-indigo/15"
+            : "border-indigo/30 focus:border-indigo/50 focus:ring-4 focus:ring-indigo/15")
         }
       >
         <span className={selected ? "" : "text-navy-soft"}>
@@ -74,7 +74,7 @@ export function CustomSelect({
       </button>
 
       {open && (
-        <div className="absolute top-[calc(100%+6px)] left-0 right-0 z-20 max-h-60 overflow-y-auto rounded-field border border-indigo bg-white shadow-card-hover">
+        <div className="absolute top-[calc(100%+6px)] left-0 right-0 z-20 max-h-60 overflow-y-auto rounded-field border border-indigo/50 bg-white shadow-card-hover">
           {options.map((option) => (
             <button
               key={option.value}
