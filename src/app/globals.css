@@ -89,3 +89,20 @@ button:not(:disabled) {
   cursor: pointer;
 }
 
+/* Декоративні плаваючі елементи на Головній (design/Viktoriia Lemeshko - Homepage+mobile.html) */
+@keyframes vlFloat {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-18px) rotate(4deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+@keyframes vlFloatSlow {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(14px) rotate(-5deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+@keyframes vlPulse {
+  0% { transform: scale(1); opacity: .55; }
+  50% { transform: scale(1.08); opacity: .8; }
+  100% { transform: scale(1); opacity: .55; }
+}
+
