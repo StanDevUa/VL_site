@@ -89,21 +89,30 @@ export function Header() {
           <Image src="/logo.png" alt="Viktoriia Lemeshko" width={160} height={62} className="h-[56px] w-auto" priority />
         </Link>
 
-        <nav className="hidden items-center justify-center gap-6 text-[15px] font-semibold lg:flex">
-          {NAV_ITEMS.map((item) => (
-            <Link
-              key={item.key}
-              href={navHref(pathname, item)}
-              className={
-                item.accent
-                  ? "font-bold text-magenta transition-colors hover:text-coral"
-                  : "text-navy transition-colors hover:text-magenta"
-              }
-            >
-              {t(item.key)}
-            </Link>
-          ))}
-        </nav>
+        <div className="min-w-0">
+          <nav className="hidden items-center justify-center gap-6 text-[15px] font-semibold lg:flex">
+            {NAV_ITEMS.map((item) => (
+              <Link
+                key={item.key}
+                href={navHref(pathname, item)}
+                className={
+                  item.accent
+                    ? "font-bold text-magenta transition-colors hover:text-coral"
+                    : "text-navy transition-colors hover:text-magenta"
+                }
+              >
+                {t(item.key)}
+              </Link>
+            ))}
+          </nav>
+
+          <Link
+            href="/#cta"
+            className="flex w-full items-center justify-center whitespace-nowrap rounded-field bg-indigo px-5 py-3 font-heading text-[15px] font-bold text-white shadow-button transition-colors hover:bg-indigo-hover lg:hidden"
+          >
+            {common("bookConsultation")}
+          </Link>
+        </div>
 
         <div className="flex items-center gap-3">
           <Link
@@ -152,10 +161,9 @@ export function Header() {
 
           <Link
             href="/#cta"
-            className="inline-flex whitespace-nowrap rounded-field bg-indigo px-5 py-3 font-heading text-[15px] font-bold text-white shadow-button transition-colors hover:bg-indigo-hover"
+            className="hidden whitespace-nowrap rounded-field bg-indigo px-5 py-3 font-heading text-[15px] font-bold text-white shadow-button transition-colors hover:bg-indigo-hover lg:inline-flex"
           >
-            <span className="hidden sm:inline">{common("bookConsultation")}</span>
-            <span className="sm:hidden">{common("bookConsultationShort")}</span>
+            {common("bookConsultation")}
           </Link>
 
           <button
