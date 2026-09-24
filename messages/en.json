@@ -83,5 +83,15 @@
     "pendingNote": "Waiting for payment confirmation from the payment provider — this takes a few minutes. If the payment didn't go through, try placing the order again.",
     "cancelledNote": "This order has been cancelled.",
     "notFoundNote": "Order not found."
+  },
+  "Footer": {
+    "tagline": "A space where a child is heard and parents are understood. The signature TM «Enot EMO» method.",
+    "privacyPolicy": "Privacy policy",
+    "termsOfUse": "Terms of use",
+    "paymentDelivery": "Payment & delivery",
+    "returnPolicy": "Return policy",
+    "copyright": "© 2026 Viktoriia Lemeshko. All rights reserved.",
+    "trademark": "TM «Enot EMO» is a registered trademark",
+    "scrollTop": "Scroll to top"
   }
 }
