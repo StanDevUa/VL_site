@@ -72,13 +72,13 @@ export function HeroSection() {
           <div className="mb-9 flex flex-wrap gap-3.5">
             <Link
               href="#cta"
-              className="w-full rounded-field bg-indigo px-8 py-[17px] text-center font-heading text-[17px] font-bold text-white shadow-button transition-all hover:-translate-y-0.5 hover:shadow-[0_20px_38px_-14px_rgba(82,82,172,.34)] sm:w-auto"
+              className="w-full rounded-field bg-indigo px-8 py-[17px] text-center font-heading text-[17px] font-bold text-white shadow-button transition-[transform,box-shadow] duration-[250ms] ease-in-out hover:-translate-y-[3px] hover:shadow-[0_20px_38px_-14px_rgba(82,82,172,.34)] sm:w-auto"
             >
               Записатися на консультацію
             </Link>
             <Link
               href="#shop"
-              className="w-full rounded-field border-[1.5px] border-navy/18 bg-white/90 px-8 py-[17px] text-center font-heading text-[17px] font-bold text-navy transition-all hover:-translate-y-0.5 hover:border-magenta hover:text-magenta sm:w-auto"
+              className="w-full rounded-field border-[1.5px] border-navy/18 bg-white/90 px-8 py-[17px] text-center font-heading text-[17px] font-bold text-navy transition-[border-color,transform] duration-[250ms] ease-in-out hover:-translate-y-[3px] hover:border-magenta hover:text-magenta sm:w-auto"
             >
               До магазину
             </Link>

@@ -72,13 +72,13 @@ export function AboutSection() {
           <div className="flex flex-wrap items-center gap-3.5">
             <Link
               href="#diplomas"
-              className="w-full rounded-field border-[1.5px] border-navy/18 bg-white/90 px-7 py-[15px] text-center font-heading text-base font-bold text-navy transition-all hover:-translate-y-0.5 hover:border-magenta hover:text-magenta sm:w-auto"
+              className="w-full rounded-field border-[1.5px] border-navy/18 bg-white/90 px-7 py-[15px] text-center font-heading text-base font-bold text-navy transition-[border-color,transform] duration-[250ms] ease-in-out hover:-translate-y-[3px] hover:border-magenta hover:text-magenta sm:w-auto"
             >
               Моя кваліфікація
             </Link>
             <Link
               href="#cta"
-              className="w-full rounded-field bg-indigo px-7 py-[15px] text-center font-heading text-base font-bold text-white shadow-[0_12px_26px_-12px_rgba(82,82,172,.34)] transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_34px_-14px_rgba(82,82,172,.34)] sm:w-auto"
+              className="w-full rounded-field bg-indigo px-7 py-[15px] text-center font-heading text-base font-bold text-white shadow-[0_12px_26px_-12px_rgba(82,82,172,.34)] transition-[transform,box-shadow,background-color] duration-[250ms] ease-in-out hover:-translate-y-[3px] hover:bg-indigo-hover hover:shadow-[0_18px_34px_-14px_rgba(82,82,172,.34)] sm:w-auto"
             >
               Записатися на консультацію
             </Link>
