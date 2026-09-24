@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
@@ -66,8 +67,8 @@ export function Footer() {
               <Image
                 src="/logo.png"
                 alt="Viktoriia Lemeshko"
-                width={220}
-                height={96}
+                width={298}
+                height={312}
                 className="mx-auto mb-5 h-24 w-auto"
               />
               <p className="text-center text-[15px] leading-relaxed text-navy-soft">
@@ -134,14 +135,47 @@ export function Footer() {
 
 function ScrollTopButton() {
   const t = useTranslations("Footer");
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    function handleScroll() {
+      // "З другого блоку" — на головній ще немає реальних секцій (заглушка),
+      // тимчасовий орієнтир: перший екран (100vh). Уточнити, коли зробимо
+      // головну сторінку з реальними блоками.
+      const pastFirstBlock = window.scrollY > window.innerHeight * 0.9;
+      const atBottom =
+        window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
+      setVisible(pastFirstBlock && !atBottom);
+    }
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, []);
+
   return (
     <button
       type="button"
       title={t("scrollTop")}
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      className="fixed right-7 bottom-7 z-[70] h-[68px] w-[68px] overflow-hidden rounded-full border-4 border-white shadow-[0_10px_24px_-8px_rgba(30,42,90,0.45)] transition-transform hover:-translate-y-1"
+      style={{
+        filter: "drop-shadow(0 0 9px rgba(30,42,90,.22))",
+        transition: "opacity .35s ease, transform 1s cubic-bezier(.3,.7,.2,1)",
+      }}
+      className={
+        "fixed right-7 bottom-7 z-[70] h-[68px] w-[68px] rounded-full border-0 bg-transparent p-0 rotate-0 hover:rotate-[360deg] " +
+        (visible ? "opacity-100" : "pointer-events-none opacity-0")
+      }
     >
-      <Image src="/scroll-top-icon.png" alt="" width={68} height={68} className="h-full w-full object-cover" />
+      <Image
+        src="/scroll-top-icon.png"
+        alt={t("scrollTop")}
+        width={68}
+        height={68}
+        className="block h-full w-full rounded-full"
+      />
     </button>
   );
 }

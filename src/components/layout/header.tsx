@@ -86,7 +86,7 @@ export function Header() {
     <header className="sticky top-0 z-[60] border-b border-navy/10 bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-[1320px] items-center justify-between gap-2.5 px-3.5 py-[7px] sm:grid sm:grid-cols-[auto_1fr_auto] sm:justify-normal sm:gap-6 sm:px-8">
         <Link href="/" className="flex shrink-0 items-center">
-          <Image src="/logo.png" alt="Viktoriia Lemeshko" width={160} height={62} className="h-[56px] w-auto" priority />
+          <Image src="/logo.png" alt="Viktoriia Lemeshko" width={298} height={312} className="h-[56px] w-auto" priority />
         </Link>
 
         <nav className="hidden items-center justify-center gap-6 text-[15px] font-semibold lg:flex">
