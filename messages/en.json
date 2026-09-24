@@ -93,5 +93,269 @@
     "copyright": "© 2026 Viktoriia Lemeshko. All rights reserved.",
     "trademark": "TM «Enot EMO» is a registered trademark",
     "scrollTop": "Scroll to top"
+  },
+  "HomeHero": {
+    "badge": "Practising psychologist · creator of ТМ «Enot EMO»",
+    "h1": "Simply about complex things",
+    "subtitle": "A psychologist for children, children with special needs and parents",
+    "p1": "I help a child understand themselves, their emotions and needs better – and help parents understand their child better.",
+    "p2": "I work with anxiety, crisis states, emotional and behavioural difficulties, developmental and interaction features.",
+    "p3": "An individual approach to every child, every story and every family.",
+    "stat1": "3+ years of practice",
+    "stat2": "Online and in person",
+    "stat3": "Support for parents",
+    "photoCaption": "Practising psychologist | Creator of EMO therapy"
+  },
+  "HomeAbout": {
+    "eyebrow": "About me",
+    "h2": "A child needs time, patience and truth",
+    "p1": "Years of practice have convinced me: a child opens up where they feel safety, acceptance, sincerity and trust. That is what builds value. So my work begins with careful observation and a deep understanding of the child – their emotions, needs, traits and inner world.",
+    "p2": "I work with emotions, behaviour, anxiety, fears and crisis states. And always alongside parents: helping them understand their child, build close and effective contact, and find their own inner ground in parenthood.",
+    "p3": "My approach is individual. My goal is to help a child restore inner balance, understand themselves better and unfold their potential – and to help the family find its own path to mutual understanding.",
+    "ctaQualifications": "My qualifications"
+  },
+  "HomeServices": {
+    "eyebrow": "Services",
+    "h2": "Formats of work – for the child, the parents and professionals",
+    "p": "I work with families, teenagers, women and colleagues. Choose the format that feels closer to you – we will discuss the rest at our first meeting.",
+    "ctaNote": "Not sure which format is yours? Write to me – I will help you choose",
+    "items": {
+      "joint": {
+        "title": "Joint session",
+        "subtitle": "Both parents or one parent + a child aged 10 and up.",
+        "points": [
+          "Talking together: the family request, the atmosphere at home and expectations from the work.",
+          "Talking with parents: how the adults see the situation, the child’s development and history.",
+          "Talking with the child: making contact, getting to know their view of the situation, emotions and needs.",
+          "Observation: analysing interaction, emotional bonds and non-verbal signals between parents and child for further recommendations."
+        ]
+      },
+      "parents": {
+        "title": "Consultation for parents",
+        "subtitle": "Without the child.",
+        "points": [
+          "Analysing the child’s behaviour: the causes of difficulties, emotional reactions and the signals a child sends through behaviour.",
+          "Aligning positions: helping parents reach a common view and form a single approach to parenting.",
+          "A strategy: no more acting at random – a clear plan and rules for your specific situation.",
+          "Support for parents: space to voice your own feelings, release tension and find inner ground."
+        ]
+      },
+      "teens": {
+        "title": "Consultation for teenagers",
+        "subtitle": "From 12 years old.",
+        "points": [
+          "A safe space: an atmosphere of trust and acceptance where a teenager can speak openly about what troubles them, without fear of judgement.",
+          "Working with emotions and anxiety: understanding one’s feelings, lowering stress, overcoming fears and self-regulating.",
+          "Self-esteem and self-expression: finding inner supports, self-acceptance, building confidence and understanding one’s boundaries and values.",
+          "Relationships and adaptation: support in resolving conflicts with peers or parents, moving through life crises and finding personal meaning."
+        ]
+      },
+      "women": {
+        "title": "Consultations for women",
+        "subtitle": "One to one, online or in person.",
+        "points": [
+          "Emotional support and resourcing: moving through stress, anxiety and burnout, restoring a sense of inner ground and emotional resource.",
+          "Self-esteem and self-expression: working with self-worth, building confidence, setting personal boundaries and accepting your individuality.",
+          "Relationships and safety: support in difficult relationships, processing abuse and violence, ending toxic bonds and moving to a new level of life. Building healthy communication skills.",
+          "Life crises and the search for meaning: support through difficult transformations, help with important decisions, choosing your own path and finding new landmarks."
+        ]
+      },
+      "professionals": {
+        "title": "Sessions for professionals: group and private",
+        "subtitle": "Psychologists, teachers, social and special-needs educators, rehabilitation specialists.",
+        "points": [
+          "EMO therapy – the toy, the stories, the metaphorical cards and tokens: mastering the method in practice, bringing the cards into your sessions, effective ways to support clients and turning therapeutic work into play.",
+          "The ТМ «Enot EMO» learning and therapy toy: a methodological guide and algorithms for using the toy and its manuals in correctional and therapeutic work.",
+          "Professional growth and brand: building a personal brand as a helping professional, positioning and promoting your services.",
+          "Intervision and support: reviewing difficult client cases among colleagues, finding new therapeutic solutions and preventing burnout."
+        ]
+      },
+      "training": {
+        "title": "Training online and in person",
+        "subtitle": "For parents and for professionals.",
+        "points": [
+          "Formats and materials: courses, masterclasses and workshops – live or recorded, with ready-made working materials and guides.",
+          "Training for parents: practical webinars and programmes that help you understand children, their emotions and development better.",
+          "Training for colleagues: professional programmes for helping professionals on new methods and practical tools."
+        ]
+      },
+      "onsite": {
+        "title": "On-site trainings and seminars on request",
+        "subtitle": "At the client’s venue.",
+        "points": [
+          "In-person work and practice: live sessions, interactive lectures and workshops at your venue for full immersion in the topic.",
+          "An individual programme: content adapted to the team’s request – for parent communities, schools, kindergartens or professional teams.",
+          "Practical tools: learning working techniques of emotional self-regulation, overcoming burnout and effective communication right during the meeting.",
+          "Team support: a safe space to share experience, bring the team together and get professional answers to current questions."
+        ]
+      },
+      "groups": {
+        "title": "Group formats and communities",
+        "subtitle": "Small groups, online or in person.",
+        "points": [
+          "Psychotherapeutic or support groups for women and parents: regular online or in-person meetings in small groups (6–8 people) on shared topics – burnout, boundaries in relationships, anxiety, self-esteem.",
+          "Teen psychology clubs and trainings: group sessions on soft skills, emotional intelligence, self-confidence, communication with peers and coping with stress."
+        ]
+      },
+      "mentoring": {
+        "title": "Specialised ongoing support",
+        "subtitle": "Long-term individual support.",
+        "points": [
+          "Mentoring for professionals: long-term individual support for early-career colleagues – from mastering EMO therapy in depth to growing your own practice and guiding your first client cases.",
+          "Family support package: a complete solution for 1–3 months including joint sessions, separate consultations for the child and the parents, and ongoing text support in a messenger for crisis situations."
+        ]
+      }
+    }
+  },
+  "HomeFacts": {
+    "items": {
+      "kids": {
+        "label": "children",
+        "note": "in consultation and correctional work"
+      },
+      "reviews": {
+        "label": "genuine reviews",
+        "note": "from parents and colleagues"
+      },
+      "developments": {
+        "label": "original developments",
+        "note": "including ТМ «Enot EMO»"
+      },
+      "talks": {
+        "label": "public talks",
+        "note": "at professional events"
+      }
+    }
+  },
+  "HomeMethod": {
+    "eyebrow": "Signature method",
+    "photoLine1": "We turn therapy",
+    "photoLine2": "into play",
+    "h2": "EMO therapy: developing emotional intelligence in children and teenagers",
+    "p": "EMO therapy is a unique original system where the toy, the stories, the tokens, the cards and the manuals work as one. A child learns to recognise, express and live through their emotions in play, while the adult gets clear and workable ways to support them.",
+    "ctaBuy": "Buy in the shop",
+    "ctaMore": "More about the method",
+    "parts": {
+      "toy": {
+        "title": "A toy to hug",
+        "text": "A soft raccoon that becomes a safe “friend” for the child."
+      },
+      "stories": {
+        "title": "Therapeutic stories",
+        "text": "A collection of stories about a raccoon named Emo."
+      },
+      "cards": {
+        "title": "Metaphorical cards and tokens",
+        "text": "Cards that help develop emotional intelligence."
+      },
+      "guide": {
+        "title": "Methodological guide",
+        "text": "A manual for parents and psychologists: gentle adaptation to crisis situations."
+      }
+    }
+  },
+  "HomeReviews": {
+    "eyebrow": "Reviews",
+    "h2": "Stories of families who have already walked this path",
+    "prevAria": "Previous review",
+    "nextAria": "Next review",
+    "dotAria": "Go to review {n}"
+  },
+  "HomeWorks": {
+    "eyebrow": "My work",
+    "h2": "Tools, consultations, sessions",
+    "ctaAllWorks": "See all work",
+    "prevAria": "Previous work",
+    "nextAria": "Next work"
+  },
+  "HomeProcess": {
+    "eyebrow": "How a consultation works",
+    "h2": "Four clear steps",
+    "p": "An individual approach. Respect for your pace. Realistic timelines.",
+    "ctaStart": "Start with a first talk",
+    "ctaNote": "I reply within one working day",
+    "steps": {
+      "request": {
+        "title": "Your request",
+        "text": "You leave the form. I reply within one working day and clarify your request."
+      },
+      "intro": {
+        "title": "Getting to know each other",
+        "text": "A short talk with the parents: the child’s history, what you have already tried, what you want to achieve."
+      },
+      "assessment": {
+        "title": "Assessment",
+        "text": "1–2 meetings with the child in the form of play, followed by a clear and caring summary for the parents."
+      },
+      "work": {
+        "title": "Work and support",
+        "text": "An individual plan, regular sessions and clear practical steps for the family."
+      }
+    }
+  },
+  "HomeNews": {
+    "eyebrow": "News and announcements",
+    "h2": "What is happening now",
+    "ctaAllNews": "All news",
+    "prevAria": "Previous news",
+    "nextAria": "Next news"
+  },
+  "HomeVideo": {
+    "previewCaption": "video greeting · preview 16:9",
+    "h2": "A few words from me – before our first meeting",
+    "p": "A short video about how I work, what to expect at the first consultation and what parents should prepare.",
+    "followLabel": "Follow me on social media"
+  },
+  "HomeShop": {
+    "eyebrow": "Shop",
+    "h2": "Materials for a supportive environment",
+    "p": "Manuals, therapeutic stories, metaphorical cards, tokens and ТМ «Enot EMO» toys, plus online courses for parents and specialised training for psychologists.",
+    "ctaGoShop": "Go to shop"
+  },
+  "HomeFaq": {
+    "eyebrow": "Questions and answers",
+    "h2": "What people ask most often",
+    "p": "Did not find your question? Write in the booking form – I will answer personally.",
+    "ctaAsk": "Ask your question",
+    "modalTitle": "Ask your question",
+    "modalSubtitle": "Write briefly — I will reply to your email personally.",
+    "labelName": "Your name",
+    "labelEmail": "Your e-mail",
+    "labelQuestion": "Your question",
+    "placeholderName": "Olena",
+    "placeholderEmail": "olena@email.com",
+    "placeholderQuestion": "What are you interested in?",
+    "submit": "Send question",
+    "submitting": "Sending…",
+    "closeAria": "Close",
+    "thankYouTitle": "Thank you for your question!",
+    "thankYouText": "I will reply to you soon.",
+    "errorName": "Please enter your name.",
+    "errorEmail": "Please enter your e-mail.",
+    "errorQuestion": "Please enter your question."
+  },
+  "HomeCta": {
+    "h2": "Book your consultation",
+    "p": "The first meeting is an introduction: you tell me about your request, I show you where we will start. I reply within one working day.",
+    "bullet1": "Online or in person, by arrangement",
+    "bullet2": "Your own pace and format of work",
+    "bullet3": "Confidential, without judgement or hasty conclusions",
+    "labelName": "Your name",
+    "labelPhone": "Phone",
+    "labelEmail": "Your email",
+    "labelComment": "Briefly about your request",
+    "placeholderName": "For example, Olena",
+    "placeholderPhone": "+380",
+    "placeholderEmail": "olena@email.com",
+    "placeholderComment": "What worries you most?",
+    "submit": "Send request",
+    "submitting": "Sending…",
+    "disclaimer": "By sending the form you agree to the privacy policy.",
+    "thankYouTitle": "Thank you for your booking!",
+    "thankYouText": "I will get in touch with you soon.",
+    "closeButton": "Got it",
+    "errorName": "Please enter your name.",
+    "errorPhone": "Please enter your phone number.",
+    "errorEmail": "Please enter your e-mail."
   }
 }

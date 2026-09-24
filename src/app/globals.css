@@ -41,12 +41,15 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+  overflow-x: clip;
 }
 
 body {
   background: var(--color-page-bg);
   color: var(--color-navy);
   font-family: var(--font-body), system-ui, sans-serif;
+  overflow-x: clip;
 }
 
 /*

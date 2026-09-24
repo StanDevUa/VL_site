@@ -1,7 +1,11 @@
 import Image from "next/image";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 
-export function AboutSection() {
+export async function AboutSection() {
+  const t = await getTranslations("HomeAbout");
+  const common = await getTranslations("Common");
+
   return (
     <section
       id="about"
@@ -47,40 +51,26 @@ export function AboutSection() {
 
         <div>
           <div className="mb-4 text-sm font-bold tracking-[1.6px] text-magenta uppercase">
-            Про мене
+            {t("eyebrow")}
           </div>
           <h2 className="mb-6 font-heading text-[28px] leading-[1.14] font-extrabold tracking-[-.4px] text-navy sm:text-[42px] sm:tracking-[-.8px]">
-            Дитині потрібні час, терпіння і правда
+            {t("h2")}
           </h2>
-          <p className="mb-[18px] text-[17px] leading-[1.72] text-navy-soft">
-            За роки практики я переконалася: дитина розкривається там, де відчуває безпеку,
-            прийняття, щирість і довіру. Це формує цінність. Тому моя робота починається з
-            уважного спостереження та глибокого розуміння дитини – її емоцій, потреб,
-            особливостей і внутрішнього світу.
-          </p>
-          <p className="mb-[18px] text-[17px] leading-[1.72] text-navy-soft">
-            Працюю з емоціями, поведінковими проявами, тривожністю, страхами та кризовими
-            станами. І обовʼязково поруч із батьками допомагаю зрозуміти дитину,
-            вибудовувати близький та ефективний контакт і знаходити власну внутрішню опору у
-            батьківстві.
-          </p>
-          <p className="mb-8 text-[17px] leading-[1.72] font-bold text-navy">
-            Мій підхід – індивідуальний. Моя мета – допомогти дитині відновити внутрішню
-            рівновагу, краще зрозуміти себе та розкрити свій потенціал, а родині – знайти
-            власний шлях до взаєморозуміння.
-          </p>
+          <p className="mb-[18px] text-[17px] leading-[1.72] text-navy-soft">{t("p1")}</p>
+          <p className="mb-[18px] text-[17px] leading-[1.72] text-navy-soft">{t("p2")}</p>
+          <p className="mb-8 text-[17px] leading-[1.72] font-bold text-navy">{t("p3")}</p>
           <div className="flex flex-wrap items-center gap-3.5">
             <Link
               href="#diplomas"
               className="w-full rounded-field border-[1.5px] border-navy/18 bg-white/90 px-7 py-[15px] text-center font-heading text-base font-bold text-navy transition-[border-color,translate] duration-[250ms] ease-in-out hover:-translate-y-[3px] hover:border-magenta hover:text-magenta sm:w-auto"
             >
-              Моя кваліфікація
+              {t("ctaQualifications")}
             </Link>
             <Link
               href="#cta"
               className="w-full rounded-field bg-indigo px-7 py-[15px] text-center font-heading text-base font-bold text-white shadow-[0_12px_26px_-12px_rgba(82,82,172,.34)] transition-[translate,box-shadow,background-color] duration-[250ms] ease-in-out hover:-translate-y-[3px] hover:bg-indigo-hover hover:shadow-[0_18px_34px_-14px_rgba(82,82,172,.34)] sm:w-auto"
             >
-              Записатися на консультацію
+              {common("bookConsultation")}
             </Link>
           </div>
         </div>

@@ -1,19 +1,20 @@
-export type NavItem = { key: string; hash?: string; exact?: string; accent?: boolean };
+export type NavItem = { key: string; hash: string; accent?: boolean };
 
 /**
- * 6 якорів навігації (architecture.md, розд. 4): усі ведуть скролом до секцій
- * на "/", окрім Магазин/Новини, які завжди ведуть на власні маршрути.
+ * 6 якорів навігації — точна відповідність макету (`href="#about"`, `href="#shop"` тощо
+ * у самому `<header>`): усі однаково ведуть скролом до відповідної секції на "/", включно
+ * з Магазин/Новини — тепер, коли на Головній є реальні секції «Магазин»/«Новини та анонси»
+ * з посиланням на повну сторінку (`/shop`, `/novyny`) вже всередині самої секції.
  */
 export const NAV_ITEMS: NavItem[] = [
   { key: "about", hash: "about" },
   { key: "services", hash: "services" },
   { key: "method", hash: "method", accent: true },
-  { key: "shop", exact: "/shop" },
-  { key: "news", exact: "/novyny" },
+  { key: "shop", hash: "shop" },
+  { key: "news", hash: "news" },
   { key: "faq", hash: "faq" },
 ];
 
 export function navHref(pathname: string, item: NavItem): string {
-  if (item.exact) return item.exact;
   return pathname === "/" ? `#${item.hash}` : `/#${item.hash}`;
 }

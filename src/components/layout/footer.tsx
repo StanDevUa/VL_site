@@ -42,9 +42,27 @@ function TelegramIcon() {
 }
 
 const SOCIALS = [
-  { title: "Facebook", href: "https://facebook.com/", gradient: "linear-gradient(135deg, #2B6BB8, #7A3AA0)", Icon: FacebookIcon },
-  { title: "Instagram", href: "https://instagram.com/", gradient: "linear-gradient(135deg, #F2662F, #C9307C)", Icon: InstagramIcon },
-  { title: "Telegram", href: "https://t.me/", gradient: "linear-gradient(135deg, #7A3AA0, #2B6BB8)", Icon: TelegramIcon },
+  {
+    title: "Facebook",
+    href: "https://facebook.com/",
+    gradient: "linear-gradient(135deg, #2B6BB8, #7A3AA0)",
+    hoverShadowClass: "hover:shadow-[0_12px_22px_-10px_rgba(43,107,184,.6)]",
+    Icon: FacebookIcon,
+  },
+  {
+    title: "Instagram",
+    href: "https://instagram.com/",
+    gradient: "linear-gradient(135deg, #F2662F, #C9307C)",
+    hoverShadowClass: "hover:shadow-[0_12px_22px_-10px_rgba(201,48,124,.32)]",
+    Icon: InstagramIcon,
+  },
+  {
+    title: "Telegram",
+    href: "https://t.me/",
+    gradient: "linear-gradient(135deg, #7A3AA0, #2B6BB8)",
+    hoverShadowClass: "hover:shadow-[0_12px_22px_-10px_rgba(122,58,160,.6)]",
+    Icon: TelegramIcon,
+  },
 ];
 
 export function Footer() {
@@ -55,36 +73,41 @@ export function Footer() {
   return (
     <>
       <footer
-        className="relative px-8 pt-[72px] pb-10 text-navy"
+        className="relative px-[18px] pt-12 pb-7 text-navy sm:px-8 sm:pt-[72px] sm:pb-10"
         style={{
           background:
-            "linear-gradient(180deg, rgba(248,232,226,0) 0%, #F7E7E1 10%, #F1DCD4 100%)",
+            "linear-gradient(180deg, rgba(248,232,226,0) 0%, #F7E7E1 10%, #F1DCD4 100%), #FFFDFC",
         }}
       >
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-[190px] h-[360px] w-[360px] rounded-full bg-magenta/[.04]"
+          style={{ left: "calc(50% - 446px)" }}
+        />
         <div className="relative mx-auto max-w-[1240px]">
-          <div className="grid grid-cols-1 gap-12 border-b border-navy/10 pb-11 sm:grid-cols-2 lg:grid-cols-[1.25fr_.8fr_.9fr_.7fr]">
-            <div className="max-w-[340px]">
+          <div className="grid grid-cols-1 gap-[22px] border-b border-navy/14 pb-11 sm:grid-cols-2 sm:gap-9 lg:grid-cols-[1.25fr_.8fr_.9fr_.7fr] lg:gap-12">
+            <div className="max-w-[340px] max-sm:col-span-full max-sm:max-w-none">
               <Image
                 src="/logo.png"
                 alt="Viktoriia Lemeshko"
                 width={298}
                 height={312}
-                className="mx-auto mb-5 h-24 w-auto"
+                className="mx-auto mb-[22px] h-24 w-auto"
               />
-              <p className="text-center text-[15px] leading-relaxed text-navy-soft">
+              <p className="text-center text-[15px] leading-[1.7] text-navy-soft">
                 {footerT("tagline")}
               </p>
             </div>
 
-            <nav className="flex flex-col gap-3 pt-2 text-[15px]">
+            <nav className="flex flex-col gap-[13px] pt-2 text-[15px]">
               {FOOTER_NAV.map((item) => (
                 <Link
                   key={item.key}
                   href={navHref(pathname, item)}
                   className={
                     item.accent
-                      ? "font-bold text-magenta transition-colors hover:text-coral"
-                      : "text-navy-soft transition-colors hover:text-magenta"
+                      ? "font-bold text-magenta hover:text-coral"
+                      : "text-navy-soft hover:text-magenta"
                   }
                 >
                   {t(item.key)}
@@ -92,27 +115,30 @@ export function Footer() {
               ))}
             </nav>
 
-            <nav className="flex flex-col gap-3 pt-2 text-[15px]">
+            <nav className="flex flex-col gap-[13px] pt-2 text-[15px]">
               {LEGAL_LINKS.map((link) => (
                 <Link
                   key={link.slug}
                   href={`/legal/${link.slug}`}
-                  className="text-navy-soft transition-colors hover:text-magenta"
+                  className="text-navy-soft hover:text-magenta"
                 >
                   {footerT(link.labelKey)}
                 </Link>
               ))}
             </nav>
 
-            <div className="flex justify-start gap-2.5 pt-2 sm:justify-end">
-              {SOCIALS.map(({ title, href, gradient, Icon }) => (
+            <div className="flex justify-start gap-2.5 pt-2 max-sm:col-span-full max-sm:justify-center sm:justify-end">
+              {SOCIALS.map(({ title, href, gradient, hoverShadowClass, Icon }) => (
                 <a
                   key={title}
                   href={href}
                   target="_blank"
                   rel="noreferrer"
                   title={title}
-                  className="flex h-[46px] w-[46px] items-center justify-center rounded-field text-white transition-transform hover:-translate-y-1"
+                  className={
+                    "flex h-[46px] w-[46px] items-center justify-center rounded-[12px] text-white transition-[translate,box-shadow] duration-[250ms] ease-in-out hover:-translate-y-[3px] " +
+                    hoverShadowClass
+                  }
                   style={{ background: gradient }}
                 >
                   <Icon />
@@ -121,7 +147,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="flex flex-col items-center justify-between gap-3 pt-6 text-[13.5px] text-navy-soft sm:flex-row">
+          <div className="flex flex-col items-center justify-between gap-[10px] pt-6 text-[13.5px] text-navy-soft sm:flex-row sm:gap-6">
             <span>{footerT("copyright")}</span>
             <span>{footerT("trademark")}</span>
           </div>
@@ -139,14 +165,10 @@ function ScrollTopButton() {
 
   useEffect(() => {
     function handleScroll() {
-      // "З другого блоку" — на головній ще немає реальних секцій (заглушка),
-      // тимчасовий орієнтир: невеликий фіксований відступ у пікселях (а не
-      // % висоти екрана — на короткій сторінці-заглушці такої прокрутки може
-      // фізично не існувати). Уточнити поріг, коли з'являться реальні блоки.
-      const pastFirstBlock = window.scrollY > 150;
-      const atBottom =
-        window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
-      setVisible(pastFirstBlock && !atBottom);
+      // Точні значення з макета (onScroll у скрипті прототипу): y > 600, буфер до низу 80px.
+      const y = window.scrollY;
+      const atBottom = y + window.innerHeight >= document.documentElement.scrollHeight - 80;
+      setVisible(y > 600 && !atBottom);
     }
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -164,10 +186,10 @@ function ScrollTopButton() {
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       style={{
         filter: "drop-shadow(0 0 9px rgba(30,42,90,.22))",
-        transition: "opacity .35s ease, transform 1s cubic-bezier(.3,.7,.2,1)",
+        transition: "opacity .35s ease, rotate 1s cubic-bezier(.3,.7,.2,1)",
       }}
       className={
-        "fixed right-7 bottom-7 z-[70] h-[68px] w-[68px] rounded-full border-0 bg-transparent p-0 rotate-0 hover:rotate-[360deg] " +
+        "fixed right-7 bottom-7 z-[70] h-[68px] w-[68px] max-sm:right-4 max-sm:bottom-4 max-sm:h-[52px] max-sm:w-[52px] rounded-full border-0 bg-transparent p-0 rotate-0 hover:rotate-[360deg] " +
         (visible ? "opacity-100" : "pointer-events-none opacity-0")
       }
     >
