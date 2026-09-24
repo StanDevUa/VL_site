@@ -84,37 +84,36 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-[60] border-b border-navy/10 bg-white/90 backdrop-blur-md">
-      <div className="mx-auto grid max-w-[1320px] grid-cols-[auto_1fr_auto] items-center gap-6 px-8 py-2">
-        <Link href="/" className="flex items-center">
+      <div className="mx-auto flex max-w-[1320px] items-center justify-between gap-2.5 px-3.5 py-[7px] sm:grid sm:grid-cols-[auto_1fr_auto] sm:justify-normal sm:gap-6 sm:px-8">
+        <Link href="/" className="flex shrink-0 items-center">
           <Image src="/logo.png" alt="Viktoriia Lemeshko" width={160} height={62} className="h-[56px] w-auto" priority />
         </Link>
 
-        <div className="min-w-0">
-          <nav className="hidden items-center justify-center gap-6 text-[15px] font-semibold lg:flex">
-            {NAV_ITEMS.map((item) => (
-              <Link
-                key={item.key}
-                href={navHref(pathname, item)}
-                className={
-                  item.accent
-                    ? "font-bold text-magenta transition-colors hover:text-coral"
-                    : "text-navy transition-colors hover:text-magenta"
-                }
-              >
-                {t(item.key)}
-              </Link>
-            ))}
-          </nav>
+        <nav className="hidden items-center justify-center gap-6 text-[15px] font-semibold lg:flex">
+          {NAV_ITEMS.map((item) => (
+            <Link
+              key={item.key}
+              href={navHref(pathname, item)}
+              className={
+                item.accent
+                  ? "font-bold text-magenta transition-colors hover:text-coral"
+                  : "text-navy transition-colors hover:text-magenta"
+              }
+            >
+              {t(item.key)}
+            </Link>
+          ))}
+        </nav>
 
+        <div className="contents sm:flex sm:items-center sm:gap-3">
+          {/* Компактна кнопка для мобільного/планшета — 12.5px/11×13px до 640px (точно за макетом), звичайний розмір 640–1024, ховається на lg (там своя, у правому кластері) */}
           <Link
             href="/#cta"
-            className="flex w-full items-center justify-center whitespace-nowrap rounded-field bg-indigo px-5 py-3 font-heading text-[15px] font-bold text-white shadow-button transition-colors hover:bg-indigo-hover lg:hidden"
+            className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-field bg-indigo px-[13px] py-[11px] font-heading text-[12.5px] font-bold text-white shadow-button transition-colors hover:bg-indigo-hover sm:px-[22px] sm:py-[13px] sm:text-[15px] lg:hidden"
           >
             {common("bookConsultation")}
           </Link>
-        </div>
 
-        <div className="flex items-center gap-3">
           <Link
             href="/cart"
             title={common("cart")}
@@ -128,7 +127,7 @@ export function Header() {
             )}
           </Link>
 
-          <div className="mr-0.5 hidden items-center gap-1.5 border-r border-navy/10 pr-1.5 md:flex">
+          <div className="mr-0.5 hidden items-center gap-1.5 border-r border-navy/10 pr-1.5 lg:flex">
             {LOCALES.map((l) => {
               const Flag = FLAGS[l.code];
               return (
@@ -153,7 +152,7 @@ export function Header() {
             target="_blank"
             rel="noreferrer"
             title="Telegram"
-            className="hidden h-[42px] w-[42px] shrink-0 items-center justify-center rounded-field text-white transition-transform hover:-translate-y-0.5 sm:flex"
+            className="hidden h-[42px] w-[42px] shrink-0 items-center justify-center rounded-field text-white transition-transform hover:-translate-y-0.5 lg:flex"
             style={{ background: "linear-gradient(135deg, #7A3AA0, #2B6BB8)" }}
           >
             <TelegramIcon />
@@ -170,7 +169,7 @@ export function Header() {
             type="button"
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Menu"
-            className="flex h-11 w-11 items-center justify-center rounded-field border-[1.5px] border-navy/15 lg:hidden"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-field border-[1.5px] border-navy/15 lg:hidden"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E2A5A" strokeWidth="2" strokeLinecap="round">
               <path d={menuOpen ? "M6 6l12 12M18 6L6 18" : "M4 7h16M4 12h16M4 17h16"} />
