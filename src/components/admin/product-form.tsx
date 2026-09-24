@@ -5,6 +5,7 @@ import Link from "next/link";
 import { LocaleTabs, type LocaleSuffix } from "@/components/admin/locale-tabs";
 import { PhotoPicker } from "@/components/admin/photo-picker";
 import { GalleryPicker } from "@/components/admin/gallery-picker";
+import { CustomSelect } from "@/components/admin/custom-select";
 import { FieldError } from "@/components/admin/field-error";
 import { primaryButtonClass, secondaryButtonClass } from "@/components/ui/button-styles";
 import type { FormState } from "@/server/actions/form-state";
@@ -137,21 +138,13 @@ export function ProductForm({
             <div className="space-y-4">
               <div>
                 <label className={labelClass}>Категорія *</label>
-                <select
+                <CustomSelect
                   name="categoryId"
+                  options={categories.map((c) => ({ value: c.id, label: c.nameUk }))}
                   defaultValue={resolve("categoryId")}
-                  onChange={(e) => dismissOnFill("categoryId", e.target.value)}
-                  className={inputClass}
-                >
-                  <option value="" disabled>
-                    Оберіть категорію
-                  </option>
-                  {categories.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.nameUk}
-                    </option>
-                  ))}
-                </select>
+                  placeholder="Оберіть категорію"
+                  onChange={(value) => dismissOnFill("categoryId", value)}
+                />
                 <FieldError message={errorFor("categoryId")} />
               </div>
               <div>

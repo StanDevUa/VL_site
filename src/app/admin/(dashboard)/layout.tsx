@@ -1,13 +1,11 @@
-import { auth, signOut } from "@/lib/auth";
+import { signOut } from "@/lib/auth";
 import { AdminSidebarNav } from "@/components/admin/sidebar-nav";
 
-export default async function AdminDashboardLayout({
+export default function AdminDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
-
   return (
     <div className="h-screen flex bg-page-bg overflow-hidden">
       <aside className="w-64 h-full shrink-0 bg-white border-r border-navy/10 flex flex-col">
@@ -20,10 +18,7 @@ export default async function AdminDashboardLayout({
 
         <AdminSidebarNav />
 
-        <div className="p-4 border-t border-navy/10 shrink-0">
-          <p className="text-xs text-navy-soft mb-2 truncate">
-            {session?.user?.email}
-          </p>
+        <div className="p-4 shrink-0">
           <form
             action={async () => {
               "use server";

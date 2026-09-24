@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import Link from "next/link";
 import { LocaleTabs, type LocaleSuffix } from "@/components/admin/locale-tabs";
 import { PhotoPicker } from "@/components/admin/photo-picker";
+import { CustomSelect } from "@/components/admin/custom-select";
 import { FieldError } from "@/components/admin/field-error";
 import { primaryButtonClass, secondaryButtonClass } from "@/components/ui/button-styles";
 import { defaultScheduleDateTime } from "@/lib/format-date";
@@ -139,18 +140,12 @@ export function NewsForm({
             <div className="space-y-4">
               <div>
                 <label className={labelClass}>Категорія *</label>
-                <select
+                <CustomSelect
                   name="category"
+                  options={CATEGORY_OPTIONS}
                   defaultValue={state?.values?.category || existing?.category || "NEWS"}
-                  onChange={(e) => dismissOnFill("category", e.target.value)}
-                  className={inputClass}
-                >
-                  {CATEGORY_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(value) => dismissOnFill("category", value)}
+                />
                 <FieldError message={errorFor("category")} />
               </div>
               <div>

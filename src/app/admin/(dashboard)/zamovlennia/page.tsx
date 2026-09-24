@@ -5,6 +5,7 @@ import { formatDate } from "@/lib/format-date";
 import { formatPrice } from "@/lib/format-price";
 import { ORDER_STATUS_LABELS, ORDER_STATUS_BADGE_CLASS } from "@/lib/order-status";
 import { primaryButtonClass, secondaryButtonClass } from "@/components/ui/button-styles";
+import { CustomSelect } from "@/components/admin/custom-select";
 
 const PAGE_SIZE = 15;
 
@@ -103,36 +104,39 @@ export default async function AdminOrdersListPage({
         </div>
         <div>
           <label className={labelClass}>Статус</label>
-          <select name="status" defaultValue={activeStatus ?? ""} className={selectClass}>
-            <option value="">Усі</option>
-            {Object.entries(ORDER_STATUS_LABELS).map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
+          <CustomSelect
+            name="status"
+            defaultValue={activeStatus ?? ""}
+            placeholder="Усі"
+            options={[
+              { value: "", label: "Усі" },
+              ...Object.entries(ORDER_STATUS_LABELS).map(([value, label]) => ({ value, label })),
+            ]}
+          />
         </div>
         <div>
           <label className={labelClass}>Категорія</label>
-          <select name="categoryId" defaultValue={activeCategoryId ?? ""} className={selectClass}>
-            <option value="">Усі</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.nameUk}
-              </option>
-            ))}
-          </select>
+          <CustomSelect
+            name="categoryId"
+            defaultValue={activeCategoryId ?? ""}
+            placeholder="Усі"
+            options={[
+              { value: "", label: "Усі" },
+              ...categories.map((c) => ({ value: c.id, label: c.nameUk })),
+            ]}
+          />
         </div>
         <div>
           <label className={labelClass}>Товар</label>
-          <select name="productId" defaultValue={activeProductId ?? ""} className={selectClass}>
-            <option value="">Усі</option>
-            {products.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.nameUk}
-              </option>
-            ))}
-          </select>
+          <CustomSelect
+            name="productId"
+            defaultValue={activeProductId ?? ""}
+            placeholder="Усі"
+            options={[
+              { value: "", label: "Усі" },
+              ...products.map((p) => ({ value: p.id, label: p.nameUk })),
+            ]}
+          />
         </div>
         <div className="col-span-2 md:col-span-5 flex gap-3">
           <button type="submit" className={primaryButtonClass}>
