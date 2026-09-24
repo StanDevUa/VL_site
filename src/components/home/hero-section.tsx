@@ -4,7 +4,7 @@ import { Link } from "@/i18n/navigation";
 export function HeroSection() {
   return (
     <section
-      className="relative px-[18px] py-14 sm:px-6 sm:py-16 lg:px-8 lg:pt-[84px] lg:pb-[120px]"
+      className="relative px-[18px] py-14 sm:px-6 sm:pt-[84px] sm:pb-[120px] lg:px-8"
       style={{ background: "linear-gradient(180deg, #FBEFEC 0%, #FBEFEC 60%, #FFFDFC 100%)" }}
     >
       {/* Декоративні плаваючі елементи (без scroll-parallax — статичне позиціювання) */}
@@ -39,9 +39,9 @@ export function HeroSection() {
         style={{ background: "#F2662F", animation: "vlFloat 7s ease-in-out infinite" }}
       />
 
-      <div className="relative mx-auto grid max-w-[1240px] grid-cols-1 items-center gap-14 lg:grid-cols-[1.05fr_.95fr] lg:gap-[56px]">
+      <div className="relative mx-auto grid max-w-[1240px] grid-cols-1 items-center gap-6 sm:grid-cols-[1.05fr_.95fr] sm:gap-[56px]">
         <div>
-          <div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-navy/10 bg-white/75 px-4 py-2 text-sm font-semibold text-navy-soft">
+          <div className="mb-[26px] inline-flex items-center gap-[9px] rounded-full border border-navy/10 bg-white/75 px-4 py-2 text-sm font-semibold text-navy-soft">
             <span
               className="h-2 w-2 rounded-full"
               style={{ background: "linear-gradient(135deg, #F2662F, #C9307C)" }}
@@ -49,36 +49,36 @@ export function HeroSection() {
             Практичний психолог · автор ТМ «Єнот ЕМО»
           </div>
 
-          <h1 className="mb-5 font-heading text-[42px] leading-[1.08] font-extrabold tracking-[-1px] text-navy sm:text-[52px] lg:text-[60px] lg:tracking-[-1.2px]">
+          <h1 className="mb-[22px] font-heading text-[36px] leading-[1.06] font-extrabold tracking-[-.6px] text-navy sm:text-[60px] sm:tracking-[-1.2px]">
             Просто про складне
           </h1>
 
-          <p className="mb-5 max-w-[560px] font-heading text-xl leading-tight font-bold text-magenta sm:text-2xl lg:text-[26px]">
+          <p className="-mt-1.5 mb-[22px] max-w-[560px] font-heading text-[26px] leading-[1.3] font-bold text-magenta">
             Психолог для дітей, дітей з ООП та батьків
           </p>
 
-          <p className="mb-3.5 max-w-[560px] text-lg leading-relaxed text-navy-soft">
+          <p className="mb-3.5 max-w-[560px] text-lg leading-[1.62] text-navy-soft">
             Допомагаю дитині краще розуміти себе, свої емоції та потреби, а батькам – краще
             розуміти свою дитину.
           </p>
-          <p className="mb-3.5 max-w-[560px] text-lg leading-relaxed text-navy-soft">
+          <p className="mb-3.5 max-w-[560px] text-lg leading-[1.62] text-navy-soft">
             Працюю з тривожністю, кризовими станами, емоційними та поведінковими труднощами,
             особливостями розвитку та взаємодії.
           </p>
-          <p className="mb-8 max-w-[560px] text-lg leading-relaxed text-navy-soft">
+          <p className="mb-[34px] max-w-[560px] text-lg leading-[1.62] text-navy-soft">
             Індивідуальний підхід до кожної дитини, кожної історії та кожної родини.
           </p>
 
           <div className="mb-9 flex flex-wrap gap-3.5">
             <Link
               href="#cta"
-              className="rounded-field bg-indigo px-8 py-[17px] font-heading text-[17px] font-bold text-white shadow-button transition-all hover:-translate-y-0.5 hover:shadow-[0_20px_38px_-14px_rgba(82,82,172,.34)]"
+              className="w-full rounded-field bg-indigo px-8 py-[17px] text-center font-heading text-[17px] font-bold text-white shadow-button transition-all hover:-translate-y-0.5 hover:shadow-[0_20px_38px_-14px_rgba(82,82,172,.34)] sm:w-auto"
             >
               Записатися на консультацію
             </Link>
             <Link
-              href="/shop"
-              className="rounded-field border-[1.5px] border-navy/18 bg-white/90 px-8 py-[17px] font-heading text-[17px] font-bold text-navy transition-all hover:-translate-y-0.5 hover:border-magenta hover:text-magenta"
+              href="#shop"
+              className="w-full rounded-field border-[1.5px] border-navy/18 bg-white/90 px-8 py-[17px] text-center font-heading text-[17px] font-bold text-navy transition-all hover:-translate-y-0.5 hover:border-magenta hover:text-magenta sm:w-auto"
             >
               До магазину
             </Link>
@@ -101,7 +101,7 @@ export function HeroSection() {
                 "linear-gradient(120deg, #F2662F 0%, #C9307C 42%, #7A3AA0 70%, #2B6BB8 100%)",
             }}
           />
-          <div className="relative h-[360px] w-full overflow-hidden rounded-card shadow-photo sm:h-[460px] lg:h-[560px]">
+          <div className="relative h-[380px] w-full overflow-hidden rounded-card shadow-photo sm:h-[460px] lg:h-[560px]">
             <Image
               src="/home/hero.jpg"
               alt="Вікторія Лемешко"
