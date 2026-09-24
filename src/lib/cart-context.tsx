@@ -29,7 +29,8 @@ const STORAGE_KEY = "vl-cart";
  * порожній кошик на сервері, а після гідратації React сам підхоплює
  * реальні дані з cachedItems.
  */
-let cachedItems: CartItem[] = [];
+const EMPTY_ITEMS: CartItem[] = [];
+let cachedItems: CartItem[] = EMPTY_ITEMS;
 let listeners: Array<() => void> = [];
 
 function readFromStorage(): CartItem[] {
@@ -71,7 +72,9 @@ function getSnapshot() {
 }
 
 function getServerSnapshot(): CartItem[] {
-  return [];
+  // Стабільне посилання — React порівнює snapshot по ===, новий [] щоразу
+  // читається як "змінився стан" і провокує попередження про нескінченний цикл.
+  return EMPTY_ITEMS;
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {

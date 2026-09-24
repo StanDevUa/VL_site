@@ -9,6 +9,7 @@ import { createOrder } from "@/server/actions/checkout";
 import { pickLocalized } from "@/lib/i18n-content";
 import { formatPrice } from "@/lib/format-price";
 import { FieldError } from "@/components/admin/field-error";
+import { NovaPoshtaFields } from "@/components/checkout/nova-poshta-fields";
 import type { AppLocale } from "@/i18n/routing";
 import type { FormState } from "@/server/actions/form-state";
 
@@ -108,24 +109,19 @@ export default function CheckoutPage() {
         <div className="rounded-card bg-white border border-navy/10 p-6">
           <h2 className="font-heading font-bold text-lg text-navy mb-4">{t("deliveryTitle")}</h2>
           <div className="space-y-4">
-            <div>
-              <label className={labelClass}>{t("city")}</label>
-              <input
-                name="novaPoshtaCityName"
-                defaultValue={resolve("novaPoshtaCityName")}
-                className={inputClass}
-              />
-              <FieldError message={errorFor("novaPoshtaCityName")} />
-            </div>
-            <div>
-              <label className={labelClass}>{t("warehouse")}</label>
-              <input
-                name="novaPoshtaWarehouseName"
-                defaultValue={resolve("novaPoshtaWarehouseName")}
-                className={inputClass}
-              />
-              <FieldError message={errorFor("novaPoshtaWarehouseName")} />
-            </div>
+            <NovaPoshtaFields
+              cityLabel={t("city")}
+              warehouseLabel={t("warehouse")}
+              cityPlaceholder={t("cityPlaceholder")}
+              warehousePlaceholder={t("warehousePlaceholder")}
+              warehouseDisabledHint={t("warehouseDisabledHint")}
+              defaultCityName={resolve("novaPoshtaCityName")}
+              defaultCityRef={resolve("novaPoshtaCityRef")}
+              defaultWarehouseName={resolve("novaPoshtaWarehouseName")}
+              defaultWarehouseRef={resolve("novaPoshtaWarehouseRef")}
+            />
+            <FieldError message={errorFor("novaPoshtaCityName")} />
+            <FieldError message={errorFor("novaPoshtaWarehouseName")} />
             <div>
               <label className={labelClass}>{t("comment")}</label>
               <textarea
