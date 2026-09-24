@@ -9,7 +9,7 @@ export default function AdminDashboardLayout({
   return (
     <div className="h-screen flex bg-page-bg overflow-hidden">
       <aside className="w-64 h-full shrink-0 bg-white border-r border-navy/10 flex flex-col">
-        <div className="p-6 border-b border-navy/10">
+        <div className="px-6 py-4 border-b border-navy/10">
           <p className="font-heading font-extrabold text-lg text-navy">
             Адмін-панель
           </p>

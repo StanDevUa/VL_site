@@ -7,7 +7,9 @@ type Option = { value: string; label: string };
 /**
  * Заміна нативного <select> — у браузерів немає способу стилізувати рамку
  * розкритого попап-списку нативного select (це малює сама ОС, не сторінка).
- * Точна специфікація кнопки/списку — з design/VL - Checkout (client).html.
+ * Структура (кнопка + абсолютно позиційований список) — з design/VL -
+ * Checkout (client).html, кольори — наша звичайна схема інпутів (navy/indigo),
+ * а не magenta з макета (той був лише прикладом самої ідеї рамки).
  */
 export function CustomSelect({
   name,
@@ -46,7 +48,12 @@ export function CustomSelect({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center justify-between gap-2 rounded-field border-[1.5px] border-magenta/45 bg-white px-4 py-3 text-left text-navy transition-shadow hover:shadow-[0_0_0_4px_rgba(201,48,124,0.1)] focus:outline-none focus:shadow-[0_0_0_4px_rgba(201,48,124,0.15)]"
+        className={
+          "flex w-full items-center justify-between gap-2 rounded-field border bg-white px-4 py-3 text-left text-navy outline-none transition-colors " +
+          (open
+            ? "border-indigo ring-4 ring-indigo/15"
+            : "border-navy/15 focus:border-indigo focus:ring-4 focus:ring-indigo/15")
+        }
       >
         <span className={selected ? "" : "text-navy-soft"}>
           {selected ? selected.label : placeholder}
@@ -60,14 +67,14 @@ export function CustomSelect({
           strokeWidth="2.4"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className={"shrink-0 text-magenta transition-transform " + (open ? "rotate-180" : "")}
+          className={"shrink-0 text-navy-soft transition-transform " + (open ? "rotate-180" : "")}
         >
           <polyline points="6 9 12 15 18 9" />
         </svg>
       </button>
 
       {open && (
-        <div className="absolute top-[calc(100%+6px)] left-0 right-0 z-20 max-h-60 overflow-y-auto rounded-field border-[1.5px] border-magenta/45 bg-white shadow-[0_20px_40px_-20px_rgba(30,42,90,0.4)]">
+        <div className="absolute top-[calc(100%+6px)] left-0 right-0 z-20 max-h-60 overflow-y-auto rounded-field border border-navy/15 bg-white shadow-card-hover">
           {options.map((option) => (
             <button
               key={option.value}
@@ -80,8 +87,8 @@ export function CustomSelect({
               className={
                 "block w-full px-4 py-3 text-left text-[15.5px] transition-colors " +
                 (option.value === value
-                  ? "bg-magenta/10 font-bold text-magenta"
-                  : "text-navy hover:bg-magenta/[0.07]")
+                  ? "bg-indigo text-white font-bold"
+                  : "text-navy hover:bg-powder-pink")
               }
             >
               {option.label}
