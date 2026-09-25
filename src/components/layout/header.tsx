@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { useCart } from "@/lib/cart-context";
 import { NAV_ITEMS, navHref } from "@/lib/nav-items";
+import { preserveScrollForLocaleSwitch } from "@/components/layout/scroll-reset";
 import type { AppLocale } from "@/i18n/routing";
 
 const LOCALES: { code: AppLocale; label: string }[] = [
@@ -79,6 +80,7 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   function switchLocale(code: AppLocale) {
+    preserveScrollForLocaleSwitch();
     router.replace(pathname, { locale: code, scroll: false });
   }
 

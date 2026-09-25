@@ -137,6 +137,13 @@
     "cancelledNote": "This order has been cancelled.",
     "notFoundNote": "Order not found."
   },
+  "Legal": {
+    "eyebrow": "Legal information",
+    "contents": "Contents",
+    "updated": "Updated {date}",
+    "questionAboutDocument": "Questions about this document",
+    "writeToMe": "Write to me"
+  },
   "Footer": {
     "tagline": "A space where a child is heard and parents are understood. The signature TM «Enot EMO» method.",
     "privacyPolicy": "Privacy policy",
@@ -380,6 +387,7 @@
     "placeholderQuestion": "What are you interested in?",
     "submit": "Send question",
     "submitting": "Sending…",
+    "disclaimer": "By sending the form you agree to the <privacy>Privacy Policy</privacy>",
     "closeAria": "Close",
     "thankYouTitle": "Thank you for your question!",
     "thankYouText": "I will reply to you soon.",
@@ -403,7 +411,7 @@
     "placeholderComment": "What worries you most?",
     "submit": "Send request",
     "submitting": "Sending…",
-    "disclaimer": "By sending the form you agree to the privacy policy.",
+    "disclaimer": "By sending the form you agree to the <privacy>Privacy Policy</privacy>",
     "thankYouTitle": "Thank you for your booking!",
     "thankYouText": "I will get in touch with you soon.",
     "closeButton": "Got it",

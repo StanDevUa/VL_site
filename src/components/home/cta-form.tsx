@@ -3,6 +3,7 @@
 import { useActionState, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FieldError } from "@/components/admin/field-error";
+import { Link } from "@/i18n/navigation";
 import { submitConsultationRequest } from "@/server/actions/consultation-request";
 
 const inputClass =
@@ -74,7 +75,15 @@ export function CtaForm() {
         >
           {isPending ? t("submitting") : t("submit")}
         </button>
-        <div className="text-center text-[13px] leading-[1.55] text-navy-soft">{t("disclaimer")}</div>
+        <div className="text-center text-[13px] leading-[1.55] text-navy-soft">
+          {t.rich("disclaimer", {
+            privacy: (chunks) => (
+              <Link href="/legal/pryvatnist" className="border-b border-blue/40 text-blue hover:text-magenta">
+                {chunks}
+              </Link>
+            ),
+          })}
+        </div>
       </form>
 
       {state?.success && !dismissed && (
