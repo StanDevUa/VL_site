@@ -14,10 +14,16 @@ export function AddToCartButton({ productId }: { productId: string }) {
       <button
         type="button"
         onClick={() => addItem(productId)}
-        className="inline-flex shrink-0 items-center gap-2 rounded-button bg-indigo/10 px-4 py-2.5 text-sm font-bold text-indigo transition-colors hover:bg-indigo/15"
+        title={common("addOneMore")}
+        className="inline-flex shrink-0 items-center gap-[7px] whitespace-nowrap border-0 bg-transparent p-0 font-heading text-sm font-bold text-indigo transition-colors duration-[250ms] ease-in-out hover:text-magenta"
       >
-        ✓ {common("cart")}
-        <span className="rounded-full bg-indigo/20 px-2 py-0.5 text-xs">{qty}</span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        {common("inCart")}
+        <span className="flex h-[21px] min-w-[21px] items-center justify-center rounded-full bg-indigo/12 px-1.5 text-xs">
+          {qty}
+        </span>
       </button>
     );
   }
@@ -26,7 +32,7 @@ export function AddToCartButton({ productId }: { productId: string }) {
     <button
       type="button"
       onClick={() => addItem(productId)}
-      className="shrink-0 rounded-button border border-navy/18 px-4 py-2.5 text-sm font-bold text-navy transition-colors hover:border-magenta hover:text-magenta"
+      className="shrink-0 whitespace-nowrap rounded-field border-[1.5px] border-navy/18 bg-white px-4 py-2.5 font-heading text-sm font-bold text-navy transition-[border-color,color] duration-[250ms] ease-in-out hover:border-magenta hover:text-magenta"
     >
       {common("addToCart")}
     </button>

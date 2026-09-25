@@ -133,7 +133,7 @@ export async function createOrder(
 export async function getOrderStatus(orderNumber: string) {
   const order = await prisma.order.findUnique({
     where: { orderNumber },
-    select: { status: true },
+    select: { status: true, novaPoshtaCityName: true, novaPoshtaWarehouseName: true },
   });
-  return order?.status ?? null;
+  return order;
 }

@@ -22,16 +22,8 @@ function useIsMobile() {
   return isMobile;
 }
 
-export function ProductGallery({
-  mainPhotoUrl,
-  gallery,
-  title,
-}: {
-  mainPhotoUrl: string;
-  gallery: string[];
-  title: string;
-}) {
-  const t = useTranslations("Shop");
+export function WorkGallery({ photos, title }: { photos: string[]; title: string }) {
+  const t = useTranslations("Works");
   const trackRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
   const [start, setStart] = useState(0);
@@ -40,10 +32,10 @@ export function ProductGallery({
   const modalLoaded = loadedIndex === modal;
 
   const perView = isMobile ? PER_VIEW_MOBILE : PER_VIEW;
-  const maxStart = Math.max(0, gallery.length - perView);
+  const maxStart = Math.max(0, photos.length - perView);
   const clampedStart = Math.min(start, maxStart);
-  const shown = gallery.slice(clampedStart, clampedStart + perView);
-  const hasArrows = gallery.length > perView;
+  const shown = photos.slice(clampedStart, clampedStart + perView);
+  const hasArrows = photos.length > perView;
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -71,59 +63,53 @@ export function ProductGallery({
     setStart((s) => Math.min(maxStart, s + 1));
   }
 
-  return (
-    <div>
-      <div className="relative h-[480px] w-full overflow-hidden rounded-card border border-navy/12 bg-navy/5">
-        <Image src={mainPhotoUrl} alt={title} fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
-      </div>
+  if (photos.length === 0) return null;
 
-      {gallery.length > 0 && (
-        <div className="mt-[18px] max-sm:flex max-sm:flex-wrap max-sm:items-center">
-          <div className="mb-3 text-center font-heading text-[15px] font-bold text-navy-soft max-sm:order-1 max-sm:mr-auto max-sm:mb-0 max-sm:text-left">
-            {t("gallery")}
-          </div>
-          <div className="flex items-center justify-center gap-3 max-sm:contents">
-            {hasArrows && (
+  return (
+    <div className="pt-9 max-sm:flex max-sm:flex-wrap max-sm:items-center">
+      <div className="mb-[18px] text-center font-heading text-base font-bold text-navy-soft max-sm:order-1 max-sm:mr-auto max-sm:mb-0 max-sm:text-left">
+        {t("galleryHeading")}
+      </div>
+      <div className="flex items-center justify-center gap-4 max-sm:contents">
+        {hasArrows && (
+          <button
+            type="button"
+            onClick={goPrev}
+            aria-label={t("galleryPrevAria")}
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-white text-xl text-navy transition-[border-color,color] duration-[250ms] ease-in-out hover:border-magenta hover:text-magenta max-sm:order-2"
+          >
+            ←
+          </button>
+        )}
+        <div
+          ref={trackRef}
+          className="flex flex-wrap justify-center gap-4 max-sm:order-4 max-sm:mt-4 max-sm:w-full max-sm:flex-nowrap max-sm:justify-start max-sm:gap-2.5 max-sm:overflow-x-auto max-sm:snap-x max-sm:snap-mandatory"
+        >
+          {shown.map((src, i) => {
+            const realIndex = clampedStart + i;
+            return (
               <button
+                key={src}
                 type="button"
-                onClick={goPrev}
-                aria-label={t("galleryPrevAria")}
-                className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-white text-[18px] text-navy transition-[border-color,color] duration-[250ms] ease-in-out hover:border-magenta hover:text-magenta max-sm:order-2"
+                onClick={() => setModal(realIndex)}
+                className="relative h-[120px] w-[calc((100%-10px)/2)] shrink-0 cursor-pointer overflow-hidden rounded-field border border-navy/12 p-0 transition-[translate,box-shadow] duration-200 ease-in-out hover:-translate-y-1 hover:shadow-[0_18px_30px_-18px_rgba(30,42,90,.45)] max-sm:snap-start sm:h-[140px] sm:w-[190px]"
               >
-                ←
+                <Image src={src} alt={`${title} ${realIndex + 1}`} fill sizes="190px" className="object-cover" />
               </button>
-            )}
-            <div
-              ref={trackRef}
-              className="flex flex-wrap justify-center gap-3 max-sm:order-4 max-sm:mt-4 max-sm:w-full max-sm:flex-nowrap max-sm:justify-start max-sm:gap-2.5 max-sm:overflow-x-auto max-sm:snap-x max-sm:snap-mandatory"
-            >
-              {shown.map((src, i) => {
-                const realIndex = clampedStart + i;
-                return (
-                  <button
-                    key={src}
-                    type="button"
-                    onClick={() => setModal(realIndex)}
-                    className="relative h-[98px] w-[calc((100%-10px)/2)] shrink-0 cursor-pointer overflow-hidden rounded-field border border-navy/12 p-0 transition-colors duration-200 ease-in-out hover:border-magenta max-sm:snap-start sm:h-[98px] sm:w-[132px]"
-                  >
-                    <Image src={src} alt={`${title} ${realIndex + 1}`} fill sizes="132px" className="object-cover" />
-                  </button>
-                );
-              })}
-            </div>
-            {hasArrows && (
-              <button
-                type="button"
-                onClick={goNext}
-                aria-label={t("galleryNextAria")}
-                className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-white text-[18px] text-navy transition-[border-color,color] duration-[250ms] ease-in-out hover:border-magenta hover:text-magenta max-sm:order-3 max-sm:ml-[10px]"
-              >
-                →
-              </button>
-            )}
-          </div>
+            );
+          })}
         </div>
-      )}
+        {hasArrows && (
+          <button
+            type="button"
+            onClick={goNext}
+            aria-label={t("galleryNextAria")}
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-white text-xl text-navy transition-[border-color,color] duration-[250ms] ease-in-out hover:border-magenta hover:text-magenta max-sm:order-3 max-sm:ml-[10px]"
+          >
+            →
+          </button>
+        )}
+      </div>
 
       {modal >= 0 && (
         <div
@@ -132,9 +118,11 @@ export function ProductGallery({
         >
           <div onClick={(e) => e.stopPropagation()} className="relative w-[min(920px,100%)]">
             <div className="relative h-[min(70vh,560px)] w-full overflow-hidden rounded-card bg-navy/5">
-              {!modalLoaded && <div aria-hidden className="absolute inset-0 animate-pulse bg-navy/10" />}
+              {!modalLoaded && (
+                <div aria-hidden className="absolute inset-0 animate-pulse bg-navy/10" />
+              )}
               <Image
-                src={gallery[modal]}
+                src={photos[modal]}
                 alt={`${title} ${modal + 1}`}
                 fill
                 sizes="920px"
@@ -151,13 +139,13 @@ export function ProductGallery({
             >
               ×
             </button>
-            {gallery.length > 1 && (
+            {photos.length > 1 && (
               <div className="mt-[18px] flex justify-center gap-2.5">
                 <button
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    setModal((m) => (m - 1 + gallery.length) % gallery.length);
+                    setModal((m) => (m - 1 + photos.length) % photos.length);
                   }}
                   className="flex h-12 w-12 items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-white text-xl text-navy transition-[border-color,color] duration-[250ms] ease-in-out hover:border-magenta hover:text-magenta"
                 >
@@ -167,7 +155,7 @@ export function ProductGallery({
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    setModal((m) => (m + 1) % gallery.length);
+                    setModal((m) => (m + 1) % photos.length);
                   }}
                   className="flex h-12 w-12 items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-white text-xl text-navy transition-[border-color,color] duration-[250ms] ease-in-out hover:border-magenta hover:text-magenta"
                 >

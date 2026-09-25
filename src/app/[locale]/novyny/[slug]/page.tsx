@@ -2,20 +2,14 @@ import { notFound } from "next/navigation";
 import { getTranslations, getLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
-import { NewsCategory } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getPublicUrl } from "@/lib/storage";
 import { pickLocalized, newsCategoryKey } from "@/lib/i18n-content";
 import { publishedNewsWhere } from "@/lib/news-visibility";
 import { formatDate } from "@/lib/format-date";
+import { ShareButton } from "@/components/ui/share-button";
+import { NewsOthersSidebar } from "@/components/novyny/news-others-sidebar";
 import type { AppLocale } from "@/i18n/routing";
-
-const CATEGORY_FILTERS: { value?: NewsCategory; key: string }[] = [
-  { value: undefined, key: "categoryAll" },
-  { value: "ANNOUNCEMENT", key: "categoryAnnouncement" },
-  { value: "NEWS", key: "categoryNews" },
-  { value: "FOR_PSYCHOLOGISTS", key: "categoryForPsychologists" },
-];
 
 export default async function NewsDetailPage({
   params,
@@ -25,7 +19,6 @@ export default async function NewsDetailPage({
   const { slug } = await params;
   const locale = (await getLocale()) as AppLocale;
   const t = await getTranslations("News");
-  const common = await getTranslations("Common");
 
   const news = await prisma.newsPost.findFirst({
     where: publishedNewsWhere({ slug }),
@@ -52,109 +45,109 @@ export default async function NewsDetailPage({
     }),
   ]);
 
+  const others = otherNews.map((o) => ({
+    slug: o.slug,
+    category: o.category,
+    date: formatDate(o.date, locale),
+    title: pickLocalized(o, "title", locale),
+    photoUrl: getPublicUrl(o.photo)!,
+  }));
+
   return (
-    <main className="max-w-6xl mx-auto px-8 py-16 grid grid-cols-1 lg:grid-cols-3 gap-12">
-      <article className="lg:col-span-2">
-        <p className="text-xs font-bold tracking-[1.6px] uppercase text-violet mb-3">
-          {t("pageTitle")}
-        </p>
-        <h1 className="font-heading font-extrabold text-3xl text-navy mb-4">
-          {pickLocalized(news, "title", locale)}
-        </h1>
+    <main
+      className="relative px-[18px] pt-12 pb-12 sm:px-6 sm:pt-[52px] sm:pb-[90px] lg:px-8"
+      style={{ background: "linear-gradient(180deg, #FBEFEC 0%, rgba(251,239,236,0) 46%), #FFFDFC" }}
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-[130px] -right-[110px] h-[420px] w-[420px] rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle at 35% 35%, rgba(242,102,47,.16), rgba(201,48,124,.09) 55%, rgba(43,107,184,0) 72%)",
+          animation: "vlPulse 12s ease-in-out infinite",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute top-[120px] right-[12%] h-8 w-5 rounded-tl-[60%] rounded-br-[60%] rounded-tr-[10%] rounded-bl-[10%] opacity-[.35]"
+        style={{
+          background: "linear-gradient(140deg, #7A3AA0, #2B6BB8)",
+          animation: "vlFloat 11s ease-in-out infinite",
+        }}
+      />
 
-        <div className="flex items-center gap-3 mb-6">
-          <span className="text-xs font-bold uppercase tracking-wide text-magenta bg-magenta/10 px-2 py-1 rounded-field">
-            {t(newsCategoryKey(news.category))}
-          </span>
-          <span className="text-sm text-navy-soft">
-            {formatDate(news.date, locale, {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
-          </span>
-        </div>
+      <div className="relative mx-auto grid max-w-[1240px] grid-cols-1 items-start gap-11 lg:grid-cols-[2fr_1fr] lg:gap-14">
+        <article>
+          <div className="mb-[14px] text-sm font-bold tracking-[1.6px] text-violet uppercase">
+            {t("pageTitle")}
+          </div>
+          <h1 className="mb-4 font-heading text-[36px] leading-[1.12] font-extrabold tracking-[-.6px] text-navy sm:text-[42px] sm:tracking-[-.9px]">
+            {pickLocalized(news, "title", locale)}
+          </h1>
+          <div className="mb-[26px] flex items-center gap-3">
+            <span className="rounded-[7px] bg-magenta/9 px-3 py-[6px] text-xs font-bold tracking-[.6px] text-magenta uppercase">
+              {t(newsCategoryKey(news.category))}
+            </span>
+            <span className="text-[14.5px] text-navy-soft">
+              {formatDate(news.date, locale, { day: "numeric", month: "long", year: "numeric" })}
+            </span>
+          </div>
 
-        <Image
-          src={getPublicUrl(news.photo)!}
-          alt=""
-          width={800}
-          height={450}
-          className="w-full rounded-card object-cover mb-6"
-        />
+          <div className="relative mb-[30px] h-[440px] w-full overflow-hidden rounded-card border border-navy/12">
+            <Image
+              src={getPublicUrl(news.photo)!}
+              alt={pickLocalized(news, "title", locale)}
+              fill
+              sizes="(min-width: 1024px) 60vw, 100vw"
+              className="object-cover"
+              priority
+            />
+          </div>
 
-        <p className="text-xl font-bold text-navy mb-4">
-          {pickLocalized(news, "excerpt", locale)}
-        </p>
+          <p className="mb-[22px] font-heading text-xl leading-[1.45] font-bold text-navy">
+            {pickLocalized(news, "excerpt", locale)}
+          </p>
 
-        <div className="text-navy-soft leading-relaxed whitespace-pre-line mb-10">
-          {pickLocalized(news, "text", locale)}
-        </div>
+          <div className="mb-[34px] text-[17px] leading-[1.75] whitespace-pre-line text-navy-soft">
+            {pickLocalized(news, "text", locale)}
+          </div>
 
-        <div className="flex items-center justify-between border-t border-navy/10 pt-6">
-          {prevNews ? (
-            <Link
-              href={`/novyny/${prevNews.slug}`}
-              className="font-bold text-navy hover:text-indigo"
-            >
-              ← {t("prevNews")}
-            </Link>
-          ) : (
-            <span />
+          <div className="border-b border-navy/12 pb-[34px]">
+            <ShareButton />
+          </div>
+
+          {(prevNews || nextNews) && (
+            <div className="mt-10 flex items-center justify-between gap-3 sm:gap-5">
+              {prevNews ? (
+                <Link
+                  href={`/novyny/${prevNews.slug}`}
+                  className="group inline-flex flex-1 items-center gap-[9px] font-heading text-[13.5px] font-bold text-navy transition-colors duration-[250ms] ease-in-out hover:text-magenta sm:flex-initial sm:gap-3 sm:text-[15.5px]"
+                >
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-field border-[1.5px] border-navy/18 text-xl transition-colors duration-[250ms] ease-in-out group-hover:border-magenta group-hover:text-magenta">
+                    ←
+                  </span>
+                  {t("prevNews")}
+                </Link>
+              ) : (
+                <span className="flex-1 sm:flex-initial" />
+              )}
+              {nextNews && (
+                <Link
+                  href={`/novyny/${nextNews.slug}`}
+                  className="group inline-flex flex-1 items-center justify-end gap-[9px] text-right font-heading text-[13.5px] font-bold text-navy transition-colors duration-[250ms] ease-in-out hover:text-magenta sm:flex-initial sm:justify-start sm:gap-3 sm:text-[15.5px]"
+                >
+                  {t("nextNews")}
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-field border-[1.5px] border-navy/18 text-xl transition-colors duration-[250ms] ease-in-out group-hover:border-magenta group-hover:text-magenta">
+                    →
+                  </span>
+                </Link>
+              )}
+            </div>
           )}
-          {nextNews && (
-            <Link
-              href={`/novyny/${nextNews.slug}`}
-              className="font-bold text-navy hover:text-indigo"
-            >
-              {t("nextNews")} →
-            </Link>
-          )}
-        </div>
-      </article>
+        </article>
 
-      <aside>
-        <h2 className="font-heading font-bold text-lg text-navy mb-4">
-          {t("otherNews")}
-        </h2>
-
-        <div className="flex flex-wrap gap-2 mb-5">
-          {CATEGORY_FILTERS.map((filter) => (
-            <Link
-              key={filter.key}
-              href={filter.value ? `/novyny?category=${filter.value}` : "/novyny"}
-              className="rounded-field px-3 py-1.5 text-xs font-bold bg-white border border-navy/15 text-navy-soft hover:text-navy"
-            >
-              {t(filter.key)}
-            </Link>
-          ))}
-        </div>
-
-        <div className="space-y-4 mb-6">
-          {otherNews.map((other) => (
-            <Link key={other.id} href={`/novyny/${other.slug}`} className="block group">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs font-bold uppercase tracking-wide text-magenta bg-magenta/10 px-2 py-0.5 rounded-field">
-                  {t(newsCategoryKey(other.category))}
-                </span>
-                <span className="text-xs text-navy-soft">
-                  {formatDate(other.date, locale)}
-                </span>
-              </div>
-              <p className="font-bold text-sm text-navy group-hover:text-indigo">
-                {pickLocalized(other, "title", locale)}
-              </p>
-            </Link>
-          ))}
-        </div>
-
-        <Link
-          href="/novyny"
-          className="font-bold text-sm text-navy border-b-2 border-indigo/40 hover:border-indigo"
-        >
-          {common("allNews")}
-        </Link>
-      </aside>
+        <NewsOthersSidebar others={others} />
+      </div>
     </main>
   );
 }

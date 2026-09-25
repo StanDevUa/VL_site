@@ -21,6 +21,7 @@ export async function getCartProducts(ids: string[]) {
       nameUk: true,
       nameEn: true,
       nameRu: true,
+      category: { select: { nameUk: true, nameEn: true, nameRu: true } },
     },
   });
 
@@ -32,5 +33,6 @@ export async function getCartProducts(ids: string[]) {
     nameRu: p.nameRu,
     price: p.price.toString(),
     mainPhotoUrl: getPublicUrl(p.mainPhoto)!,
+    category: p.category,
   }));
 }

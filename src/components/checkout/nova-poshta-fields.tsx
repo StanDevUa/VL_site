@@ -5,12 +5,12 @@ import { useEffect, useRef, useState } from "react";
 type Suggestion = { ref: string; name: string };
 
 const fieldClass =
-  "w-full rounded-field border border-indigo/30 bg-white px-4 py-3 text-navy outline-none transition-colors focus:border-indigo focus:ring-4 focus:ring-indigo/15 disabled:cursor-not-allowed disabled:bg-navy/5 disabled:text-navy-soft";
+  "w-full rounded-field border-[1.5px] border-magenta/45 bg-white px-4 py-3.5 text-base text-navy outline-none transition-shadow duration-200 ease-in-out focus:shadow-[0_0_0_4px_rgba(201,48,124,.12)] disabled:cursor-not-allowed disabled:border-navy/16 disabled:bg-navy/5 disabled:text-navy-soft";
 const dropdownClass =
-  "absolute top-[calc(100%+6px)] left-0 right-0 z-20 max-h-60 overflow-y-auto rounded-field border border-indigo/50 bg-white shadow-card-hover";
+  "absolute top-[calc(100%+6px)] left-0 right-0 z-20 max-h-60 overflow-y-auto rounded-field border-[1.5px] border-magenta/45 bg-white shadow-[0_20px_40px_-20px_rgba(30,42,90,.4)] [scrollbar-width:none]";
 const optionClass =
-  "block w-full px-3 py-2 text-left text-sm text-navy transition-colors hover:bg-indigo/5";
-const labelClass = "block text-sm font-bold text-navy mb-2";
+  "block w-full px-4 py-3 text-left text-[15.5px] text-navy transition-colors duration-200 ease-in-out hover:bg-magenta/7";
+const labelClass = "mb-2 block text-sm font-bold text-navy";
 
 /** Живий пошук міста + залежний пошук відділення через проксі /api/nova-poshta/*. */
 export function NovaPoshtaFields({
@@ -23,6 +23,8 @@ export function NovaPoshtaFields({
   defaultCityRef = "",
   defaultWarehouseName = "",
   defaultWarehouseRef = "",
+  onCityInput,
+  onWarehouseInput,
 }: {
   cityLabel: string;
   warehouseLabel: string;
@@ -33,6 +35,8 @@ export function NovaPoshtaFields({
   defaultCityRef?: string;
   defaultWarehouseName?: string;
   defaultWarehouseRef?: string;
+  onCityInput?: (value: string) => void;
+  onWarehouseInput?: (value: string) => void;
 }) {
   const [cityQuery, setCityQuery] = useState(defaultCityName);
   const [cityRef, setCityRef] = useState(defaultCityRef);
@@ -104,9 +108,11 @@ export function NovaPoshtaFields({
   }, []);
 
   return (
-    <div className="space-y-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div ref={cityBoxRef} className="relative">
-        <label className={labelClass}>{cityLabel}</label>
+        <label className={labelClass}>
+          {cityLabel} <span className="text-[#C0322C]">*</span>
+        </label>
         <input type="hidden" name="novaPoshtaCityRef" value={cityRef} />
         <input
           type="text"
@@ -120,6 +126,7 @@ export function NovaPoshtaFields({
             setCityOpen(true);
             setWarehouseQuery("");
             setWarehouseRef("");
+            onCityInput?.(e.target.value);
           }}
           onFocus={() => setCityOpen(true)}
           className={fieldClass}
@@ -134,6 +141,7 @@ export function NovaPoshtaFields({
                   setCityQuery(c.name);
                   setCityRef(c.ref);
                   setCityOpen(false);
+                  onCityInput?.(c.name);
                 }}
                 className={optionClass}
               >
@@ -145,7 +153,9 @@ export function NovaPoshtaFields({
       </div>
 
       <div ref={warehouseBoxRef} className="relative">
-        <label className={labelClass}>{warehouseLabel}</label>
+        <label className={labelClass}>
+          {warehouseLabel} <span className="text-[#C0322C]">*</span>
+        </label>
         <input type="hidden" name="novaPoshtaWarehouseRef" value={warehouseRef} />
         <input
           type="text"
@@ -158,6 +168,7 @@ export function NovaPoshtaFields({
             setWarehouseQuery(e.target.value);
             setWarehouseRef("");
             setWarehouseOpen(true);
+            onWarehouseInput?.(e.target.value);
           }}
           onFocus={() => setWarehouseOpen(true)}
           className={fieldClass}
@@ -172,6 +183,7 @@ export function NovaPoshtaFields({
                   setWarehouseQuery(w.name);
                   setWarehouseRef(w.ref);
                   setWarehouseOpen(false);
+                  onWarehouseInput?.(w.name);
                 }}
                 className={optionClass}
               >

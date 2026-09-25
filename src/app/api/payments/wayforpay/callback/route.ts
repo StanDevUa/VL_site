@@ -22,16 +22,29 @@ export async function POST(request: NextRequest) {
     body.reasonCode,
   ]);
 
-  if (expectedSignature === body.merchantSignature && body.transactionStatus === "Approved") {
-    await prisma.order.updateMany({
-      where: { orderNumber: body.orderReference, status: "PENDING_PAYMENT" },
-      data: {
-        status: "PAID",
-        paidAt: new Date(),
-        wayforpayOrderReference: body.orderReference,
-        wayforpayStatus: body.transactionStatus,
-      },
-    });
+  if (expectedSignature === body.merchantSignature) {
+    if (body.transactionStatus === "Approved") {
+      await prisma.order.updateMany({
+        where: { orderNumber: body.orderReference, status: "PENDING_PAYMENT" },
+        data: {
+          status: "PAID",
+          paidAt: new Date(),
+          wayforpayOrderReference: body.orderReference,
+          wayforpayStatus: body.transactionStatus,
+        },
+      });
+    } else if (body.transactionStatus === "Declined" || body.transactionStatus === "Voided") {
+      // Клієнт спробував оплатити, але банк відхилив або сесія оплати
+      // прострочилась (reasonCode 1124) — замовлення більше не актуальне.
+      await prisma.order.updateMany({
+        where: { orderNumber: body.orderReference, status: "PENDING_PAYMENT" },
+        data: {
+          status: "CANCELLED",
+          wayforpayOrderReference: body.orderReference,
+          wayforpayStatus: body.transactionStatus,
+        },
+      });
+    }
   }
 
   const time = Math.floor(Date.now() / 1000);

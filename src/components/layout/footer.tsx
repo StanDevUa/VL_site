@@ -79,13 +79,15 @@ export function Footer() {
             "linear-gradient(180deg, rgba(248,232,226,0) 0%, #F7E7E1 10%, #F1DCD4 100%), #FFFDFC",
         }}
       >
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -top-[190px] h-[360px] w-[360px] rounded-full bg-magenta/[.04]"
-          style={{ left: "calc(50% - 446px)" }}
-        />
+        {pathname === "/" && (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -top-[190px] h-[360px] w-[360px] rounded-full bg-magenta/[.04]"
+            style={{ left: "calc(50% - 446px)" }}
+          />
+        )}
         <div className="relative mx-auto max-w-[1240px]">
-          <div className="grid grid-cols-1 gap-[22px] border-b border-navy/14 pb-11 sm:grid-cols-2 sm:gap-9 lg:grid-cols-[1.25fr_.8fr_.9fr_.7fr] lg:gap-12">
+          <div className="grid grid-cols-1 gap-[22px] border-b border-navy/14 pb-11 sm:grid-cols-2 sm:gap-9 lg:grid-cols-[1.25fr_.8fr_1.6fr] lg:items-start lg:gap-12">
             <div className="max-w-[340px] max-sm:col-span-full max-sm:max-w-none">
               <Image
                 src="/logo.png"
@@ -115,35 +117,42 @@ export function Footer() {
               ))}
             </nav>
 
-            <nav className="flex flex-col gap-[13px] pt-2 text-[15px]">
-              {LEGAL_LINKS.map((link) => (
-                <Link
-                  key={link.slug}
-                  href={`/legal/${link.slug}`}
-                  className="text-navy-soft hover:text-magenta"
-                >
-                  {footerT(link.labelKey)}
-                </Link>
-              ))}
-            </nav>
+            <div className="col-span-full grid grid-cols-1 gap-9 sm:grid-cols-[.9fr_.7fr] lg:col-span-1 lg:items-stretch lg:gap-12">
+              <nav className="flex flex-col gap-[13px] pt-2 text-[15px]">
+                {LEGAL_LINKS.map((link) => (
+                  <Link
+                    key={link.slug}
+                    href={`/legal/${link.slug}`}
+                    className="text-navy-soft hover:text-magenta"
+                  >
+                    {footerT(link.labelKey)}
+                  </Link>
+                ))}
+              </nav>
 
-            <div className="flex justify-start gap-2.5 pt-2 max-sm:col-span-full max-sm:justify-center sm:justify-end">
-              {SOCIALS.map(({ title, href, gradient, hoverShadowClass, Icon }) => (
-                <a
-                  key={title}
-                  href={href}
-                  target="_blank"
-                  rel="noreferrer"
-                  title={title}
-                  className={
-                    "flex h-[46px] w-[46px] items-center justify-center rounded-[12px] text-white transition-[translate,box-shadow] duration-[250ms] ease-in-out hover:-translate-y-[3px] " +
-                    hoverShadowClass
-                  }
-                  style={{ background: gradient }}
-                >
-                  <Icon />
-                </a>
-              ))}
+              <div className="flex flex-row items-center justify-between pt-2 max-sm:col-span-full sm:flex-col sm:items-end sm:justify-between">
+                <div className="flex justify-end gap-2.5 sm:w-40">
+                  {SOCIALS.map(({ title, href, gradient, hoverShadowClass, Icon }) => (
+                    <a
+                      key={title}
+                      href={href}
+                      target="_blank"
+                      rel="noreferrer"
+                      title={title}
+                      className={
+                        "flex h-[46px] w-[46px] items-center justify-center rounded-[12px] text-white transition-[translate,box-shadow] duration-[250ms] ease-in-out hover:-translate-y-[3px] " +
+                        hoverShadowClass
+                      }
+                      style={{ background: gradient }}
+                    >
+                      <Icon />
+                    </a>
+                  ))}
+                </div>
+                <div className="sm:flex sm:w-40 sm:justify-center">
+                  <Image src="/wayforpay.png" alt="WayForPay" width={753} height={331} className="h-12 w-auto" />
+                </div>
+              </div>
             </div>
           </div>
 

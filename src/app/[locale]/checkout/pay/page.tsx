@@ -2,6 +2,10 @@ import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { signWayForPay } from "@/lib/wayforpay";
 import { primaryButtonClass } from "@/components/ui/button-styles";
+import { AutoSubmitForm } from "@/components/checkout/auto-submit-form";
+
+/** Скільки секунд клієнт може оплачувати замовлення на стороні WayForPay, перш ніж вони самі відхилять спробу як прострочену. */
+const ORDER_LIFETIME_SECONDS = 3600;
 
 export default async function CheckoutPayPage({
   searchParams,
@@ -54,6 +58,8 @@ export default async function CheckoutPayPage({
         <input type="hidden" name="merchantAccount" value={merchantAccount} />
         <input type="hidden" name="merchantDomainName" value={merchantDomainName} />
         <input type="hidden" name="merchantSignature" value={signature} />
+        <input type="hidden" name="merchantTransactionSecureType" value="AUTO" />
+        <input type="hidden" name="orderLifetime" value={ORDER_LIFETIME_SECONDS} />
         <input type="hidden" name="orderReference" value={order.orderNumber} />
         <input type="hidden" name="orderDate" value={orderDate} />
         <input type="hidden" name="amount" value={amount} />
@@ -82,11 +88,7 @@ export default async function CheckoutPayPage({
         </button>
       </form>
 
-      <script
-        dangerouslySetInnerHTML={{
-          __html: "document.getElementById('wfp-form').submit();",
-        }}
-      />
+      <AutoSubmitForm formId="wfp-form" />
     </main>
   );
 }

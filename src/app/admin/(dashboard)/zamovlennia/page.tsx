@@ -1,17 +1,15 @@
 import Link from "next/link";
-import { Prisma, OrderStatus } from "@prisma/client";
+import { OrderStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/format-date";
 import { formatPrice } from "@/lib/format-price";
 import { ORDER_STATUS_LABELS, ORDER_STATUS_BADGE_CLASS } from "@/lib/order-status";
-import { primaryButtonClass, secondaryButtonClass } from "@/components/ui/button-styles";
-import { CustomSelect } from "@/components/admin/custom-select";
+import { OrdersFilterBar } from "@/components/admin/orders-filter-bar";
+import { OrdersAutoRefresh } from "@/components/admin/orders-auto-refresh";
+import { buildOrdersWhere } from "@/lib/orders-filter";
+import { expireStaleOrders } from "@/lib/expire-stale-orders";
 
-const PAGE_SIZE = 15;
-
-const selectClass =
-  "w-full rounded-field border border-navy/15 px-3 py-2 text-sm text-navy outline-none focus:border-indigo focus:ring-4 focus:ring-indigo/15";
-const labelClass = "block text-xs font-bold text-navy-soft mb-1.5";
+const PAGE_SIZE = 10;
 
 type SearchParams = {
   page?: string;
@@ -22,6 +20,31 @@ type SearchParams = {
   productId?: string;
 };
 
+const thClass = "px-4 py-3 text-left text-xs font-bold text-navy-soft whitespace-nowrap";
+const tdClass = "p-0";
+const cellLinkClass = "block px-4 py-3 text-sm text-navy whitespace-nowrap";
+
+/** Вікно навколо поточної сторінки + перша/остання, з "..." на пропусках — щоб при 30 сторінках не рендерити всі 30 кнопок підряд. */
+function buildPageList(current: number, total: number): (number | "ellipsis")[] {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+  const delta = 2;
+  const pages = new Set<number>([1, total]);
+  for (let i = current - delta; i <= current + delta; i++) {
+    if (i >= 1 && i <= total) pages.add(i);
+  }
+  const sorted = Array.from(pages).sort((a, b) => a - b);
+  const result: (number | "ellipsis")[] = [];
+  let prev = 0;
+  for (const p of sorted) {
+    if (prev && p - prev > 1) result.push("ellipsis");
+    result.push(p);
+    prev = p;
+  }
+  return result;
+}
+
 export default async function AdminOrdersListPage({
   searchParams,
 }: {
@@ -29,6 +52,8 @@ export default async function AdminOrdersListPage({
 }) {
   const { page, dateFrom, dateTo, status, categoryId, productId } = await searchParams;
   const currentPage = Math.max(1, Number(page) || 1);
+
+  await expireStaleOrders();
 
   const activeStatus =
     status && Object.values(OrderStatus).includes(status as OrderStatus)
@@ -42,20 +67,11 @@ export default async function AdminOrdersListPage({
   const activeCategoryId = categories.some((c) => c.id === categoryId) ? categoryId : undefined;
   const activeProductId = products.some((p) => p.id === productId) ? productId : undefined;
 
-  const andConditions: Prisma.OrderWhereInput[] = [];
-  if (activeStatus) andConditions.push({ status: activeStatus });
-  if (dateFrom) andConditions.push({ createdAt: { gte: new Date(dateFrom) } });
-  if (dateTo) {
-    const end = new Date(dateTo);
-    end.setHours(23, 59, 59, 999);
-    andConditions.push({ createdAt: { lte: end } });
-  }
-  if (activeProductId) {
-    andConditions.push({ items: { some: { productId: activeProductId } } });
-  } else if (activeCategoryId) {
-    andConditions.push({ items: { some: { product: { categoryId: activeCategoryId } } } });
-  }
-  const where: Prisma.OrderWhereInput = andConditions.length > 0 ? { AND: andConditions } : {};
+  const where = buildOrdersWhere(
+    { dateFrom, dateTo, status, categoryId, productId },
+    new Set(categories.map((c) => c.id)),
+    new Set(products.map((p) => p.id)),
+  );
 
   const [orders, total] = await Promise.all([
     prisma.order.findMany({
@@ -83,6 +99,7 @@ export default async function AdminOrdersListPage({
 
   return (
     <div>
+      <OrdersAutoRefresh />
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-heading font-extrabold text-2xl text-navy">Замовлення</h1>
         <p className="text-sm text-navy-soft">
@@ -90,112 +107,103 @@ export default async function AdminOrdersListPage({
         </p>
       </div>
 
-      <form
-        method="get"
-        className="bg-white rounded-card border border-navy/10 p-4 mb-6 grid grid-cols-2 md:grid-cols-5 gap-3 items-end"
-      >
-        <div>
-          <label className={labelClass}>Від</label>
-          <input type="date" name="dateFrom" defaultValue={dateFrom ?? ""} className={selectClass} />
-        </div>
-        <div>
-          <label className={labelClass}>До</label>
-          <input type="date" name="dateTo" defaultValue={dateTo ?? ""} className={selectClass} />
-        </div>
-        <div>
-          <label className={labelClass}>Статус</label>
-          <CustomSelect
-            name="status"
-            defaultValue={activeStatus ?? ""}
-            placeholder="Усі"
-            options={[
-              { value: "", label: "Усі" },
-              ...Object.entries(ORDER_STATUS_LABELS).map(([value, label]) => ({ value, label })),
-            ]}
-          />
-        </div>
-        <div>
-          <label className={labelClass}>Категорія</label>
-          <CustomSelect
-            name="categoryId"
-            defaultValue={activeCategoryId ?? ""}
-            placeholder="Усі"
-            options={[
-              { value: "", label: "Усі" },
-              ...categories.map((c) => ({ value: c.id, label: c.nameUk })),
-            ]}
-          />
-        </div>
-        <div>
-          <label className={labelClass}>Товар</label>
-          <CustomSelect
-            name="productId"
-            defaultValue={activeProductId ?? ""}
-            placeholder="Усі"
-            options={[
-              { value: "", label: "Усі" },
-              ...products.map((p) => ({ value: p.id, label: p.nameUk })),
-            ]}
-          />
-        </div>
-        <div className="col-span-2 md:col-span-5 flex gap-3">
-          <button type="submit" className={primaryButtonClass}>
-            Застосувати
-          </button>
-          <Link href="/admin/zamovlennia" className={secondaryButtonClass}>
-            Скинути
-          </Link>
-        </div>
-      </form>
+      <OrdersFilterBar
+        dateFrom={dateFrom}
+        dateTo={dateTo}
+        activeStatus={activeStatus}
+        activeCategoryId={activeCategoryId}
+        activeProductId={activeProductId}
+        categories={categories}
+        products={products}
+      />
 
       {orders.length === 0 ? (
         <p className="text-navy-soft">Замовлень за цими фільтрами не знайдено.</p>
       ) : (
         <>
-          <div className="bg-white rounded-card border border-navy/10 divide-y divide-navy/10">
-            {orders.map((order) => (
-              <Link
-                key={order.id}
-                href={`/admin/zamovlennia/${order.id}`}
-                className="flex items-center gap-4 p-4 hover:bg-powder-pink/40 transition-colors"
-              >
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <p className="font-bold text-navy">{order.orderNumber}</p>
-                    <span
-                      className={
-                        "shrink-0 text-xs font-bold px-2 py-0.5 rounded-field " +
-                        ORDER_STATUS_BADGE_CLASS[order.status]
-                      }
-                    >
-                      {ORDER_STATUS_LABELS[order.status]}
-                    </span>
-                  </div>
-                  <p className="text-sm text-navy-soft truncate">
-                    {order.recipientName} · {formatDate(order.createdAt, "uk", { day: "2-digit", month: "2-digit", year: "numeric" })}
-                  </p>
-                </div>
-                <p className="shrink-0 font-bold text-navy">{formatPrice(order.subtotal.toString())}</p>
-              </Link>
-            ))}
+          <div className="bg-white rounded-card border border-navy/10 overflow-hidden overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead className="sticky top-0 z-10 bg-white">
+                <tr className="border-b border-navy/10">
+                  <th className={thClass}>Дата замовлення</th>
+                  <th className={thClass}>№ замовлення</th>
+                  <th className={thClass}>Покупець</th>
+                  <th className={thClass}>Контакт</th>
+                  <th className={thClass}>Сума</th>
+                  <th className={thClass}>Статус</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((order) => {
+                  const href = `/admin/zamovlennia/${order.id}`;
+                  return (
+                    <tr key={order.id} className="border-b border-navy/10 last:border-0 hover:bg-powder-pink/40 transition-colors">
+                      <td className={tdClass}>
+                        <Link href={href} className={cellLinkClass}>
+                          {formatDate(order.createdAt, "uk", { day: "2-digit", month: "2-digit", year: "numeric" })}
+                        </Link>
+                      </td>
+                      <td className={tdClass}>
+                        <Link href={href} className={`${cellLinkClass} font-bold`}>
+                          {order.orderNumber}
+                        </Link>
+                      </td>
+                      <td className={tdClass}>
+                        <Link href={href} className={`${cellLinkClass} max-w-[200px] truncate`}>
+                          {order.recipientName}
+                        </Link>
+                      </td>
+                      <td className={tdClass}>
+                        <Link href={href} className={cellLinkClass}>
+                          {order.recipientPhone}
+                        </Link>
+                      </td>
+                      <td className={tdClass}>
+                        <Link href={href} className={`${cellLinkClass} font-bold`}>
+                          {formatPrice(order.subtotal.toString())}
+                        </Link>
+                      </td>
+                      <td className={tdClass}>
+                        <Link href={href} className={`${cellLinkClass} py-2.5`}>
+                          <span
+                            className={
+                              "inline-block text-xs font-bold px-2 py-0.5 rounded-field " +
+                              ORDER_STATUS_BADGE_CLASS[order.status]
+                            }
+                          >
+                            {ORDER_STATUS_LABELS[order.status]}
+                          </span>
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
 
           {totalPages > 1 && (
             <nav className="flex items-center justify-center gap-2 mt-6">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                <Link
-                  key={p}
-                  href={queryFor(p)}
-                  className={
-                    "w-10 h-10 flex items-center justify-center rounded-field font-bold text-sm " +
-                    (p === currentPage
-                      ? "bg-indigo text-white"
-                      : "bg-white border border-navy/15 text-navy hover:border-magenta hover:text-magenta")
-                  }
-                >
-                  {p}
-                </Link>
-              ))}
+              {buildPageList(currentPage, totalPages).map((p, i) =>
+                p === "ellipsis" ? (
+                  <span key={`e${i}`} className="w-10 h-10 flex items-center justify-center text-navy-soft">
+                    …
+                  </span>
+                ) : (
+                  <Link
+                    key={p}
+                    href={queryFor(p)}
+                    className={
+                      "w-10 h-10 flex items-center justify-center rounded-field font-bold text-sm " +
+                      (p === currentPage
+                        ? "bg-indigo text-white"
+                        : "bg-white border border-navy/15 text-navy hover:border-magenta hover:text-magenta")
+                    }
+                  >
+                    {p}
+                  </Link>
+                ),
+              )}
             </nav>
           )}
         </>

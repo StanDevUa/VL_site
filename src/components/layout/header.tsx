@@ -117,7 +117,12 @@ export function Header() {
           <Link
             href="/cart"
             title={common("cart")}
-            className="relative flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-field border-[1.5px] border-navy/15 text-navy transition-colors duration-[250ms] ease-in-out hover:border-indigo hover:text-indigo"
+            className={
+              "relative flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-field border-[1.5px] transition-colors duration-[250ms] ease-in-out " +
+              (pathname === "/cart"
+                ? "border-magenta text-magenta"
+                : "border-navy/15 text-navy hover:border-indigo hover:text-indigo")
+            }
           >
             <CartIcon />
             {totalCount > 0 && (
