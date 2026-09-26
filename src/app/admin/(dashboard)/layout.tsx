@@ -1,5 +1,6 @@
 import { signOut } from "@/lib/auth";
 import { AdminSidebarNav } from "@/components/admin/sidebar-nav";
+import { AdminScrollReset } from "@/components/admin/scroll-reset";
 
 export default function AdminDashboardLayout({
   children,
@@ -7,8 +8,9 @@ export default function AdminDashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="h-screen flex bg-page-bg overflow-hidden">
-      <aside className="w-64 h-full shrink-0 bg-white border-r border-navy/10 flex flex-col">
+    <div className="flex min-h-screen bg-page-bg">
+      <AdminScrollReset />
+      <aside className="w-64 h-screen sticky top-0 shrink-0 bg-white border-r border-navy/10 flex flex-col">
         <div className="px-6 py-4 border-b border-navy/10">
           <p className="font-heading font-extrabold text-lg text-navy">
             Адмін-панель
@@ -35,7 +37,7 @@ export default function AdminDashboardLayout({
         </div>
       </aside>
 
-      <main className="flex-1 min-w-0 h-full overflow-y-auto p-8">{children}</main>
+      <main className="flex-1 min-w-0 p-8">{children}</main>
     </div>
   );
 }

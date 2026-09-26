@@ -113,7 +113,10 @@ export function ProductForm({
                   {suffix === "Uk" && <FieldError message={errorFor("specsUk")} />}
                 </div>
                 <div>
-                  <label className={labelClass}>Опис{suffix === "Uk" && " *"}</label>
+                  <label className={labelClass}>
+                    Опис{suffix === "Uk" && " *"} (після першого абзацу обов&apos;язково
+                    додайте 1 порожній рядок)
+                  </label>
                   <textarea
                     name={`description${suffix}`}
                     defaultValue={resolve(`description${suffix}`)}
