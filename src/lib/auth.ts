@@ -6,6 +6,10 @@ import { prisma } from "@/lib/prisma";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
+  // Застосунок фізично слухає localhost:PORT, а назовні його віддає Caddy як
+  // reverse proxy на реальному домені — без trustHost Auth.js відкидає запит
+  // з "UntrustedHost", бо не бачить прямого зв'язку між портом і доменом.
+  trustHost: true,
   // JWT, не database-сесії: Auth.js не підтримує Credentials-провайдер разом
   // з database-стратегією (жорстке обмеження фреймворка). Для наскрізного входу
   // між Ресурсами 1–3 це навіть краще — JWT перевіряється локально по спільному
