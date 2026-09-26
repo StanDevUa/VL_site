@@ -133,9 +133,13 @@
     "successTitle": "Thank you!",
     "orderNumberLabel": "Order number:",
     "paidNote": "Your order № <b>{orderNo}</b> will be sent to the «<b>{warehouseName}</b>» branch in <b>{cityName}</b>.",
-    "pendingNote": "Waiting for payment confirmation from the payment provider — this takes a few minutes. If the payment didn't go through, try placing the order again.",
-    "cancelledNote": "This order has been cancelled.",
-    "notFoundNote": "Order not found."
+    "checkingTitle": "Checking payment status…",
+    "checkingNote": "This takes just a few seconds.",
+    "stillPendingTitle": "Confirmation not received yet",
+    "pendingNote": "We haven't received payment confirmation yet. If the payment didn't go through, try placing the order again.",
+    "cancelledTitle": "Order cancelled",
+    "cancelledNote": "Your items are still in the cart — you can try placing the order again.",
+    "notFoundTitle": "Order not found"
   },
   "Legal": {
     "eyebrow": "Legal information",
