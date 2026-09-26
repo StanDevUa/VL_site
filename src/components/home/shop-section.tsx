@@ -15,6 +15,7 @@ export async function ShopSection() {
   const products = await prisma.product.findMany({
     where: { showOnHome: true },
     orderBy: { createdAt: "asc" },
+    take: 4,
     include: { category: { select: { nameUk: true, nameEn: true, nameRu: true } } },
   });
 
