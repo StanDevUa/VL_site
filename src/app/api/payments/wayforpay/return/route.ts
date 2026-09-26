@@ -11,7 +11,10 @@ import { NextRequest, NextResponse } from "next/server";
  */
 function redirectToSuccess(request: NextRequest) {
   const order = request.nextUrl.searchParams.get("order");
-  const target = new URL("/checkout/success", request.url);
+  // request.url — це внутрішня адреса за Caddy (localhost:PORT), не публічний
+  // домен, тому будуємо абсолютний URL з APP_BASE_URL (так само, як serviceUrl/
+  // returnUrl самого WayForPay в checkout/pay/page.tsx), а не з request.url.
+  const target = new URL("/checkout/success", process.env.APP_BASE_URL!);
   if (order) target.searchParams.set("order", order);
   return NextResponse.redirect(target, 303);
 }
