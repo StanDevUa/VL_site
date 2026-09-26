@@ -25,20 +25,41 @@ export default function CheckoutSuccessPage() {
   const { clear } = useCart();
   const [order, setOrder] = useState<OrderInfo | "loading">("loading");
 
-  useEffect(() => {
-    clear();
-  }, [clear]);
-
+  // Редирект на цю сторінку може прийти РАНІШЕ, ніж WayForPay встигне
+  // надіслати serviceUrl-вебхук, що оновлює статус замовлення в БД (це два
+  // незалежні запити, без гарантованого порядку) — тож перевіряємо статус
+  // не один раз, а періодично, поки він PENDING_PAYMENT, максимум ~1 хвилину.
   useEffect(() => {
     if (!orderNumber) return;
     let cancelled = false;
-    getOrderStatus(orderNumber).then((result) => {
-      if (!cancelled) setOrder(result);
-    });
+    let timeoutId: ReturnType<typeof setTimeout>;
+    let attempts = 0;
+
+    async function poll() {
+      const result = await getOrderStatus(orderNumber!);
+      if (cancelled) return;
+      setOrder(result);
+      attempts += 1;
+      if (result?.status === "PENDING_PAYMENT" && attempts < 20) {
+        timeoutId = setTimeout(poll, 3000);
+      }
+    }
+    poll();
+
     return () => {
       cancelled = true;
+      clearTimeout(timeoutId);
     };
   }, [orderNumber]);
+
+  // Кошик очищаємо лише після підтвердженої оплати — якщо покупець скасував
+  // оплату або вона ще не пройшла, товари мають лишитись, щоб можна було
+  // спробувати оформити те саме замовлення ще раз.
+  useEffect(() => {
+    if (order !== "loading" && order?.status === "PAID") {
+      clear();
+    }
+  }, [order, clear]);
 
   const note =
     order === "loading"
