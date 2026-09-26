@@ -9,7 +9,10 @@ import { getOrderStatus } from "@/server/actions/checkout";
 
 type OrderInfo = Awaited<ReturnType<typeof getOrderStatus>>;
 
-const MAX_POLL_ATTEMPTS = 20;
+// WayForPay-вебхук іноді приходить за секунди, а іноді помітно повільніше
+// (спостерігали затримки за хвилину при реальному тестуванні) — тож 2
+// хвилини опитування раз на 3с, а не 1, як було спочатку.
+const MAX_POLL_ATTEMPTS = 40;
 const POLL_INTERVAL_MS = 3000;
 
 function CheckIcon() {

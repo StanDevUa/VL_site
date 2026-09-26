@@ -134,7 +134,7 @@
     "orderNumberLabel": "Order number:",
     "paidNote": "Your order № <b>{orderNo}</b> will be sent to the «<b>{warehouseName}</b>» branch in <b>{cityName}</b>.",
     "checkingTitle": "Checking payment status…",
-    "checkingNote": "This takes just a few seconds.",
+    "checkingNote": "This can take up to 2 minutes.",
     "stillPendingTitle": "Confirmation not received yet",
     "pendingNote": "We haven't received payment confirmation yet. If the payment didn't go through, try placing the order again.",
     "cancelledTitle": "Order cancelled",
