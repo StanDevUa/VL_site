@@ -156,9 +156,26 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="flex flex-col items-center justify-between gap-[10px] pt-6 text-[13.5px] text-navy-soft sm:flex-row sm:gap-6">
-            <span>{footerT("copyright")}</span>
-            <span>{footerT("trademark")}</span>
+          <div className="flex flex-col items-center gap-[14px] pt-6 text-[13.5px] text-navy-soft sm:grid sm:grid-cols-3 sm:items-center sm:gap-6">
+            <span className="sm:justify-self-start">{footerT("copyright")}</span>
+
+            <a
+              href="https://asdev.online/"
+              target="_blank"
+              rel="noreferrer"
+              className="group flex flex-wrap items-center justify-center gap-2.5 sm:justify-self-center"
+            >
+              <span>{footerT("developedBy")}</span>
+              <Image
+                src="/logo-dev.png"
+                alt="ASDev"
+                width={636}
+                height={203}
+                className="h-5 w-auto transition-transform duration-200 ease-out group-hover:scale-110"
+              />
+            </a>
+
+            <span className="sm:justify-self-end">{footerT("trademark")}</span>
           </div>
         </div>
       </footer>

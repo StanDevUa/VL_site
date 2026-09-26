@@ -41,17 +41,17 @@ export default async function AdminLoginPage({
 
         {error && (
           <p className="mb-4 rounded-field bg-red-50 px-4 py-3 text-sm text-red-700">
-            Невірний email або пароль.
+            Невірний логін або пароль.
           </p>
         )}
 
         <label className="block text-sm font-bold text-navy mb-2" htmlFor="email">
-          Email
+          Логін
         </label>
         <input
           id="email"
           name="email"
-          type="email"
+          type="text"
           required
           className="w-full mb-4 rounded-field border border-navy/15 px-4 py-3 text-navy outline-none focus:border-indigo focus:ring-4 focus:ring-indigo/15"
         />
