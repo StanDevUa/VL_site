@@ -2,6 +2,7 @@
 
 import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
+import { sendNotificationEmail } from "@/lib/mail";
 import { extractTextValues, type FormState } from "./form-state";
 
 export type ConsultationRequestState = (FormState & { success?: boolean }) | undefined;
@@ -24,7 +25,6 @@ async function validate(fields: ReturnType<typeof readFields>) {
   return fieldErrors;
 }
 
-/** TODO: надіслати email Вікторії — email-інфраструктура (SMTP/Resend) ще не підключена в проєкті. */
 export async function submitConsultationRequest(
   _prevState: ConsultationRequestState,
   formData: FormData,
@@ -37,6 +37,18 @@ export async function submitConsultationRequest(
   }
 
   await prisma.consultationRequest.create({ data: fields });
+
+  try {
+    await sendNotificationEmail({
+      subject: `Новий запис на консультацію від ${fields.name}`,
+      text: `Ім'я: ${fields.name}\nТелефон: ${fields.phone}\nEmail: ${fields.email}${
+        fields.comment ? `\n\nКоментар:\n${fields.comment}` : ""
+      }`,
+      replyTo: fields.email,
+    });
+  } catch (error) {
+    console.error("Не вдалося надіслати email-сповіщення про новий запис на консультацію:", error);
+  }
 
   return { success: true };
 }

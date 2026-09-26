@@ -2,6 +2,7 @@
 
 import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
+import { sendNotificationEmail } from "@/lib/mail";
 import { extractTextValues, type FormState } from "./form-state";
 
 export type AskQuestionState = (FormState & { success?: boolean }) | undefined;
@@ -23,7 +24,6 @@ async function validate(fields: ReturnType<typeof readFields>) {
   return fieldErrors;
 }
 
-/** TODO: надіслати email Вікторії — email-інфраструктура (SMTP/Resend) ще не підключена в проєкті. */
 export async function submitFaqQuestion(
   _prevState: AskQuestionState,
   formData: FormData,
@@ -36,6 +36,16 @@ export async function submitFaqQuestion(
   }
 
   await prisma.faqQuestion.create({ data: fields });
+
+  try {
+    await sendNotificationEmail({
+      subject: `Нове питання на сайті від ${fields.name}`,
+      text: `Ім'я: ${fields.name}\nEmail: ${fields.email}\n\nПитання:\n${fields.question}`,
+      replyTo: fields.email,
+    });
+  } catch (error) {
+    console.error("Не вдалося надіслати email-сповіщення про нове FAQ-питання:", error);
+  }
 
   return { success: true };
 }
