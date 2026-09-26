@@ -81,7 +81,7 @@ export default async function CheckoutPayPage({
         <input
           type="hidden"
           name="returnUrl"
-          value={`${baseUrl}/checkout/success?order=${order.orderNumber}`}
+          value={`${baseUrl}/api/payments/wayforpay/return?order=${order.orderNumber}`}
         />
         <button type="submit" className={primaryButtonClass}>
           Перейти до оплати

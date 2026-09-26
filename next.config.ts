@@ -9,11 +9,6 @@ const nextConfig: NextConfig = {
       // За замовчуванням 1MB — замало навіть для одного фото з телефону.
       // 25MB із запасом покриває головне фото + кілька фото галереї за раз.
       bodySizeLimit: "25mb",
-      // WayForPay повертає покупця на returnUrl (/checkout/success) через
-      // кросдоменний POST зі своєї сторінки оплати — без цього Next.js
-      // відхиляє запит як потенційний CSRF (Origin secure.wayforpay.com
-      // не збігається з Host lemeshko.org).
-      allowedOrigins: ["secure.wayforpay.com"],
     },
   },
   images: {
