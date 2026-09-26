@@ -97,6 +97,8 @@ export default function CheckoutSuccessPage() {
         title: t("checkingTitle"),
         note: t("checkingNote"),
         showButton: false,
+        buttonHref: "/shop" as const,
+        buttonLabel: common("toShop"),
       }
     : order === null
       ? {
@@ -105,6 +107,8 @@ export default function CheckoutSuccessPage() {
           title: t("notFoundTitle"),
           note: null,
           showButton: true,
+          buttonHref: "/shop" as const,
+          buttonLabel: common("toShop"),
         }
       : order.status === "PAID"
         ? {
@@ -118,6 +122,10 @@ export default function CheckoutSuccessPage() {
               b: (chunks: React.ReactNode) => <strong className="text-navy">{chunks}</strong>,
             }),
             showButton: true,
+            // Кошик уже очищено (ефект нижче) — вести в порожній кошик
+            // немає сенсу, тут доречніше запропонувати продовжити покупки.
+            buttonHref: "/shop" as const,
+            buttonLabel: common("toShop"),
           }
         : order.status === "CANCELLED"
           ? {
@@ -126,6 +134,10 @@ export default function CheckoutSuccessPage() {
               title: t("cancelledTitle"),
               note: t("cancelledNote"),
               showButton: true,
+              // Товари лишились у кошику (не очищали) — ведемо прямо туди,
+              // щоб можна було одразу спробувати оформити ще раз.
+              buttonHref: "/cart" as const,
+              buttonLabel: common("toCart"),
             }
           : {
               icon: <XIcon />,
@@ -133,6 +145,8 @@ export default function CheckoutSuccessPage() {
               title: t("stillPendingTitle"),
               note: t("pendingNote"),
               showButton: true,
+              buttonHref: "/cart" as const,
+              buttonLabel: common("toCart"),
             };
 
   return (
@@ -166,10 +180,10 @@ export default function CheckoutSuccessPage() {
           {view.note && <p className="mb-7 text-base leading-[1.7] text-navy-soft">{view.note}</p>}
           {view.showButton && (
             <Link
-              href="/shop"
+              href={view.buttonHref}
               className="inline-block rounded-button bg-indigo px-[34px] py-[15px] font-heading text-base font-bold text-white transition-colors duration-[250ms] ease-in-out hover:bg-indigo-hover"
             >
-              {common("toShop")}
+              {view.buttonLabel}
             </Link>
           )}
         </div>
