@@ -155,7 +155,7 @@ export function Header() {
           </div>
 
           <a
-            href="https://t.me/"
+            href="https://t.me/Viktoriia_Lemeshko"
             target="_blank"
             rel="noreferrer"
             title="Telegram"

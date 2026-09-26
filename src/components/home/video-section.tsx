@@ -66,7 +66,9 @@ export async function VideoSection() {
           <div className="mb-3.5 text-[15px] font-bold text-navy">{t("followLabel")}</div>
           <div className="mb-7 flex flex-wrap gap-3">
             <a
-              href="#"
+              href="https://www.facebook.com/lemeshkoviktoriia"
+              target="_blank"
+              rel="noreferrer"
               className="inline-flex items-center gap-2.5 rounded-field border-[1.5px] border-navy/16 px-5 py-[13px] text-[15px] font-bold text-navy transition-[border-color,color,translate] duration-[250ms] ease-in-out hover:-translate-y-0.5 hover:border-blue hover:text-blue"
             >
               <span
@@ -78,7 +80,9 @@ export async function VideoSection() {
               Facebook
             </a>
             <a
-              href="#"
+              href="https://www.instagram.com/viktoriya.lemeshko"
+              target="_blank"
+              rel="noreferrer"
               className="inline-flex items-center gap-2.5 rounded-field border-[1.5px] border-navy/16 px-5 py-[13px] text-[15px] font-bold text-navy transition-[border-color,color,translate] duration-[250ms] ease-in-out hover:-translate-y-0.5 hover:border-magenta hover:text-magenta"
             >
               <span

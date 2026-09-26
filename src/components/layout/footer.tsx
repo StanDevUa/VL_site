@@ -44,21 +44,21 @@ function TelegramIcon() {
 const SOCIALS = [
   {
     title: "Facebook",
-    href: "https://facebook.com/",
+    href: "https://www.facebook.com/lemeshkoviktoriia",
     gradient: "linear-gradient(135deg, #2B6BB8, #7A3AA0)",
     hoverShadowClass: "hover:shadow-[0_12px_22px_-10px_rgba(43,107,184,.6)]",
     Icon: FacebookIcon,
   },
   {
     title: "Instagram",
-    href: "https://instagram.com/",
+    href: "https://www.instagram.com/viktoriya.lemeshko",
     gradient: "linear-gradient(135deg, #F2662F, #C9307C)",
     hoverShadowClass: "hover:shadow-[0_12px_22px_-10px_rgba(201,48,124,.32)]",
     Icon: InstagramIcon,
   },
   {
     title: "Telegram",
-    href: "https://t.me/",
+    href: "https://t.me/Viktoriia_Lemeshko",
     gradient: "linear-gradient(135deg, #7A3AA0, #2B6BB8)",
     hoverShadowClass: "hover:shadow-[0_12px_22px_-10px_rgba(122,58,160,.6)]",
     Icon: TelegramIcon,
