@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { FieldError } from "@/components/admin/field-error";
 import { Link } from "@/i18n/navigation";
 import { submitConsultationRequest } from "@/server/actions/consultation-request";
+import { formatPhone } from "@/lib/format-phone";
 
 const inputClass =
   "w-full rounded-field border-[1.5px] border-navy/16 bg-white px-4 py-[14px] text-base text-navy outline-none transition-[border-color,box-shadow] duration-[250ms] ease-in-out focus:border-magenta focus:ring-4 focus:ring-magenta/[.12]";
@@ -16,6 +17,13 @@ export function CtaForm() {
   const [dismissed, setDismissed] = useState(false);
   const resolve = (key: string) => state?.values?.[key] ?? "";
   const errorFor = (key: string) => state?.fieldErrors?.[key];
+
+  const [phone, setPhone] = useState(() => formatPhone(resolve("phone")));
+  const [prevState, setPrevState] = useState(state);
+  if (state !== prevState) {
+    setPrevState(state);
+    setPhone(formatPhone(resolve("phone")));
+  }
 
   return (
     <>
@@ -40,7 +48,8 @@ export function CtaForm() {
             <input
               type="tel"
               name="phone"
-              defaultValue={resolve("phone")}
+              value={phone}
+              onChange={(e) => setPhone(formatPhone(e.target.value))}
               placeholder={t("placeholderPhone")}
               className={inputClass}
             />

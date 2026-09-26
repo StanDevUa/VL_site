@@ -9,6 +9,7 @@ import { getCartProducts } from "@/server/actions/cart";
 import { createOrder } from "@/server/actions/checkout";
 import { pickLocalized } from "@/lib/i18n-content";
 import { formatPrice } from "@/lib/format-price";
+import { formatPhone } from "@/lib/format-phone";
 import { FieldError } from "@/components/admin/field-error";
 import { NovaPoshtaFields } from "@/components/checkout/nova-poshta-fields";
 import type { AppLocale } from "@/i18n/routing";
@@ -27,19 +28,6 @@ const inputClass =
   "w-full rounded-field border-[1.5px] border-navy/16 bg-white px-4 py-3.5 text-base text-navy outline-none transition-shadow duration-200 ease-in-out focus:border-magenta focus:shadow-[0_0_0_4px_rgba(201,48,124,.12)]";
 const labelClass = "mb-2 block text-sm font-bold text-navy";
 const cardClass = "rounded-[16px] border border-navy/12 bg-white px-[26px] pt-[26px] pb-7";
-
-/** Як тільки з'являється перша цифра — одразу префікс +380, решта форматується як XX-XXX-XX-XX. */
-function formatPhone(raw: string): string {
-  const digitsOnly = raw.replace(/\D/g, "");
-  if (!digitsOnly) return "";
-  const digits = (digitsOnly.startsWith("380") ? digitsOnly.slice(3) : digitsOnly).slice(0, 9);
-  let out = "+380";
-  if (digits.length > 0) out += " " + digits.slice(0, 2);
-  if (digits.length > 2) out += "-" + digits.slice(2, 5);
-  if (digits.length > 5) out += "-" + digits.slice(5, 7);
-  if (digits.length > 7) out += "-" + digits.slice(7, 9);
-  return out;
-}
 
 export default function CheckoutPage() {
   const locale = useLocale() as AppLocale;
