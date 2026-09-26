@@ -83,7 +83,7 @@ export async function ShopSection() {
                 <div className="line-clamp-2 mb-[18px] text-[14.5px] text-navy-soft">
                   {pickLocalized(p, "productType", locale)}
                 </div>
-                <div className="mt-auto flex items-center justify-between gap-3">
+                <div className="mt-auto flex min-h-[42px] items-center justify-between gap-3">
                   <span className="font-heading text-xl font-extrabold whitespace-nowrap text-navy">
                     {formatPrice(p.price.toString())}
                   </span>
