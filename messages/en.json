@@ -327,7 +327,8 @@
     "nextAria": "Next review",
     "dotAria": "Go to review {n}",
     "readMore": "Read more",
-    "closeAria": "Close"
+    "closeAria": "Close",
+    "counter": "{current} / {total}"
   },
   "HomeWorks": {
     "eyebrow": "My work",

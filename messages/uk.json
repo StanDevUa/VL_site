@@ -327,7 +327,8 @@
     "nextAria": "Наступний відгук",
     "dotAria": "Перейти до відгуку {n}",
     "readMore": "Читати повністю",
-    "closeAria": "Закрити"
+    "closeAria": "Закрити",
+    "counter": "{current} / {total}"
   },
   "HomeWorks": {
     "eyebrow": "Мої роботи",

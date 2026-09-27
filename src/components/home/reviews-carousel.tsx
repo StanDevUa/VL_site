@@ -151,21 +151,31 @@ export function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
         </div>
 
         <div className="mt-8 flex items-center justify-between gap-6">
-          <div className="flex gap-2">
-            {Array.from({ length: maxIndex + 1 }, (_, i) => (
-              <button
-                key={i}
-                type="button"
-                aria-label={t("dotAria", { n: i + 1 })}
-                onClick={() => setReview(i)}
-                className="h-2 cursor-pointer rounded-full border-0 p-0 transition-[width,background] duration-300 ease-in-out"
-                style={{
-                  width: i === idx ? "30px" : "8px",
-                  background: i === idx ? "linear-gradient(90deg, #F2662F, #C9307C)" : "rgba(30,42,90,.18)",
-                }}
-              />
-            ))}
-          </div>
+          {perView === 1 ? (
+            // На мобільному perView=1 -> кількість крапок = кількість відгуків:
+            // при 15-20 відгуках вони не влізуть в один рядок і поламають
+            // верстку. Замість крапок — текстовий лічильник фіксованої
+            // ширини, який ніколи не переповнює рядок. Десктоп/планшет — без змін.
+            <span className="font-heading text-sm font-bold text-navy-soft">
+              {t("counter", { current: idx + 1, total: maxIndex + 1 })}
+            </span>
+          ) : (
+            <div className="flex gap-2">
+              {Array.from({ length: maxIndex + 1 }, (_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  aria-label={t("dotAria", { n: i + 1 })}
+                  onClick={() => setReview(i)}
+                  className="h-2 cursor-pointer rounded-full border-0 p-0 transition-[width,background] duration-300 ease-in-out"
+                  style={{
+                    width: i === idx ? "30px" : "8px",
+                    background: i === idx ? "linear-gradient(90deg, #F2662F, #C9307C)" : "rgba(30,42,90,.18)",
+                  }}
+                />
+              ))}
+            </div>
+          )}
           <div className="flex items-center gap-[34px]">
             <span
               aria-hidden
