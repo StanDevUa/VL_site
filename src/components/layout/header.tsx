@@ -113,7 +113,8 @@ export function Header() {
             href="/#cta"
             className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-field bg-indigo px-[13px] py-[11px] font-heading text-[12.5px] font-bold text-white shadow-[0_8px_20px_-8px_rgba(82,82,172,.34)] transition-[translate,box-shadow,background-color] duration-[250ms] ease-in-out hover:-translate-y-[2px] hover:bg-indigo-hover hover:shadow-[0_14px_28px_-10px_rgba(82,82,172,.34)] sm:px-[22px] sm:py-[13px] sm:text-[15px] lg:hidden"
           >
-            {common("bookConsultation")}
+            <span className="sm:hidden">{common("bookConsultationShort")}</span>
+            <span className="hidden sm:inline">{common("bookConsultation")}</span>
           </Link>
 
           <Link
