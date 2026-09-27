@@ -105,7 +105,7 @@ export async function HeroSection() {
           />
           <div className="relative h-[380px] w-full overflow-hidden rounded-card shadow-photo sm:h-[460px] lg:h-[560px]">
             <Image
-              src="/home/hero.jpg"
+              src="/home/hero.webp"
               alt="Вікторія Лемешко"
               fill
               sizes="(min-width: 1024px) 45vw, 100vw"
