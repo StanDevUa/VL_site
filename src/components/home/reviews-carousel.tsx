@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
@@ -26,11 +26,58 @@ function useReviewsPerView() {
   return perView;
 }
 
+/** Показує кнопку "Читати повністю" лише якщо текст РЕАЛЬНО обрізаний
+ * рамкою в 4 рядки — рахувати "на око" за кількістю символів ненадійно,
+ * бо перенос рядків залежить від ширини картки на конкретному екрані. */
+function ReviewCardBody({ review, onReadMore }: { review: Review; onReadMore: () => void }) {
+  const t = useTranslations("HomeReviews");
+  const textRef = useRef<HTMLParagraphElement>(null);
+  const [truncated, setTruncated] = useState(false);
+
+  useLayoutEffect(() => {
+    const el = textRef.current;
+    if (el) setTruncated(el.scrollHeight > el.clientHeight + 1);
+  }, [review.text]);
+
+  return (
+    <>
+      <div className="mb-3 font-heading text-[44px] leading-none text-magenta opacity-50">“</div>
+      <p ref={textRef} className="line-clamp-4 text-[16.5px] leading-[1.68] text-navy">
+        {review.text}
+      </p>
+      <div className="mt-2 mb-4 flex h-8 items-center justify-end">
+        {truncated && (
+          <button
+            type="button"
+            onClick={onReadMore}
+            className="border-0 bg-transparent p-0 font-heading text-sm font-bold text-indigo transition-colors duration-[250ms] ease-in-out hover:text-magenta"
+          >
+            {t("readMore")}
+          </button>
+        )}
+      </div>
+      <div className="flex items-center gap-3 border-t border-navy/12 pt-5">
+        <div
+          className="h-10 w-10 shrink-0 rounded-[10px] opacity-[.85]"
+          style={{
+            background: "linear-gradient(120deg, #F2662F 0%, #C9307C 42%, #7A3AA0 70%, #2B6BB8 100%)",
+          }}
+        />
+        <div>
+          <div className="text-[15px] font-bold text-navy">{review.name}</div>
+          <div className="text-[13.5px] text-navy-soft">{review.detail}</div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 export function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
   const t = useTranslations("HomeReviews");
   const common = useTranslations("Common");
   const perView = useReviewsPerView();
   const [review, setReview] = useState(0);
+  const [modalIndex, setModalIndex] = useState(-1);
 
   const maxIndex = Math.max(0, reviews.length - perView);
   const idx = Math.min(review, maxIndex);
@@ -43,6 +90,15 @@ export function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
   function nextReview() {
     setReview((r) => Math.min(maxIndex, r + 1));
   }
+
+  useEffect(() => {
+    if (modalIndex < 0) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setModalIndex(-1);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [modalIndex]);
 
   return (
     <section id="reviews" className="relative scroll-mt-24 px-[18px] py-14 sm:px-6 sm:py-24 lg:px-8">
@@ -79,7 +135,7 @@ export function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
             className="flex gap-[22px] transition-transform duration-[550ms] ease-[cubic-bezier(.22,.7,.25,1)]"
             style={{ transform: shift }}
           >
-            {reviews.map((r) => (
+            {reviews.map((r, i) => (
               <div
                 key={r.name}
                 className="rounded-card border border-navy/12 px-[30px] py-8"
@@ -88,23 +144,7 @@ export function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
                   background: "linear-gradient(170deg, rgba(251,239,236,.75), rgba(255,253,252,1))",
                 }}
               >
-                <div className="mb-3 font-heading text-[44px] leading-none text-magenta opacity-50">“</div>
-                <p className="mb-6 h-[138.6px] overflow-hidden text-[16.5px] leading-[1.68] text-navy">
-                  {r.text}
-                </p>
-                <div className="flex items-center gap-3 border-t border-navy/12 pt-5">
-                  <div
-                    className="h-10 w-10 rounded-[10px] opacity-[.85]"
-                    style={{
-                      background:
-                        "linear-gradient(120deg, #F2662F 0%, #C9307C 42%, #7A3AA0 70%, #2B6BB8 100%)",
-                    }}
-                  />
-                  <div>
-                    <div className="text-[15px] font-bold text-navy">{r.name}</div>
-                    <div className="text-[13.5px] text-navy-soft">{r.detail}</div>
-                  </div>
-                </div>
+                <ReviewCardBody review={r} onReadMore={() => setModalIndex(i)} />
               </div>
             ))}
           </div>
@@ -144,6 +184,69 @@ export function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
           </div>
         </div>
       </div>
+
+      {modalIndex >= 0 && (
+        <div
+          onClick={() => setModalIndex(-1)}
+          className="fixed inset-0 z-[90] flex items-center justify-center bg-[#1A2450]/72 p-8 backdrop-blur-[4px]"
+        >
+          <div onClick={(e) => e.stopPropagation()} className="relative w-[min(640px,100%)]">
+            <div
+              className="rounded-card border border-navy/12 px-8 py-9"
+              style={{ background: "linear-gradient(170deg, rgba(251,239,236,.9), rgba(255,253,252,1))" }}
+            >
+              <div className="mb-3 font-heading text-[44px] leading-none text-magenta opacity-50">“</div>
+              <p className="mb-6 text-[16.5px] leading-[1.68] text-navy text-pretty">{reviews[modalIndex].text}</p>
+              <div className="flex items-center gap-3 border-t border-navy/12 pt-5">
+                <div
+                  className="h-10 w-10 shrink-0 rounded-[10px] opacity-[.85]"
+                  style={{
+                    background: "linear-gradient(120deg, #F2662F 0%, #C9307C 42%, #7A3AA0 70%, #2B6BB8 100%)",
+                  }}
+                />
+                <div>
+                  <div className="text-[15px] font-bold text-navy">{reviews[modalIndex].name}</div>
+                  <div className="text-[13.5px] text-navy-soft">{reviews[modalIndex].detail}</div>
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setModalIndex(-1)}
+              title={t("closeAria")}
+              className="absolute -top-[18px] -right-[18px] flex h-11 w-11 items-center justify-center rounded-full border-0 bg-white text-xl text-navy shadow-[0_12px_24px_-10px_rgba(0,0,0,.4)]"
+            >
+              ×
+            </button>
+            {reviews.length > 1 && (
+              <div className="mt-[18px] flex justify-center gap-2.5">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setModalIndex((m) => (m - 1 + reviews.length) % reviews.length);
+                  }}
+                  aria-label={t("prevAria")}
+                  className="flex h-12 w-12 items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-white text-xl text-navy transition-[border-color,color] duration-[250ms] ease-in-out hover:border-magenta hover:text-magenta"
+                >
+                  ←
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setModalIndex((m) => (m + 1) % reviews.length);
+                  }}
+                  aria-label={t("nextAria")}
+                  className="flex h-12 w-12 items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-white text-xl text-navy transition-[border-color,color] duration-[250ms] ease-in-out hover:border-magenta hover:text-magenta"
+                >
+                  →
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </section>
   );
 }

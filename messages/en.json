@@ -325,7 +325,9 @@
     "h2": "Stories of families who have already walked this path",
     "prevAria": "Previous review",
     "nextAria": "Next review",
-    "dotAria": "Go to review {n}"
+    "dotAria": "Go to review {n}",
+    "readMore": "Read more",
+    "closeAria": "Close"
   },
   "HomeWorks": {
     "eyebrow": "My work",
