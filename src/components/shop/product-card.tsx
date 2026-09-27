@@ -57,7 +57,7 @@ export function ProductCard({
             {pickLocalized(product, "name", locale)}
           </h3>
         </Link>
-        <p className="mb-4 text-sm leading-[1.5] text-navy-soft">
+        <p className="line-clamp-2 mb-4 text-sm leading-[1.5] text-navy-soft">
           {pickLocalized(product, "productType", locale)}
         </p>
         <div className="mt-auto flex min-h-[42px] items-center justify-between gap-3">

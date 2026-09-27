@@ -80,7 +80,7 @@ export async function ShopSection() {
                     {pickLocalized(p, "name", locale)}
                   </h3>
                 </Link>
-                <div className="mb-[18px] text-[14.5px] text-navy-soft">
+                <div className="line-clamp-2 mb-[18px] text-[14.5px] text-navy-soft">
                   {pickLocalized(p, "productType", locale)}
                 </div>
                 <div className="mt-auto flex min-h-[42px] items-center justify-between gap-3">
