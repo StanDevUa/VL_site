@@ -42,7 +42,7 @@ export async function FaqSection() {
           <p className="mb-[26px] text-[17px] leading-[1.68] text-navy-soft">{t("p")}</p>
           <div className="relative mb-[26px] h-[300px] w-full overflow-hidden rounded-card border border-navy/12">
             <Image
-              src="/home/faq.jpg"
+              src="/home/faq.webp"
               alt="Вікторія Лемешко"
               fill
               sizes="(min-width: 1024px) 35vw, 100vw"
