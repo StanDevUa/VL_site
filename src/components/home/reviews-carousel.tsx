@@ -5,8 +5,11 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { AddTestimonialModal } from "./add-testimonial-modal";
 
+// Той самий secondary-стиль, що і в Hero/About (border-navy/18, hover:magenta,
+// підйом на hover) — раніше кнопка була навмисно дрібнішою, ніж сусідні
+// кнопки в цьому ж рядку, що виглядало неохайно.
 const addReviewButtonClass =
-  "whitespace-nowrap rounded-field border-[1.5px] border-navy/18 bg-white px-4 py-2.5 font-heading text-sm font-bold text-navy transition-colors duration-200 ease-in-out hover:border-magenta hover:text-magenta";
+  "whitespace-nowrap rounded-field border-[1.5px] border-navy/18 bg-white/90 px-7 py-[15px] text-center font-heading text-base font-bold text-navy transition-[border-color,translate] duration-[250ms] ease-in-out hover:-translate-y-[3px] hover:border-magenta hover:text-magenta";
 
 type Review = {
   text: string;
@@ -46,7 +49,7 @@ function ReviewCardBody({ review, onReadMore }: { review: Review; onReadMore: ()
   return (
     <>
       <div className="mb-3 font-heading text-[44px] leading-none text-magenta opacity-50">“</div>
-      <p ref={textRef} className="line-clamp-4 text-[16.5px] leading-[1.68] text-navy">
+      <p ref={textRef} className="line-clamp-4 h-[110.88px] text-[16.5px] leading-[1.68] text-navy">
         {review.text}
       </p>
       <div className="mt-2 mb-4 flex h-8 items-center justify-end">
@@ -160,17 +163,17 @@ export function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
           </div>
         </div>
 
-        <div className="mt-8 flex items-center justify-between gap-6">
+        <div className="mt-8 flex items-center justify-between gap-6 sm:grid sm:grid-cols-3">
           {perView === 1 ? (
             // На мобільному perView=1 -> кількість крапок = кількість відгуків:
             // при 15-20 відгуках вони не влізуть в один рядок і поламають
             // верстку. Замість крапок — текстовий лічильник фіксованої
             // ширини, який ніколи не переповнює рядок. Десктоп/планшет — без змін.
-            <span className="font-heading text-sm font-bold text-navy-soft">
+            <span className="font-heading text-sm font-bold text-navy-soft sm:justify-self-start">
               {t("counter", { current: idx + 1, total: maxIndex + 1 })}
             </span>
           ) : (
-            <div className="flex gap-2">
+            <div className="flex gap-2 sm:justify-self-start">
               {Array.from({ length: maxIndex + 1 }, (_, i) => (
                 <button
                   key={i}
@@ -186,10 +189,14 @@ export function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
               ))}
             </div>
           )}
-          <button type="button" onClick={() => setAddReviewOpen(true)} className={`hidden sm:inline-flex ${addReviewButtonClass}`}>
+          <button
+            type="button"
+            onClick={() => setAddReviewOpen(true)}
+            className={`hidden sm:inline-flex sm:justify-self-center ${addReviewButtonClass}`}
+          >
             {t("addReview")}
           </button>
-          <div className="flex items-center gap-[34px]">
+          <div className="flex items-center gap-[34px] sm:justify-self-end">
             <span
               aria-hidden
               className="h-[34px] w-[22px] shrink-0 rounded-tl-[60%] rounded-tr-[10%] rounded-br-[60%] rounded-bl-[10%] opacity-40"
