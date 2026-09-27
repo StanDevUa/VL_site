@@ -331,7 +331,20 @@
     "dotAria": "Go to review {n}",
     "readMore": "Read more",
     "closeAria": "Close",
-    "counter": "{current} / {total}"
+    "counter": "{current} / {total}",
+    "addReview": "Add a review",
+    "addModalTitle": "Leave your review",
+    "addModalSubtitle": "Share your experience — it matters to other families and to me.",
+    "addLabelName": "Your name",
+    "addPlaceholderName": "Olena",
+    "addLabelText": "Your review",
+    "addPlaceholderText": "Tell us about your experience…",
+    "addSubmit": "Send review",
+    "addSubmitting": "Sending…",
+    "addThankYouTitle": "Thank you for your review!",
+    "addThankYouText": "It will appear on the site after moderation.",
+    "errorName": "Please enter your name.",
+    "errorText": "Please enter your review."
   },
   "HomeWorks": {
     "eyebrow": "My work",

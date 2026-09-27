@@ -6,24 +6,27 @@ export function StatCard({
   caption,
   href,
   compact = false,
+  valueClassName = "text-navy",
 }: {
   label: string;
   value: React.ReactNode;
   caption?: string;
   href?: string;
   compact?: boolean;
+  /** Дозволяє підсвітити число іншим кольором (напр. magenta, коли є щось, що потребує уваги). */
+  valueClassName?: string;
 }) {
   const labelClass = "text-sm transition-colors " + (href ? "text-navy-soft group-hover:text-magenta" : "text-navy-soft");
 
   const header = compact ? (
     <div className="flex items-center justify-between gap-3">
       <p className={labelClass}>{label}</p>
-      <p className="font-heading font-extrabold text-2xl text-navy">{value}</p>
+      <p className={`font-heading font-extrabold text-2xl ${valueClassName}`}>{value}</p>
     </div>
   ) : (
     <>
       <p className={labelClass + " mb-1"}>{label}</p>
-      <p className="font-heading font-extrabold text-3xl text-navy">{value}</p>
+      <p className={`font-heading font-extrabold text-3xl ${valueClassName}`}>{value}</p>
     </>
   );
 

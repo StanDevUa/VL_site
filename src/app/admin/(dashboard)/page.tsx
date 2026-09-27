@@ -54,6 +54,7 @@ export default async function AdminDashboardPage({
     pendingShipmentCount,
     faqCount,
     consultationCount,
+    pendingTestimonialsCount,
     statusGroups,
     revenue,
     productsCount,
@@ -66,6 +67,7 @@ export default async function AdminDashboardPage({
     prisma.consultationRequest.count({
       where: leadsSince ? { createdAt: { gte: leadsSince } } : undefined,
     }),
+    prisma.testimonial.count({ where: { showOnHome: false } }),
     prisma.order.groupBy({
       by: ["status"],
       _count: { _all: true },
@@ -109,7 +111,7 @@ export default async function AdminDashboardPage({
           <h2 className="font-heading font-bold text-lg text-navy">Що потребує уваги</h2>
           <PeriodFilterBar hrefFor={leadsHref} options={LEADS_PERIODS} active={leadsPeriod} />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <StatCard
             label="В обробці"
             value={pendingShipmentCount}
@@ -120,6 +122,17 @@ export default async function AdminDashboardPage({
             label="Нові заявки"
             value={leadsTotal}
             caption={`Питання з FAQ: ${faqCount} · Записи на консультацію: ${consultationCount}`}
+          />
+          <StatCard
+            label="Нові відгуки"
+            value={pendingTestimonialsCount}
+            valueClassName={pendingTestimonialsCount > 0 ? "text-magenta" : "text-navy"}
+            caption={
+              pendingTestimonialsCount > 0
+                ? "Вікторія, у вас є нові відгуки для публікації на сайті"
+                : "Усі відгуки оброблені та опубліковані"
+            }
+            href="/admin/vidguky"
           />
         </div>
       </section>

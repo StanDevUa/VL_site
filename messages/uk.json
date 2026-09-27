@@ -331,7 +331,20 @@
     "dotAria": "Перейти до відгуку {n}",
     "readMore": "Читати повністю",
     "closeAria": "Закрити",
-    "counter": "{current} / {total}"
+    "counter": "{current} / {total}",
+    "addReview": "Додати відгук",
+    "addModalTitle": "Залиште свій відгук",
+    "addModalSubtitle": "Поділіться враженнями — це важливо для інших родин і для мене.",
+    "addLabelName": "Ваше ім'я",
+    "addPlaceholderName": "Олена",
+    "addLabelText": "Ваш відгук",
+    "addPlaceholderText": "Розкажіть про свій досвід…",
+    "addSubmit": "Надіслати відгук",
+    "addSubmitting": "Надсилаємо…",
+    "addThankYouTitle": "Дякуємо за відгук!",
+    "addThankYouText": "Після модерації він з'явиться на сайті.",
+    "errorName": "Введіть ваше ім'я.",
+    "errorText": "Введіть текст відгуку."
   },
   "HomeWorks": {
     "eyebrow": "Мої роботи",

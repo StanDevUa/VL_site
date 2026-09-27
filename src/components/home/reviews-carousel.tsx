@@ -3,6 +3,10 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { AddTestimonialModal } from "./add-testimonial-modal";
+
+const addReviewButtonClass =
+  "whitespace-nowrap rounded-field border-[1.5px] border-navy/18 bg-white px-4 py-2.5 font-heading text-sm font-bold text-navy transition-colors duration-200 ease-in-out hover:border-magenta hover:text-magenta";
 
 type Review = {
   text: string;
@@ -78,6 +82,7 @@ export function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
   const perView = useReviewsPerView();
   const [review, setReview] = useState(0);
   const [modalIndex, setModalIndex] = useState(-1);
+  const [addReviewOpen, setAddReviewOpen] = useState(false);
 
   const maxIndex = Math.max(0, reviews.length - perView);
   const idx = Math.min(review, maxIndex);
@@ -110,23 +115,28 @@ export function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
               {t("h2")}
             </h2>
           </div>
-          <div className="flex shrink-0 gap-2.5">
-            <button
-              type="button"
-              onClick={prevReview}
-              aria-label={t("prevAria")}
-              className="flex h-12 w-12 items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-white text-xl text-navy transition-[border-color,color] duration-[250ms] ease-in-out hover:border-magenta hover:text-magenta"
-            >
-              ←
+          <div className="flex w-full items-center justify-between gap-2.5 sm:w-auto sm:justify-end">
+            <button type="button" onClick={() => setAddReviewOpen(true)} className={`${addReviewButtonClass} sm:hidden`}>
+              {t("addReview")}
             </button>
-            <button
-              type="button"
-              onClick={nextReview}
-              aria-label={t("nextAria")}
-              className="flex h-12 w-12 items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-white text-xl text-navy transition-[border-color,color] duration-[250ms] ease-in-out hover:border-magenta hover:text-magenta"
-            >
-              →
-            </button>
+            <div className="flex shrink-0 gap-2.5">
+              <button
+                type="button"
+                onClick={prevReview}
+                aria-label={t("prevAria")}
+                className="flex h-12 w-12 items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-white text-xl text-navy transition-[border-color,color] duration-[250ms] ease-in-out hover:border-magenta hover:text-magenta"
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                onClick={nextReview}
+                aria-label={t("nextAria")}
+                className="flex h-12 w-12 items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-white text-xl text-navy transition-[border-color,color] duration-[250ms] ease-in-out hover:border-magenta hover:text-magenta"
+              >
+                →
+              </button>
+            </div>
           </div>
         </div>
 
@@ -176,6 +186,9 @@ export function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
               ))}
             </div>
           )}
+          <button type="button" onClick={() => setAddReviewOpen(true)} className={`hidden sm:inline-flex ${addReviewButtonClass}`}>
+            {t("addReview")}
+          </button>
           <div className="flex items-center gap-[34px]">
             <span
               aria-hidden
@@ -257,6 +270,8 @@ export function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
           </div>
         </div>
       )}
+
+      <AddTestimonialModal open={addReviewOpen} onClose={() => setAddReviewOpen(false)} />
     </section>
   );
 }

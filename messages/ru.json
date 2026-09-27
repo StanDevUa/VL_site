@@ -331,7 +331,20 @@
     "dotAria": "Перейти к отзыву {n}",
     "readMore": "Читать полностью",
     "closeAria": "Закрыть",
-    "counter": "{current} / {total}"
+    "counter": "{current} / {total}",
+    "addReview": "Добавить отзыв",
+    "addModalTitle": "Оставьте свой отзыв",
+    "addModalSubtitle": "Поделитесь впечатлениями — это важно для других семей и для меня.",
+    "addLabelName": "Ваше имя",
+    "addPlaceholderName": "Елена",
+    "addLabelText": "Ваш отзыв",
+    "addPlaceholderText": "Расскажите о своём опыте…",
+    "addSubmit": "Отправить отзыв",
+    "addSubmitting": "Отправляем…",
+    "addThankYouTitle": "Спасибо за отзыв!",
+    "addThankYouText": "После модерации он появится на сайте.",
+    "errorName": "Введите ваше имя.",
+    "errorText": "Введите текст отзыва."
   },
   "HomeWorks": {
     "eyebrow": "Мои работы",
