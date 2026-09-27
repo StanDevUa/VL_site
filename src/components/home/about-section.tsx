@@ -32,7 +32,7 @@ export async function AboutSection() {
         <div className="relative">
           <div className="relative h-[320px] w-full overflow-hidden rounded-card shadow-[0_26px_54px_-30px_rgba(30,42,90,.4)] sm:h-[480px]">
             <Image
-              src="/home/about.jpg"
+              src="/home/about.webp"
               alt="Консультація"
               fill
               sizes="(min-width: 640px) 45vw, 100vw"
