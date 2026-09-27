@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { MethodMoreButton } from "./method-more-button";
 
 type EmoPartVisual = {
   key: string;
@@ -126,12 +127,7 @@ export async function MethodSection() {
               >
                 {t("ctaBuy")}
               </Link>
-              <Link
-                href="#method"
-                className="w-full rounded-field border-[1.5px] border-navy/18 bg-transparent px-6 py-4 text-center font-heading text-base font-bold text-navy transition-[border-color,translate] duration-[250ms] ease-in-out hover:-translate-y-[3px] hover:border-violet hover:text-violet sm:w-auto"
-              >
-                {t("ctaMore")}
-              </Link>
+              <MethodMoreButton />
             </div>
           </div>
         </div>
