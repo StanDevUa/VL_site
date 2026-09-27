@@ -86,8 +86,8 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-[60] border-b border-navy/10 bg-white/90 backdrop-blur-md">
-      <div className="mx-auto flex max-w-[1320px] items-center justify-between gap-2.5 px-3.5 py-[7px] sm:grid sm:grid-cols-[auto_1fr_auto] sm:justify-normal sm:gap-6 sm:px-8">
-        <Link href="/" className="flex shrink-0 items-center">
+      <div className="mx-auto grid max-w-[1320px] grid-cols-3 items-center gap-2.5 px-3.5 py-[7px] sm:grid-cols-[auto_1fr_auto] sm:justify-normal sm:gap-6 sm:px-8">
+        <Link href="/" className="flex shrink-0 items-center justify-self-start">
           <Image src="/logo.png" alt="Viktoriia Lemeshko" width={298} height={312} className="h-[62px] w-auto" priority />
         </Link>
 
@@ -111,29 +111,45 @@ export function Header() {
           {/* Компактна кнопка для мобільного/планшета — 12.5px/11×13px до 640px (точно за макетом), звичайний розмір 640–1024, ховається на lg (там своя, у правому кластері) */}
           <Link
             href="/#cta"
-            className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-field bg-indigo px-[13px] py-[11px] font-heading text-[12.5px] font-bold text-white shadow-[0_8px_20px_-8px_rgba(82,82,172,.34)] transition-[translate,box-shadow,background-color] duration-[250ms] ease-in-out hover:-translate-y-[2px] hover:bg-indigo-hover hover:shadow-[0_14px_28px_-10px_rgba(82,82,172,.34)] sm:px-[22px] sm:py-[13px] sm:text-[15px] lg:hidden"
+            className="inline-flex shrink-0 items-center justify-center justify-self-center whitespace-nowrap rounded-field bg-indigo px-[13px] py-[11px] font-heading text-[14px] font-bold text-white shadow-[0_8px_20px_-8px_rgba(82,82,172,.34)] transition-[translate,box-shadow,background-color] duration-[250ms] ease-in-out hover:-translate-y-[2px] hover:bg-indigo-hover hover:shadow-[0_14px_28px_-10px_rgba(82,82,172,.34)] sm:px-[22px] sm:py-[13px] sm:text-[15px] lg:hidden"
           >
             <span className="sm:hidden">{common("bookConsultationShort")}</span>
             <span className="hidden sm:inline">{common("bookConsultation")}</span>
           </Link>
 
-          <Link
-            href="/cart"
-            title={common("cart")}
-            className={
-              "relative flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-field border-[1.5px] transition-colors duration-[250ms] ease-in-out " +
-              (pathname === "/cart"
-                ? "border-magenta text-magenta"
-                : "border-navy/15 text-navy hover:border-indigo hover:text-indigo")
-            }
-          >
-            <CartIcon />
-            {totalCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 flex h-[19px] min-w-[19px] items-center justify-center rounded-full bg-magenta px-1 font-heading text-[11px] font-extrabold text-white">
-                {totalCount}
-              </span>
-            )}
-          </Link>
+          {/* Кошик і бургер навмисно згруповані разом (justify-self-end на мобільному
+              притискає їх упритул одне до одного та до правого краю) — Стас попросив
+              "прижати" їх, а не лишати кошик серед інших кнопок кластера. */}
+          <div className="flex shrink-0 items-center gap-2 justify-self-end">
+            <Link
+              href="/cart"
+              title={common("cart")}
+              className={
+                "relative flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-field border-[1.5px] transition-colors duration-[250ms] ease-in-out " +
+                (pathname === "/cart"
+                  ? "border-magenta text-magenta"
+                  : "border-navy/15 text-navy hover:border-indigo hover:text-indigo")
+              }
+            >
+              <CartIcon />
+              {totalCount > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 flex h-[19px] min-w-[19px] items-center justify-center rounded-full bg-magenta px-1 font-heading text-[11px] font-extrabold text-white">
+                  {totalCount}
+                </span>
+              )}
+            </Link>
+
+            <button
+              type="button"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label="Menu"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-field border-[1.5px] border-navy/15 lg:hidden"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E2A5A" strokeWidth="2" strokeLinecap="round">
+                <path d={menuOpen ? "M6 6l12 12M18 6L6 18" : "M4 7h16M4 12h16M4 17h16"} />
+              </svg>
+            </button>
+          </div>
 
           <div className="mr-0.5 hidden items-center gap-1.5 border-r border-navy/10 pr-1.5 lg:flex">
             {LOCALES.map((l) => {
@@ -172,17 +188,6 @@ export function Header() {
           >
             {common("bookConsultation")}
           </Link>
-
-          <button
-            type="button"
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-label="Menu"
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-field border-[1.5px] border-navy/15 lg:hidden"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E2A5A" strokeWidth="2" strokeLinecap="round">
-              <path d={menuOpen ? "M6 6l12 12M18 6L6 18" : "M4 7h16M4 12h16M4 17h16"} />
-            </svg>
-          </button>
         </div>
       </div>
 
