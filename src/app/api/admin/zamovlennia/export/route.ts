@@ -37,16 +37,19 @@ export async function GET(request: NextRequest) {
   const orders = await prisma.order.findMany({
     where,
     orderBy: { createdAt: "desc" },
+    include: { items: true },
   });
 
   const escapeCell = (value: string) => `"${value.replace(/"/g, '""')}"`;
 
-  const header = ["Дата замовлення", "№ замовлення", "Покупець", "Контакт", "Сума", "Статус"];
+  const header = ["Дата замовлення", "№ замовлення", "Покупець", "Контакт", "Місто", "Товари", "Сума", "Статус"];
   const rows = orders.map((order) => [
     formatDate(order.createdAt, "uk", { day: "2-digit", month: "2-digit", year: "numeric" }),
     order.orderNumber,
     order.recipientName,
     order.recipientPhone,
+    order.novaPoshtaCityName,
+    order.items.map((item) => `${item.nameUkSnapshot} ×${item.quantity}`).join(", "),
     order.subtotal.toString(),
     ORDER_STATUS_LABELS[order.status],
   ]);

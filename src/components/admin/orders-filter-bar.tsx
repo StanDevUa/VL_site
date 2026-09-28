@@ -77,10 +77,10 @@ export function OrdersFilterBar({
           <CustomSelect
             name="status"
             defaultValue={activeStatus ?? ""}
-            placeholder="Усі"
+            placeholder="Усі активні"
             onChange={(value) => updateParam("status", value)}
             options={[
-              { value: "", label: "Усі" },
+              { value: "", label: "Усі активні" },
               ...Object.entries(ORDER_STATUS_LABELS).map(([value, label]) => ({ value, label })),
             ]}
           />

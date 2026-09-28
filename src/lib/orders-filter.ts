@@ -25,7 +25,14 @@ export function buildOrdersWhere(
   const activeProductId = productId && validProductIds.has(productId) ? productId : undefined;
 
   const andConditions: Prisma.OrderWhereInput[] = [];
-  if (activeStatus) andConditions.push({ status: activeStatus });
+  if (activeStatus) {
+    andConditions.push({ status: activeStatus });
+  } else {
+    // "Усі активні" за замовчуванням (без явно обраного статусу) — ховаємо
+    // скасовані, щоб не захаращували список; побачити/експортувати їх можна,
+    // явно обравши фільтр "Скасовано".
+    andConditions.push({ status: { not: "CANCELLED" } });
+  }
   if (dateFrom) andConditions.push({ createdAt: { gte: new Date(dateFrom) } });
   if (dateTo) {
     const end = new Date(dateTo);
