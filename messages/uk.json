@@ -143,7 +143,15 @@
     "cancelledNote": "Товари лишились у кошику — можете спробувати оформити замовлення ще раз.",
     "notFoundTitle": "Замовлення не знайдено",
     "redirectingToPayment": "Перенаправляємо на сторінку оплати…",
-    "goToPayment": "Перейти до оплати"
+    "goToPayment": "Перейти до оплати",
+    "errorRecipientName": "Введіть ім'я та прізвище.",
+    "errorRecipientPhone": "Введіть номер телефону.",
+    "errorRecipientEmail": "Введіть коректний email.",
+    "errorCity": "Введіть місто.",
+    "errorWarehouse": "Введіть відділення Нової пошти.",
+    "errorConsent": "Потрібно погодитись з умовами, щоб оформити замовлення.",
+    "errorCartEmpty": "Кошик порожній.",
+    "errorCartUnavailable": "Товари з кошика більше не доступні."
   },
   "Legal": {
     "eyebrow": "Правова інформація",

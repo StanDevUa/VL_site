@@ -1,5 +1,6 @@
 "use server";
 
+import { getTranslations } from "next-intl/server";
 import { redirect } from "@/i18n/navigation";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { prisma } from "@/lib/prisma";
@@ -46,24 +47,26 @@ export async function createOrder(
     ? (localeField as AppLocale)
     : routing.defaultLocale;
 
+  const t = await getTranslations({ locale, namespace: "Checkout" });
+
   const fields = readFields(formData);
   const cartItems = parseCartItems(formData);
 
   const fieldErrors: Record<string, string> = {};
-  if (!fields.recipientName) fieldErrors.recipientName = "Введіть ім'я та прізвище.";
-  if (!fields.recipientPhone) fieldErrors.recipientPhone = "Введіть номер телефону.";
+  if (!fields.recipientName) fieldErrors.recipientName = t("errorRecipientName");
+  if (!fields.recipientPhone) fieldErrors.recipientPhone = t("errorRecipientPhone");
   if (!fields.recipientEmail || !EMAIL_RE.test(fields.recipientEmail)) {
-    fieldErrors.recipientEmail = "Введіть коректний email.";
+    fieldErrors.recipientEmail = t("errorRecipientEmail");
   }
-  if (!fields.novaPoshtaCityName) fieldErrors.novaPoshtaCityName = "Введіть місто.";
+  if (!fields.novaPoshtaCityName) fieldErrors.novaPoshtaCityName = t("errorCity");
   if (!fields.novaPoshtaWarehouseName) {
-    fieldErrors.novaPoshtaWarehouseName = "Введіть відділення Нової пошти.";
+    fieldErrors.novaPoshtaWarehouseName = t("errorWarehouse");
   }
   if (!fields.consent) {
-    fieldErrors.consent = "Потрібно погодитись з умовами, щоб оформити замовлення.";
+    fieldErrors.consent = t("errorConsent");
   }
   if (cartItems.length === 0) {
-    fieldErrors.cart = "Кошик порожній.";
+    fieldErrors.cart = t("errorCartEmpty");
   }
 
   if (Object.keys(fieldErrors).length > 0) {
@@ -89,7 +92,7 @@ export async function createOrder(
 
   if (orderItems.length === 0) {
     return {
-      fieldErrors: { cart: "Товари з кошика більше не доступні." },
+      fieldErrors: { cart: t("errorCartUnavailable") },
       values: extractTextValues(formData),
     };
   }

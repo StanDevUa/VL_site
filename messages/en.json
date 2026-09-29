@@ -143,7 +143,15 @@
     "cancelledNote": "Your items are still in the cart — you can try placing the order again.",
     "notFoundTitle": "Order not found",
     "redirectingToPayment": "Redirecting to the payment page…",
-    "goToPayment": "Go to payment"
+    "goToPayment": "Go to payment",
+    "errorRecipientName": "Enter your full name.",
+    "errorRecipientPhone": "Enter your phone number.",
+    "errorRecipientEmail": "Enter a valid email.",
+    "errorCity": "Enter your city.",
+    "errorWarehouse": "Enter a Nova Poshta branch.",
+    "errorConsent": "You need to agree to the terms to place the order.",
+    "errorCartEmpty": "Your cart is empty.",
+    "errorCartUnavailable": "The items in your cart are no longer available."
   },
   "Legal": {
     "eyebrow": "Legal information",

@@ -143,7 +143,15 @@
     "cancelledNote": "Товары остались в корзине — можете попробовать оформить заказ ещё раз.",
     "notFoundTitle": "Заказ не найден",
     "redirectingToPayment": "Перенаправляем на страницу оплаты…",
-    "goToPayment": "Перейти к оплате"
+    "goToPayment": "Перейти к оплате",
+    "errorRecipientName": "Введите имя и фамилию.",
+    "errorRecipientPhone": "Введите номер телефона.",
+    "errorRecipientEmail": "Введите корректный email.",
+    "errorCity": "Введите город.",
+    "errorWarehouse": "Введите отделение Новой почты.",
+    "errorConsent": "Нужно согласиться с условиями, чтобы оформить заказ.",
+    "errorCartEmpty": "Корзина пуста.",
+    "errorCartUnavailable": "Товары из корзины больше недоступны."
   },
   "Legal": {
     "eyebrow": "Правовая информация",
