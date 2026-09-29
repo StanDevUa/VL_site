@@ -119,6 +119,7 @@ export default function CheckoutPage() {
                 className="flex flex-col gap-[26px]"
               >
                 <input type="hidden" name="cartItems" value={JSON.stringify(items)} />
+                <input type="hidden" name="locale" value={locale} />
 
                 <div className={cardClass}>
                   <div className="mb-5 font-heading text-xl font-extrabold text-navy">

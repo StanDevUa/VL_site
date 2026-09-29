@@ -1,6 +1,7 @@
 "use server";
 
-import { redirect } from "next/navigation";
+import { redirect } from "@/i18n/navigation";
+import { routing, type AppLocale } from "@/i18n/routing";
 import { prisma } from "@/lib/prisma";
 import { generateOrderNumber } from "@/lib/order-number";
 import { extractTextValues, type FormState } from "./form-state";
@@ -40,6 +41,11 @@ export async function createOrder(
   _prevState: FormState,
   formData: FormData,
 ): Promise<FormState> {
+  const localeField = formData.get("locale") as string | null;
+  const locale: AppLocale = routing.locales.includes(localeField as AppLocale)
+    ? (localeField as AppLocale)
+    : routing.defaultLocale;
+
   const fields = readFields(formData);
   const cartItems = parseCartItems(formData);
 
@@ -126,7 +132,10 @@ export async function createOrder(
     },
   });
 
-  redirect(`/checkout/pay?order=${order.orderNumber}`);
+  redirect({
+    href: { pathname: "/checkout/pay", query: { order: order.orderNumber } },
+    locale,
+  });
 }
 
 /** Статус читаємо з БД, а не з query-параметрів редиректу — їм не можна довіряти. */
