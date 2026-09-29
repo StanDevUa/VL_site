@@ -73,7 +73,7 @@ export default async function WorkDetailPage({
         }}
       />
 
-      <div className="relative mx-auto grid max-w-[1240px] grid-cols-1 items-start gap-11 lg:grid-cols-[2fr_1fr] lg:gap-14">
+      <div className="relative mx-auto grid max-w-[1240px] grid-cols-1 items-start gap-11 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-14">
         <article>
           <div className="mb-[14px] text-sm font-bold tracking-[1.6px] text-violet uppercase">
             {t("pageTitle")}
