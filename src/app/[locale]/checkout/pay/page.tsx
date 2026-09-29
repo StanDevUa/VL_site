@@ -1,17 +1,22 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { signWayForPay } from "@/lib/wayforpay";
 import { primaryButtonClass } from "@/components/ui/button-styles";
 import { AutoSubmitForm } from "@/components/checkout/auto-submit-form";
+import { redirect } from "@/i18n/navigation";
+import type { AppLocale } from "@/i18n/routing";
 
 /** Скільки секунд клієнт може оплачувати замовлення на стороні WayForPay, перш ніж вони самі відхилять спробу як прострочену. */
 const ORDER_LIFETIME_SECONDS = 3600;
 
 export default async function CheckoutPayPage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ locale: AppLocale }>;
   searchParams: Promise<{ order?: string }>;
 }) {
+  const { locale } = await params;
   const { order: orderNumber } = await searchParams;
   if (!orderNumber) {
     notFound();
@@ -26,7 +31,10 @@ export default async function CheckoutPayPage({
   }
 
   if (order.status !== "PENDING_PAYMENT") {
-    redirect(`/checkout/success?order=${order.orderNumber}`);
+    redirect({
+      href: { pathname: "/checkout/success", query: { order: order.orderNumber } },
+      locale,
+    });
   }
 
   const merchantAccount = process.env.WAYFORPAY_MERCHANT_ACCOUNT!;
@@ -81,7 +89,7 @@ export default async function CheckoutPayPage({
         <input
           type="hidden"
           name="returnUrl"
-          value={`${baseUrl}/api/payments/wayforpay/return?order=${order.orderNumber}`}
+          value={`${baseUrl}/api/payments/wayforpay/return?order=${order.orderNumber}&locale=${locale}`}
         />
         <button type="submit" className={primaryButtonClass}>
           Перейти до оплати
