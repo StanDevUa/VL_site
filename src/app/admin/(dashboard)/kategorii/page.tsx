@@ -82,7 +82,7 @@ export default async function AdminCategoriesListPage({
                     </p>
                     <div className="mt-auto pt-3 flex items-center justify-between gap-2">
                       <Link
-                        href={`/admin/kategorii/${item.id}`}
+                        href={`/admin/kategorii/${item.id}${currentPage > 1 ? `?page=${currentPage}` : ""}`}
                         className="text-sm font-bold text-indigo hover:underline"
                       >
                         Редагувати

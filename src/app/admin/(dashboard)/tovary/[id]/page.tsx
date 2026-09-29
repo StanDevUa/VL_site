@@ -6,10 +6,13 @@ import { updateProduct } from "@/server/actions/products";
 
 export default async function EditProductPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ page?: string; category?: string }>;
 }) {
   const { id } = await params;
+  const { page, category } = await searchParams;
   const [product, categories] = await Promise.all([
     prisma.product.findUnique({ where: { id } }),
     prisma.category.findMany({
@@ -22,7 +25,12 @@ export default async function EditProductPage({
     notFound();
   }
 
-  const updateProductWithId = updateProduct.bind(null, id);
+  const returnParams = new URLSearchParams();
+  if (category) returnParams.set("category", category);
+  if (page) returnParams.set("page", page);
+  const returnQuery = returnParams.toString();
+  const returnTo = `/admin/tovary${returnQuery ? `?${returnQuery}` : ""}`;
+  const updateProductWithId = updateProduct.bind(null, id, returnTo);
 
   return (
     <div>

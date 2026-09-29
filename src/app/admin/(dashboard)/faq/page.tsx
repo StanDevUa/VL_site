@@ -59,7 +59,7 @@ export default async function AdminFaqListPage({
                   <p className="text-sm text-navy-soft truncate">{item.answerUk}</p>
                 </div>
                 <Link
-                  href={`/admin/faq/${item.id}`}
+                  href={`/admin/faq/${item.id}${currentPage > 1 ? `?page=${currentPage}` : ""}`}
                   className="shrink-0 text-sm font-bold text-indigo hover:underline"
                 >
                   Редагувати

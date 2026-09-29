@@ -69,7 +69,7 @@ export default async function AdminDiplomasListPage({
                   )}
                   <div className="flex items-center justify-between">
                     <Link
-                      href={`/admin/dyplomy/${item.id}`}
+                      href={`/admin/dyplomy/${item.id}${currentPage > 1 ? `?page=${currentPage}` : ""}`}
                       className="text-sm font-bold text-indigo hover:underline"
                     >
                       Редагувати

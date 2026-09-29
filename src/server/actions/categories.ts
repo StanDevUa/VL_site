@@ -50,6 +50,7 @@ export async function createCategory(
 
 export async function updateCategory(
   id: string,
+  returnTo: string,
   _prevState: FormState,
   formData: FormData,
 ): Promise<FormState> {
@@ -63,7 +64,7 @@ export async function updateCategory(
   await prisma.category.update({ where: { id }, data: fields });
 
   revalidatePath("/admin/kategorii");
-  redirect("/admin/kategorii");
+  redirect(returnTo);
 }
 
 export async function deleteCategory(id: string) {

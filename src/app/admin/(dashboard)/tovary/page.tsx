@@ -26,6 +26,13 @@ export default async function AdminProductsListPage({
 
   const where = activeCategory ? { categoryId: activeCategory } : {};
 
+  // Щоб "Редагувати" повертав на ту саму сторінку/фільтр списку, з яких
+  // адмін туди перейшов, а не завжди на першу сторінку без фільтра.
+  const returnParams = new URLSearchParams();
+  if (activeCategory) returnParams.set("category", activeCategory);
+  if (currentPage > 1) returnParams.set("page", String(currentPage));
+  const returnQuery = returnParams.toString();
+
   const [products, total] = await Promise.all([
     prisma.product.findMany({
       where,
@@ -137,7 +144,7 @@ export default async function AdminProductsListPage({
                   </p>
                   <div className="mt-auto pt-3 flex items-center justify-between gap-2">
                     <Link
-                      href={`/admin/tovary/${item.id}`}
+                      href={`/admin/tovary/${item.id}${returnQuery ? `?${returnQuery}` : ""}`}
                       className="text-sm font-bold text-indigo hover:underline"
                     >
                       Редагувати

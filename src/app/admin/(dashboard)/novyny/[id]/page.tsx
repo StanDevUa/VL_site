@@ -7,17 +7,25 @@ import { updateNews } from "@/server/actions/news";
 
 export default async function EditNewsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ page?: string; category?: string }>;
 }) {
   const { id } = await params;
+  const { page, category } = await searchParams;
   const news = await prisma.newsPost.findUnique({ where: { id } });
 
   if (!news) {
     notFound();
   }
 
-  const updateNewsWithId = updateNews.bind(null, id);
+  const returnParams = new URLSearchParams();
+  if (category) returnParams.set("category", category);
+  if (page) returnParams.set("page", page);
+  const returnQuery = returnParams.toString();
+  const returnTo = `/admin/novyny${returnQuery ? `?${returnQuery}` : ""}`;
+  const updateNewsWithId = updateNews.bind(null, id, returnTo);
 
   return (
     <div>

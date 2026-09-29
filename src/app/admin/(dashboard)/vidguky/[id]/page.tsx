@@ -5,17 +5,21 @@ import { updateTestimonial } from "@/server/actions/testimonials";
 
 export default async function EditTestimonialPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ page?: string }>;
 }) {
   const { id } = await params;
+  const { page } = await searchParams;
   const testimonial = await prisma.testimonial.findUnique({ where: { id } });
 
   if (!testimonial) {
     notFound();
   }
 
-  const updateTestimonialWithId = updateTestimonial.bind(null, id);
+  const returnTo = page ? `/admin/vidguky?page=${page}` : "/admin/vidguky";
+  const updateTestimonialWithId = updateTestimonial.bind(null, id, returnTo);
 
   return (
     <div>

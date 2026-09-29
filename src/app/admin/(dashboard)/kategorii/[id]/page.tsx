@@ -5,17 +5,21 @@ import { updateCategory } from "@/server/actions/categories";
 
 export default async function EditCategoryPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ page?: string }>;
 }) {
   const { id } = await params;
+  const { page } = await searchParams;
   const category = await prisma.category.findUnique({ where: { id } });
 
   if (!category) {
     notFound();
   }
 
-  const updateCategoryWithId = updateCategory.bind(null, id);
+  const returnTo = page ? `/admin/kategorii?page=${page}` : "/admin/kategorii";
+  const updateCategoryWithId = updateCategory.bind(null, id, returnTo);
 
   return (
     <div>

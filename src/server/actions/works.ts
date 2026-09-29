@@ -70,6 +70,7 @@ export async function createWork(
 
 export async function updateWork(
   id: string,
+  returnTo: string,
   _prevState: FormState,
   formData: FormData,
 ): Promise<FormState> {
@@ -117,7 +118,7 @@ export async function updateWork(
   revalidatePath("/admin/roboty");
   revalidatePath("/[locale]/roboty", "page");
   revalidatePath("/[locale]/roboty/[slug]", "page");
-  redirect("/admin/roboty");
+  redirect(returnTo);
 }
 
 export async function deleteWork(id: string) {

@@ -5,17 +5,21 @@ import { updateFaqEntry } from "@/server/actions/faq";
 
 export default async function EditFaqPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ page?: string }>;
 }) {
   const { id } = await params;
+  const { page } = await searchParams;
   const entry = await prisma.faqEntry.findUnique({ where: { id } });
 
   if (!entry) {
     notFound();
   }
 
-  const updateFaqEntryWithId = updateFaqEntry.bind(null, id);
+  const returnTo = page ? `/admin/faq?page=${page}` : "/admin/faq";
+  const updateFaqEntryWithId = updateFaqEntry.bind(null, id, returnTo);
 
   return (
     <div>

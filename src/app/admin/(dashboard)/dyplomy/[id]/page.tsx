@@ -6,17 +6,21 @@ import { updateDiploma } from "@/server/actions/diplomas";
 
 export default async function EditDiplomaPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ page?: string }>;
 }) {
   const { id } = await params;
+  const { page } = await searchParams;
   const diploma = await prisma.diploma.findUnique({ where: { id } });
 
   if (!diploma) {
     notFound();
   }
 
-  const updateDiplomaWithId = updateDiploma.bind(null, id);
+  const returnTo = page ? `/admin/dyplomy?page=${page}` : "/admin/dyplomy";
+  const updateDiplomaWithId = updateDiploma.bind(null, id, returnTo);
 
   return (
     <div>

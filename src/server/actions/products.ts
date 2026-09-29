@@ -86,6 +86,7 @@ export async function createProduct(
 
 export async function updateProduct(
   id: string,
+  returnTo: string,
   _prevState: FormState,
   formData: FormData,
 ): Promise<FormState> {
@@ -125,7 +126,7 @@ export async function updateProduct(
   });
 
   revalidatePath("/admin/tovary");
-  redirect("/admin/tovary");
+  redirect(returnTo);
 }
 
 export async function deleteProduct(id: string) {

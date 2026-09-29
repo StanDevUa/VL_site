@@ -6,17 +6,21 @@ import { updateWork } from "@/server/actions/works";
 
 export default async function EditWorkPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ page?: string }>;
 }) {
   const { id } = await params;
+  const { page } = await searchParams;
   const work = await prisma.portfolioWork.findUnique({ where: { id } });
 
   if (!work) {
     notFound();
   }
 
-  const updateWorkWithId = updateWork.bind(null, id);
+  const returnTo = page ? `/admin/roboty?page=${page}` : "/admin/roboty";
+  const updateWorkWithId = updateWork.bind(null, id, returnTo);
 
   return (
     <div>

@@ -43,6 +43,7 @@ export async function createFaqEntry(
 
 export async function updateFaqEntry(
   id: string,
+  returnTo: string,
   _prevState: FormState,
   formData: FormData,
 ): Promise<FormState> {
@@ -56,7 +57,7 @@ export async function updateFaqEntry(
   await prisma.faqEntry.update({ where: { id }, data: fields });
 
   revalidatePath("/admin/faq");
-  redirect("/admin/faq");
+  redirect(returnTo);
 }
 
 export async function deleteFaqEntry(id: string) {

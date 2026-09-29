@@ -47,6 +47,7 @@ export async function createTestimonial(
 
 export async function updateTestimonial(
   id: string,
+  returnTo: string,
   _prevState: FormState,
   formData: FormData,
 ): Promise<FormState> {
@@ -60,7 +61,7 @@ export async function updateTestimonial(
   await prisma.testimonial.update({ where: { id }, data: fields });
 
   revalidatePath("/admin/vidguky");
-  redirect("/admin/vidguky");
+  redirect(returnTo);
 }
 
 export async function deleteTestimonial(id: string) {

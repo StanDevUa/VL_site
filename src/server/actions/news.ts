@@ -84,6 +84,7 @@ export async function createNews(
 
 export async function updateNews(
   id: string,
+  returnTo: string,
   _prevState: FormState,
   formData: FormData,
 ): Promise<FormState> {
@@ -121,7 +122,7 @@ export async function updateNews(
   revalidatePath("/admin/novyny");
   revalidatePath("/[locale]/novyny", "page");
   revalidatePath("/[locale]/novyny/[slug]", "page");
-  redirect("/admin/novyny");
+  redirect(returnTo);
 }
 
 export async function deleteNews(id: string) {

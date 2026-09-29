@@ -37,6 +37,13 @@ export default async function AdminNewsListPage({
 
   const where = activeCategory ? { category: activeCategory } : {};
 
+  // Щоб "Редагувати" повертав на ту саму сторінку/фільтр списку, з яких
+  // адмін туди перейшов, а не завжди на першу сторінку без фільтра.
+  const returnParams = new URLSearchParams();
+  if (activeCategory) returnParams.set("category", activeCategory);
+  if (currentPage > 1) returnParams.set("page", String(currentPage));
+  const returnQuery = returnParams.toString();
+
   const [news, total] = await Promise.all([
     prisma.newsPost.findMany({
       where,
@@ -124,7 +131,7 @@ export default async function AdminNewsListPage({
                   <p className="font-bold text-navy truncate">{item.titleUk}</p>
                 </div>
                 <Link
-                  href={`/admin/novyny/${item.id}`}
+                  href={`/admin/novyny/${item.id}${returnQuery ? `?${returnQuery}` : ""}`}
                   className="shrink-0 text-sm font-bold text-indigo hover:underline"
                 >
                   Редагувати

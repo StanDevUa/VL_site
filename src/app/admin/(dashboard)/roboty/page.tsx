@@ -64,7 +64,7 @@ export default async function AdminWorksListPage({
                   </p>
                 </div>
                 <Link
-                  href={`/admin/roboty/${work.id}`}
+                  href={`/admin/roboty/${work.id}${currentPage > 1 ? `?page=${currentPage}` : ""}`}
                   className="shrink-0 text-sm font-bold text-indigo hover:underline"
                 >
                   Редагувати

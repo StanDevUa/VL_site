@@ -62,7 +62,7 @@ export default async function AdminTestimonialsListPage({
                   <p className="text-sm text-navy-soft truncate">{item.textUk}</p>
                 </div>
                 <Link
-                  href={`/admin/vidguky/${item.id}`}
+                  href={`/admin/vidguky/${item.id}${currentPage > 1 ? `?page=${currentPage}` : ""}`}
                   className="shrink-0 text-sm font-bold text-indigo hover:underline"
                 >
                   Редагувати

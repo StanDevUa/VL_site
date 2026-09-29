@@ -35,6 +35,7 @@ export async function createDiploma(
 
 export async function updateDiploma(
   id: string,
+  returnTo: string,
   _prevState: FormState,
   formData: FormData,
 ): Promise<FormState> {
@@ -51,7 +52,7 @@ export async function updateDiploma(
   await prisma.diploma.update({ where: { id }, data: { ...fields, image } });
 
   revalidatePath("/admin/dyplomy");
-  redirect("/admin/dyplomy");
+  redirect(returnTo);
 }
 
 export async function deleteDiploma(id: string) {
