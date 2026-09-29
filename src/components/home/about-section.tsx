@@ -1,10 +1,25 @@
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { prisma } from "@/lib/prisma";
+import { getPublicUrl } from "@/lib/storage";
+import { pickLocalized } from "@/lib/i18n-content";
+import { DiplomasModal } from "./diplomas-modal";
+import type { AppLocale } from "@/i18n/routing";
 
 export async function AboutSection() {
   const t = await getTranslations("HomeAbout");
   const common = await getTranslations("Common");
+  const locale = (await getLocale()) as AppLocale;
+
+  const diplomasRaw = await prisma.diploma.findMany({
+    where: { showOnSite: true },
+    orderBy: { createdAt: "asc" },
+  });
+  const diplomas = diplomasRaw.map((d) => ({
+    imageUrl: getPublicUrl(d.image)!,
+    caption: pickLocalized(d, "caption", locale),
+  }));
 
   return (
     <section
@@ -60,12 +75,7 @@ export async function AboutSection() {
           <p className="mb-[18px] text-[17px] leading-[1.72] text-navy-soft">{t("p2")}</p>
           <p className="mb-8 text-[17px] leading-[1.72] font-bold text-navy">{t("p3")}</p>
           <div className="flex flex-wrap items-center gap-3.5">
-            <Link
-              href="#diplomas"
-              className="w-full rounded-field border-[1.5px] border-navy/18 bg-white/90 px-7 py-[15px] text-center font-heading text-base font-bold text-navy transition-[border-color,translate] duration-[250ms] ease-in-out hover:-translate-y-[3px] hover:border-magenta hover:text-magenta sm:w-auto"
-            >
-              {t("ctaQualifications")}
-            </Link>
+            <DiplomasModal diplomas={diplomas} />
             <Link
               href="#cta"
               className="w-full rounded-field bg-indigo px-7 py-[15px] text-center font-heading text-base font-bold text-white shadow-[0_12px_26px_-12px_rgba(82,82,172,.34)] transition-[translate,box-shadow,background-color] duration-[250ms] ease-in-out hover:-translate-y-[3px] hover:bg-indigo-hover hover:shadow-[0_18px_34px_-14px_rgba(82,82,172,.34)] sm:w-auto"
