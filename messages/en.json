@@ -141,7 +141,9 @@
     "pendingNote": "We haven't received payment confirmation yet. If the payment didn't go through, try placing the order again.",
     "cancelledTitle": "Order cancelled",
     "cancelledNote": "Your items are still in the cart — you can try placing the order again.",
-    "notFoundTitle": "Order not found"
+    "notFoundTitle": "Order not found",
+    "redirectingToPayment": "Redirecting to the payment page…",
+    "goToPayment": "Go to payment"
   },
   "Legal": {
     "eyebrow": "Legal information",

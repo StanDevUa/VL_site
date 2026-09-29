@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { signWayForPay } from "@/lib/wayforpay";
 import { primaryButtonClass } from "@/components/ui/button-styles";
@@ -17,6 +18,7 @@ export default async function CheckoutPayPage({
   searchParams: Promise<{ order?: string }>;
 }) {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Checkout" });
   const { order: orderNumber } = await searchParams;
   if (!orderNumber) {
     notFound();
@@ -60,7 +62,7 @@ export default async function CheckoutPayPage({
 
   return (
     <main className="max-w-xl mx-auto px-8 py-24 text-center">
-      <p className="text-navy-soft mb-6">Перенаправляємо на сторінку оплати…</p>
+      <p className="text-navy-soft mb-6">{t("redirectingToPayment")}</p>
 
       <form id="wfp-form" method="POST" action="https://secure.wayforpay.com/pay">
         <input type="hidden" name="merchantAccount" value={merchantAccount} />
@@ -92,7 +94,7 @@ export default async function CheckoutPayPage({
           value={`${baseUrl}/api/payments/wayforpay/return?order=${order.orderNumber}&locale=${locale}`}
         />
         <button type="submit" className={primaryButtonClass}>
-          Перейти до оплати
+          {t("goToPayment")}
         </button>
       </form>
 
