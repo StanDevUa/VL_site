@@ -52,9 +52,6 @@ export async function VideoSection() {
           >
             ▶
           </button>
-          <span className="absolute bottom-4 left-4 rounded-[6px] bg-white/92 px-2 py-[5px] font-mono text-[11.5px] text-navy-soft">
-            {t("previewCaption")}
-          </span>
         </div>
 
         <div>
