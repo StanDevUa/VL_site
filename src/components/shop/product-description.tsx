@@ -17,7 +17,7 @@ export function ProductDescription({ description }: { description: string }) {
 
   return (
     <div>
-      <p className="mb-3.5 text-[16.5px] leading-[1.7] text-navy-soft text-pretty">{intro}</p>
+      <p className="mb-3.5 text-[16.5px] leading-[1.7] whitespace-pre-line text-navy-soft text-pretty">{intro}</p>
 
       {rest && (
         <>
@@ -53,7 +53,7 @@ export function ProductDescription({ description }: { description: string }) {
           >
             <div className="pt-4">
               {rest.split(/\n\s*\n/).map((para, i) => (
-                <p key={i} className="mb-3.5 text-base leading-[1.75] text-navy-soft text-pretty last:mb-[18px]">
+                <p key={i} className="mb-3.5 text-base leading-[1.75] whitespace-pre-line text-navy-soft text-pretty last:mb-[18px]">
                   {para}
                 </p>
               ))}
