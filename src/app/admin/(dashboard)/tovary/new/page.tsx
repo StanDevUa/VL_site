@@ -4,6 +4,10 @@ import { ProductForm } from "@/components/admin/product-form";
 import { createProduct } from "@/server/actions/products";
 import { primaryButtonClass } from "@/components/ui/button-styles";
 
+// Без params/searchParams Next прибивав цю сторінку до статичної при збірці —
+// список категорій "заморожувався" на момент деплою й не бачив нових категорій.
+export const dynamic = "force-dynamic";
+
 export default async function NewProductPage() {
   const categories = await prisma.category.findMany({
     orderBy: { createdAt: "asc" },
