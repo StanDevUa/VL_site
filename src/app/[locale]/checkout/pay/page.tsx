@@ -44,9 +44,14 @@ export default async function CheckoutPayPage({
   const baseUrl = process.env.APP_BASE_URL!;
   const orderDate = Math.floor(order.createdAt.getTime() / 1000);
   const amount = Number(order.subtotal).toFixed(2);
-  const productName = order.items.map((i) => i.nameUkSnapshot);
-  const productCount = order.items.map((i) => i.quantity);
-  const productPrice = order.items.map((i) => Number(i.priceSnapshot).toFixed(2));
+  // За рекомендацією підтримки WayForPay — усі товари передаються як ОДНА
+  // позиція з назвою "Оплата за товари: ..." (а не окремим рядком на товар),
+  // щоб саме так виглядало призначення платежу в чеку/банківській виписці.
+  const productName = [
+    `Оплата за товари: ${order.items.map((i) => `"${i.nameUkSnapshot}"`).join(", ")}`,
+  ];
+  const productCount = [1];
+  const productPrice = [amount];
 
   const signature = signWayForPay([
     merchantAccount,
