@@ -85,6 +85,9 @@ model Category {
   nameEn    String?
   nameRu    String?
   slug      String    @unique
+  // Впливає на формулювання призначення платежу WayForPay: товари — "Оплата
+  // за товари: ...", послуги (напр. категорія "Навчання") — "Оплата за послуги: ...".
+  isService Boolean   @default(false)
   products  Product[]
   createdAt DateTime  @default(now())
 }

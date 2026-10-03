@@ -20,6 +20,7 @@ function readFields(formData: FormData) {
     nameUk: (formData.get("nameUk") as string)?.trim(),
     nameEn: (formData.get("nameEn") as string)?.trim() || null,
     nameRu: (formData.get("nameRu") as string)?.trim() || null,
+    isService: formData.get("isService") === "on",
   };
 }
 

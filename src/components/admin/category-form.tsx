@@ -11,6 +11,7 @@ type ExistingCategory = {
   nameUk: string;
   nameEn: string | null;
   nameRu: string | null;
+  isService: boolean;
 };
 
 const inputClass =
@@ -62,6 +63,22 @@ export function CategoryForm({
             </div>
           )}
         </LocaleTabs>
+      </div>
+
+      <div className="rounded-card bg-white border border-navy/10 p-6 mb-8">
+        <label className="flex items-center gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            name="isService"
+            defaultChecked={existing?.isService ?? false}
+            className="w-5 h-5 rounded accent-indigo"
+          />
+          <span className="font-bold text-navy text-sm">Це послуга (не товар)</span>
+        </label>
+        <p className="mt-2 text-sm text-navy-soft">
+          Впливає на формулювання призначення платежу при оплаті: товари — «Оплата за
+          товари: …», послуги — «Оплата за послуги: …».
+        </p>
       </div>
 
       <div className="flex items-center gap-3">
