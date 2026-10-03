@@ -49,8 +49,13 @@ export default async function CheckoutPayPage({
   // щоб саме так виглядало призначення платежу в чеку/банківській виписці.
   // Самі назви товарів НЕ беремо в лапки вручну — WayForPay сам бере назву
   // позиції в лапки при відображенні, тож ручні лапки давали подвійні.
+  // Сума в дужках — за всю позицію (ціна за одиницю × кількість), а не за
+  // одну штуку, щоб сума по рядку збігалась з тим, скільки покупець платить
+  // саме за цей товар.
   const productName = [
-    `Оплата за товари: ${order.items.map((i) => i.nameUkSnapshot).join(", ")}`,
+    `Оплата за товари: ${order.items
+      .map((i) => `${i.nameUkSnapshot} (${(Number(i.priceSnapshot) * i.quantity).toFixed(2)} грн)`)
+      .join(", ")}`,
   ];
   const productCount = [1];
   const productPrice = [amount];
