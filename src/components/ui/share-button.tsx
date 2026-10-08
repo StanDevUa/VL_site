@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 function FacebookIcon({ size }: { size: number }) {
@@ -19,11 +19,48 @@ function TelegramIcon({ size }: { size: number }) {
   );
 }
 
-/** `default` — Works/News detail (44px кола, тригер 22/13px). `compact` — Product detail (42px, тригер 18/11px). */
-export function ShareButton({ size = "default" }: { size?: "default" | "compact" }) {
+function ShareNodesIcon({ size }: { size: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="18" cy="5" r="3" />
+      <circle cx="6" cy="12" r="3" />
+      <circle cx="18" cy="19" r="3" />
+      <path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4" />
+    </svg>
+  );
+}
+
+/**
+ * `default` — Works/News detail (44px кола, тригер 22/13px, розгортання інлайн).
+ * `compact` — Product detail (42px, тригер 18/11px, розгортання інлайн).
+ * `icon` — Header (42px кружечок без підпису, варіанти випадають у попапі під кнопкою,
+ * а не інлайн — в хедері немає місця, щоб розсувати сусідні елементи).
+ */
+export function ShareButton({ size = "default" }: { size?: "default" | "compact" | "icon" }) {
   const t = useTranslations("Common");
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (size !== "icon") return;
+    function handleClickOutside(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [size]);
 
   function toggle() {
     setOpen((v) => !v);
@@ -40,11 +77,74 @@ export function ShareButton({ size = "default" }: { size?: "default" | "compact"
   }
 
   const circleClass =
-    size === "compact"
-      ? "flex h-[42px] w-[42px] items-center justify-center rounded-field text-white transition-transform duration-200 ease-in-out hover:-translate-y-0.5"
-      : "flex h-11 w-11 items-center justify-center rounded-field text-white transition-transform duration-200 ease-in-out hover:-translate-y-0.5";
-  const circleIconSize = size === "compact" ? 18 : 19;
-  const copyIconSize = size === "compact" ? 17 : 18;
+    size === "default"
+      ? "flex h-11 w-11 items-center justify-center rounded-field text-white transition-transform duration-200 ease-in-out hover:-translate-y-0.5"
+      : "flex h-[42px] w-[42px] items-center justify-center rounded-field text-white transition-transform duration-200 ease-in-out hover:-translate-y-0.5";
+  const circleIconSize = size === "default" ? 19 : 18;
+  const copyIconSize = size === "default" ? 18 : 17;
+
+  const optionsPanel = (
+    <div className={size === "icon" ? "flex items-center gap-2.5" : "flex gap-2.5"}>
+      <a
+        href="#"
+        title="Facebook"
+        className={circleClass}
+        style={{ background: "linear-gradient(135deg, #2B6BB8, #7A3AA0)" }}
+      >
+        <FacebookIcon size={circleIconSize} />
+      </a>
+      <a
+        href="#"
+        title="Telegram"
+        className={circleClass}
+        style={{ background: "linear-gradient(135deg, #7A3AA0, #2B6BB8)" }}
+      >
+        <TelegramIcon size={circleIconSize} />
+      </a>
+      <button
+        type="button"
+        onClick={copyLink}
+        title={t("copyLinkTitle")}
+        className={
+          size === "default"
+            ? "flex h-11 w-11 items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-transparent text-navy transition-[border-color,color] duration-200 ease-in-out hover:border-magenta hover:text-magenta"
+            : "flex h-[42px] w-[42px] items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-transparent text-navy transition-[border-color,color] duration-200 ease-in-out hover:border-magenta hover:text-magenta"
+        }
+      >
+        <svg width={copyIconSize} height={copyIconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <path d="M10 13a5 5 0 007.5.5l2-2A5 5 0 0012.5 4.5l-1 1" />
+          <path d="M14 11a5 5 0 00-7.5-.5l-2 2A5 5 0 0011.5 19.5l1-1" />
+        </svg>
+      </button>
+      {copied && <span className="self-center text-sm text-navy-soft whitespace-nowrap">{t("copiedLabel")}</span>}
+    </div>
+  );
+
+  if (size === "icon") {
+    return (
+      <div ref={containerRef} className="relative">
+        <button
+          type="button"
+          onClick={toggle}
+          title={t("share")}
+          aria-label={t("share")}
+          className={
+            "flex h-[42px] w-[42px] items-center justify-center rounded-field border-[1.5px] transition-colors duration-[250ms] ease-in-out " +
+            (open
+              ? "border-indigo text-indigo"
+              : "border-navy/15 text-navy hover:border-indigo hover:text-indigo")
+          }
+        >
+          <ShareNodesIcon size={18} />
+        </button>
+        {open && (
+          <div className="absolute top-[calc(100%+8px)] right-0 z-20 rounded-field border border-navy/10 bg-white p-3 shadow-card-hover">
+            {optionsPanel}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-wrap items-center gap-3.5">
@@ -57,59 +157,10 @@ export function ShareButton({ size = "default" }: { size?: "default" | "compact"
             : "inline-flex items-center gap-2.5 rounded-field border-[1.5px] border-navy/18 bg-transparent px-[22px] py-[13px] font-heading text-[15px] font-bold text-navy transition-[border-color,color,translate] duration-200 ease-in-out hover:-translate-y-0.5 hover:border-magenta hover:text-magenta"
         }
       >
-        <svg
-          width={size === "compact" ? 16 : 17}
-          height={size === "compact" ? 16 : 17}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <circle cx="18" cy="5" r="3" />
-          <circle cx="6" cy="12" r="3" />
-          <circle cx="18" cy="19" r="3" />
-          <path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4" />
-        </svg>
+        <ShareNodesIcon size={size === "compact" ? 16 : 17} />
         {t("share")}
       </button>
-      {open && (
-        <div className="flex gap-2.5">
-          <a
-            href="#"
-            title="Facebook"
-            className={circleClass}
-            style={{ background: "linear-gradient(135deg, #2B6BB8, #7A3AA0)" }}
-          >
-            <FacebookIcon size={circleIconSize} />
-          </a>
-          <a
-            href="#"
-            title="Telegram"
-            className={circleClass}
-            style={{ background: "linear-gradient(135deg, #7A3AA0, #2B6BB8)" }}
-          >
-            <TelegramIcon size={circleIconSize} />
-          </a>
-          <button
-            type="button"
-            onClick={copyLink}
-            title={t("copyLinkTitle")}
-            className={
-              size === "compact"
-                ? "flex h-[42px] w-[42px] items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-transparent text-navy transition-[border-color,color] duration-200 ease-in-out hover:border-magenta hover:text-magenta"
-                : "flex h-11 w-11 items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-transparent text-navy transition-[border-color,color] duration-200 ease-in-out hover:border-magenta hover:text-magenta"
-            }
-          >
-            <svg width={copyIconSize} height={copyIconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M10 13a5 5 0 007.5.5l2-2A5 5 0 0012.5 4.5l-1 1" />
-              <path d="M14 11a5 5 0 00-7.5-.5l-2 2A5 5 0 0011.5 19.5l1-1" />
-            </svg>
-          </button>
-          {copied && <span className="self-center text-sm text-navy-soft">{t("copiedLabel")}</span>}
-        </div>
-      )}
+      {open && optionsPanel}
     </div>
   );
 }

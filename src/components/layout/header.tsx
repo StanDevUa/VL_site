@@ -7,6 +7,7 @@ import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { useCart } from "@/lib/cart-context";
 import { NAV_ITEMS, navHref } from "@/lib/nav-items";
 import { preserveScrollForLocaleSwitch } from "@/components/layout/scroll-reset";
+import { ShareButton } from "@/components/ui/share-button";
 import type { AppLocale } from "@/i18n/routing";
 
 const LOCALES: { code: AppLocale; label: string }[] = [
@@ -171,6 +172,10 @@ export function Header() {
             })}
           </div>
 
+          <div className="hidden lg:block">
+            <ShareButton size="icon" />
+          </div>
+
           <a
             href="https://t.me/Viktoriia_Lemeshko"
             target="_blank"
@@ -206,23 +211,26 @@ export function Header() {
               {t(item.key)}
             </Link>
           ))}
-          <div className="flex items-center gap-2 pt-4">
-            {LOCALES.map((l) => {
-              const Flag = FLAGS[l.code];
-              return (
-                <button
-                  key={l.code}
-                  type="button"
-                  onClick={() => switchLocale(l.code)}
-                  className={
-                    "h-[21px] w-[30px] overflow-hidden rounded border border-navy/10 " +
-                    (locale === l.code ? "" : "opacity-50")
-                  }
-                >
-                  <Flag />
-                </button>
-              );
-            })}
+          <div className="flex items-center justify-between pt-4">
+            <div className="flex items-center gap-2">
+              {LOCALES.map((l) => {
+                const Flag = FLAGS[l.code];
+                return (
+                  <button
+                    key={l.code}
+                    type="button"
+                    onClick={() => switchLocale(l.code)}
+                    className={
+                      "h-[21px] w-[30px] overflow-hidden rounded border border-navy/10 " +
+                      (locale === l.code ? "" : "opacity-50")
+                    }
+                  >
+                    <Flag />
+                  </button>
+                );
+              })}
+            </div>
+            <ShareButton size="icon" />
           </div>
         </div>
       )}
