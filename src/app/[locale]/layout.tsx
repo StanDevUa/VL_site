@@ -32,11 +32,13 @@ export const metadata: Metadata = {
   title,
   description,
   // Без цього Telegram/Facebook показують превью посилання без картинки —
-  // беремо те саме фото, що на головній у hero-секції.
+  // беремо те саме фото, що на головній у hero-секції. JPEG (не webp) і
+  // явні width/height/type — краулери деяких месенджерів (Telegram
+  // зокрема) ненадійно розпізнають webp і зображення без цих полів.
   openGraph: {
     title,
     description,
-    images: ["/home/hero.webp"],
+    images: [{ url: "/home/hero-og.jpg", width: 1200, height: 1800, type: "image/jpeg" }],
   },
 };
 
