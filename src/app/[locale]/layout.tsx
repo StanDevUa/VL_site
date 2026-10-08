@@ -23,10 +23,21 @@ const mulish = Mulish({
   weight: ["400", "600", "700"],
 });
 
+const title = "Вікторія Лемешко — дитячий та сімейний психолог";
+const description =
+  "Консультації, авторські програми та методика ЕМО-терапії для дітей, підлітків і батьків.";
+
 export const metadata: Metadata = {
-  title: "Вікторія Лемешко — дитячий та сімейний психолог",
-  description:
-    "Консультації, авторські програми та методика ЕМО-терапії для дітей, підлітків і батьків.",
+  metadataBase: new URL(process.env.APP_BASE_URL!),
+  title,
+  description,
+  // Без цього Telegram/Facebook показують превью посилання без картинки —
+  // беремо те саме фото, що на головній у hero-секції.
+  openGraph: {
+    title,
+    description,
+    images: ["/home/hero.webp"],
+  },
 };
 
 export default async function LocaleLayout({

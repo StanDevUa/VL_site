@@ -74,10 +74,14 @@ export function ShareButton({ size = "default" }: { size?: "default" | "compact"
       // clipboard unavailable — ignore, matches source behaviour
     }
     setCopied(true);
+    // Лишаємо панель відкритою на мить, щоб було видно підпис "Скопійовано",
+    // і закриваємо сам — так само, як закривається після вибору Facebook/Telegram.
+    setTimeout(() => setOpen(false), 1200);
   }
 
   function openShareWindow(url: string) {
     window.open(url, "_blank", "noopener,noreferrer,width=600,height=520");
+    setOpen(false);
   }
 
   function shareToFacebook() {
