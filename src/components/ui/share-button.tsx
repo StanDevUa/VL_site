@@ -76,31 +76,51 @@ export function ShareButton({ size = "default" }: { size?: "default" | "compact"
     setCopied(true);
   }
 
+  function openShareWindow(url: string) {
+    window.open(url, "_blank", "noopener,noreferrer,width=600,height=520");
+  }
+
+  function shareToFacebook() {
+    openShareWindow(
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`,
+    );
+  }
+
+  function shareToTelegram() {
+    openShareWindow(
+      `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(document.title)}`,
+    );
+  }
+
   const circleClass =
     size === "default"
       ? "flex h-11 w-11 items-center justify-center rounded-field text-white transition-transform duration-200 ease-in-out hover:-translate-y-0.5"
-      : "flex h-[42px] w-[42px] items-center justify-center rounded-field text-white transition-transform duration-200 ease-in-out hover:-translate-y-0.5";
-  const circleIconSize = size === "default" ? 19 : 18;
-  const copyIconSize = size === "default" ? 18 : 17;
+      : size === "compact"
+        ? "flex h-[42px] w-[42px] items-center justify-center rounded-field text-white transition-transform duration-200 ease-in-out hover:-translate-y-0.5"
+        : "flex h-[34px] w-[34px] items-center justify-center rounded-field text-white transition-transform duration-200 ease-in-out hover:-translate-y-0.5";
+  const circleIconSize = size === "default" ? 19 : size === "compact" ? 18 : 15;
+  const copyIconSize = size === "default" ? 18 : size === "compact" ? 17 : 14;
 
   const optionsPanel = (
-    <div className={size === "icon" ? "flex items-center gap-2.5" : "flex gap-2.5"}>
-      <a
-        href="#"
+    <div className={size === "icon" ? "flex items-center gap-2" : "flex gap-2.5"}>
+      <button
+        type="button"
+        onClick={shareToFacebook}
         title="Facebook"
         className={circleClass}
         style={{ background: "linear-gradient(135deg, #2B6BB8, #7A3AA0)" }}
       >
         <FacebookIcon size={circleIconSize} />
-      </a>
-      <a
-        href="#"
+      </button>
+      <button
+        type="button"
+        onClick={shareToTelegram}
         title="Telegram"
         className={circleClass}
         style={{ background: "linear-gradient(135deg, #7A3AA0, #2B6BB8)" }}
       >
         <TelegramIcon size={circleIconSize} />
-      </a>
+      </button>
       <button
         type="button"
         onClick={copyLink}
@@ -108,7 +128,9 @@ export function ShareButton({ size = "default" }: { size?: "default" | "compact"
         className={
           size === "default"
             ? "flex h-11 w-11 items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-transparent text-navy transition-[border-color,color] duration-200 ease-in-out hover:border-magenta hover:text-magenta"
-            : "flex h-[42px] w-[42px] items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-transparent text-navy transition-[border-color,color] duration-200 ease-in-out hover:border-magenta hover:text-magenta"
+            : size === "compact"
+              ? "flex h-[42px] w-[42px] items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-transparent text-navy transition-[border-color,color] duration-200 ease-in-out hover:border-magenta hover:text-magenta"
+              : "flex h-[34px] w-[34px] items-center justify-center rounded-field border-[1.5px] border-navy/18 bg-transparent text-navy transition-[border-color,color] duration-200 ease-in-out hover:border-magenta hover:text-magenta"
         }
       >
         <svg width={copyIconSize} height={copyIconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -138,7 +160,7 @@ export function ShareButton({ size = "default" }: { size?: "default" | "compact"
           <ShareNodesIcon size={18} />
         </button>
         {open && (
-          <div className="absolute top-[calc(100%+8px)] right-0 z-20 rounded-field border border-navy/10 bg-white p-3 shadow-card-hover">
+          <div className="absolute top-[calc(100%+8px)] right-0 z-20 rounded-field border border-navy/10 bg-white p-2.5 shadow-card-hover">
             {optionsPanel}
           </div>
         )}
