@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 
@@ -35,14 +36,16 @@ export async function VideoSection() {
       />
 
       <div className="mx-auto grid max-w-[1240px] grid-cols-1 items-center gap-6 sm:grid-cols-[1.25fr_.75fr] sm:gap-12">
-        <div
-          className="relative flex h-[300px] items-center justify-center overflow-hidden rounded-card border border-navy/12 sm:h-[420px]"
-          style={{
-            backgroundColor: "#F0E6E1",
-            backgroundImage:
-              "repeating-linear-gradient(135deg, rgba(30,42,90,.09) 0 10px, rgba(30,42,90,0) 10px 20px)",
-          }}
-        >
+        <div className="relative flex h-[300px] items-center justify-center overflow-hidden rounded-card border border-navy/12 sm:h-[420px]">
+          {/* Тимчасове фото замість відео — Вікторія попросила поставити, поки
+              відео знімається (2026-10-15), кнопку плеєра лишили без змін. */}
+          <Image
+            src="/home/video.webp"
+            alt=""
+            fill
+            sizes="(min-width: 640px) 62vw, 100vw"
+            className="object-cover"
+          />
           <button
             type="button"
             className="flex h-[92px] w-[92px] items-center justify-center rounded-full border-0 pl-1.5 text-2xl text-white shadow-[0_20px_40px_-16px_rgba(201,48,124,.32)] transition-transform duration-300 ease-in-out hover:scale-[1.07]"
