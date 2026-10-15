@@ -48,7 +48,7 @@ export async function VideoSection() {
           />
           <button
             type="button"
-            className="relative z-10 flex h-[92px] w-[92px] items-center justify-center rounded-full border-0 pl-1.5 text-2xl text-white shadow-[0_20px_40px_-16px_rgba(201,48,124,.32)] transition-transform duration-300 ease-in-out hover:scale-[1.07]"
+            className="relative z-10 flex h-[60px] w-[60px] items-center justify-center rounded-full border-0 pl-1 text-lg text-white shadow-[0_20px_40px_-16px_rgba(201,48,124,.32)] transition-transform duration-300 ease-in-out hover:scale-[1.07]"
             style={{
               background: "linear-gradient(120deg, #F2662F 0%, #C9307C 42%, #7A3AA0 70%, #2B6BB8 100%)",
             }}
